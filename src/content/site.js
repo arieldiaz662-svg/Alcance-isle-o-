@@ -50,7 +50,7 @@ export const site = {
       {
         id: 'mesa',
         name: 'Expositor de mesa personalizado',
-        text: 'Impreso en 3D con tu logo, el número de mesa y un QR. Con chip NFC opcional: basta con acercar el móvil.',
+        text: 'Impreso en 3D en Tenerife con tu logo, el número de mesa y un QR. Con chip NFC opcional: basta con acercar el móvil.',
         price: '10 € / unidad',
       },
       {

@@ -30,7 +30,8 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /assets\/img\/productos\/expositor-mesa-800\.webp/);
   assert.ok(existsSync(join(outDir, 'assets/img/productos/expositor-mesa-800.webp')));
   assert.match(index, /<figcaption>Imagen de muestra<\/figcaption>/);
-  assert.doesNotMatch(index, /producto estrella|hecha en Tenerife/i);
+  assert.doesNotMatch(index, /producto estrella/i);
+  assert.match(index, /Impreso en 3D en Tenerife/);
   const precios = index.slice(index.indexOf('id="precios"'));
   assert.ok(precios.indexOf('Servicios digitales') < precios.indexOf('Para tu local'));
   assert.match(precios, /Creación u optimización de la ficha de Google Business<\/span><span class="importe">100 €/);
