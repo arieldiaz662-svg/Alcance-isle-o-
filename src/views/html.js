@@ -30,12 +30,12 @@ export function contact(site, config) {
   };
 }
 
-// Política de seguridad de contenidos. GitHub Pages no permite cabeceras propias, así que va como
-// <meta> en cada página; _headers la repite para Netlify o Cloudflare Pages.
+// Política de seguridad de contenidos. Va como <meta> en cada página (vale en cualquier alojamiento, también
+// en la vista previa local) y _headers la repite como cabecera para Cloudflare o Netlify.
 export const STATIC_CSP = "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; object-src 'none'; base-uri 'self'";
 
 // Rutas de enlaces y recursos, relativas y con .html para que la web funcione en cualquier subcarpeta
-// (p. ej. GitHub Pages). assetVersions añade ?v=<hash> a CSS y JS para evitar cachés antiguas.
+// o dominio. assetVersions añade ?v=<hash> a CSS y JS para evitar cachés antiguas.
 export function links(config) {
   return {
     home: './', legal: 'aviso-legal.html', privacy: 'privacidad.html', cookies: 'cookies.html',
@@ -44,7 +44,7 @@ export function links(config) {
   };
 }
 
-// baseHref: para páginas que se sirven desde cualquier ruta (404 de GitHub Pages), fija la base de los
+// baseHref: para páginas que se sirven desde cualquier ruta (la página 404), fija la base de los
 // enlaces relativos en la raíz de la web.
 export function layout({ site, config, title, description, path = '/', nav = [], body, scripts = [], baseHref = '' }) {
   const to = links(config);

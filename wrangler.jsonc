@@ -1,10 +1,11 @@
-// Cloudflare Workers (proyecto "alcance-isle-o"): construye la web estática y publica dist/.
+// Cloudflare Workers (proyecto "alcance-isle-o"): pasa los tests, construye la web estática y publica
+// dist/. Si falla un test, no se publica.
 // Las cabeceras de seguridad salen del _headers que genera la construcción.
 {
   "name": "alcance-isle-o",
   "compatibility_date": "2025-09-01",
   "build": {
-    "command": "PUBLIC_BASE_URL=https://alcance-isle-o.ariel-diaz662.workers.dev npm run build"
+    "command": "npm test && PUBLIC_BASE_URL=https://alcance-isle-o.ariel-diaz662.workers.dev npm run build"
   },
   "assets": {
     "directory": "./dist",

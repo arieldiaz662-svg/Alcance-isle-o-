@@ -1,5 +1,5 @@
 // Genera la web en dist/ (o en la carpeta indicada). Es 100 % estática: se puede subir tal cual a
-// Cloudflare (Workers o Pages), GitHub Pages o Netlify.
+// Cloudflare (Workers o Pages) o Netlify.
 //
 // Uso:  npm run build
 //       PUBLIC_BASE_URL=https://alcance-isleno.netlify.app npm run build   (añade canonical y sitemap)
@@ -39,8 +39,8 @@ export function buildStatic({
     ...(hasLegalNotice(site) ? { 'aviso-legal.html': renderLegalNotice({ site, config }) } : {}),
     'privacidad.html': renderPrivacy({ site, config }),
     'cookies.html': renderCookies({ site, config }),
-    // GitHub Pages sirve 404.html en cualquier ruta: <base> hace que estilos y enlaces funcionen también
-    // en rutas con subcarpetas.
+    // Cloudflare sirve 404.html en cualquier ruta inexistente: <base> hace que estilos y enlaces funcionen
+    // también en rutas con subcarpetas.
     '404.html': messagePage({
       site, config, title: 'Página no encontrada', heading: 'Esta página no existe',
       text: 'Puede que el enlace esté mal escrito o que la página se haya movido.',
@@ -67,7 +67,7 @@ ${sitemapUrls.map((path) => `  <url><loc>${config.publicBaseUrl}/${path}</loc></
 `);
   }
 
-  // Cabeceras de seguridad para Cloudflare y Netlify (GitHub Pages las ignora).
+  // Cabeceras de seguridad para Cloudflare y Netlify.
   writeFileSync(join(outDir, '_headers'), `/*
   Content-Security-Policy: ${STATIC_CSP}; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
@@ -76,8 +76,6 @@ ${sitemapUrls.map((path) => `  <url><loc>${config.publicBaseUrl}/${path}</loc></
 /assets/*
   Cache-Control: public, max-age=86400
 `);
-  // Evita que GitHub Pages procese la carpeta con Jekyll.
-  writeFileSync(join(outDir, '.nojekyll'), '');
 
   return { outDir, files: Object.keys(pages) };
 }

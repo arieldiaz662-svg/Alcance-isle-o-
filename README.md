@@ -2,7 +2,7 @@
 
 Página web (landing) de Alcance Isleño: **tu escaparate digital** para negocios locales de Tenerife.
 
-Es una web **100 % estática**: sin servidor, sin base de datos y sin cookies. El formulario de contacto no guarda datos, solo abre WhatsApp con el mensaje ya escrito. Se aloja gratis en Cloudflare Workers (y, en paralelo, en GitHub Pages).
+Es una web **100 % estática**: sin servidor, sin base de datos y sin cookies. El formulario de contacto no guarda datos, solo abre WhatsApp con el mensaje ya escrito. Se aloja gratis en Cloudflare Workers.
 
 - Diseño y criterios visuales: [docs/DISENO.md](docs/DISENO.md)
 - Auditoría técnica y desglose de la web: [docs/AUDITORIA.md](docs/AUDITORIA.md)
@@ -21,9 +21,9 @@ npm run og-image     # regenera la imagen para compartir (tras cambiar la portad
 
 ## Publicación
 
-En cada cambio que llega a la rama `main`, el flujo `.github/workflows/pages.yml` pasa los tests, genera la web y la sube a la rama `gh-pages`, que GitHub Pages publica en `https://<usuario>.github.io/<repositorio>/`.
+**Cloudflare Workers**: el Worker `alcance-isle-o` está conectado a este repositorio y publica cada cambio de `main` en https://alcance-isle-o.ariel-diaz662.workers.dev. Toda la configuración está en `wrangler.jsonc`: pasa los tests (si alguno falla, no se publica), construye con `PUBLIC_BASE_URL` apuntando a esa dirección (canonical, sitemap y og:image), publica `dist/`, sirve `404.html` en rutas inexistentes y aplica las cabeceras de `_headers`. Node 22 queda fijado en `.node-version`. Si se conecta un dominio propio, hay que cambiar la URL en `wrangler.jsonc`.
 
-**Cloudflare Workers**: el Worker `alcance-isle-o` está conectado a este repositorio y publica cada cambio de `main` en https://alcance-isle-o.ariel-diaz662.workers.dev. Toda la configuración está en `wrangler.jsonc`: construye con `PUBLIC_BASE_URL` apuntando a esa dirección (canonical, sitemap y og:image), publica `dist/`, sirve `404.html` en rutas inexistentes y aplica las cabeceras de `_headers`. Node 22 queda fijado en `.node-version`. Si se conecta un dominio propio, hay que cambiar la URL en `wrangler.jsonc`.
+Además, GitHub Actions (`.github/workflows/ci.yml`) pasa los tests en cada push y pull request.
 
 Alternativas: arrastrar la carpeta `dist/` a [Netlify Drop](https://app.netlify.com/drop) o conectar el repositorio a Vercel o Netlify (comando `npm run build`, carpeta `dist`).
 

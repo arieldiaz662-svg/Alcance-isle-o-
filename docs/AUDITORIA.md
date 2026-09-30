@@ -22,8 +22,8 @@ flowchart LR
   C[src/content/site.js<br/>textos, precios, packs, contacto] --> V[src/views<br/>landing.js · html.js · legal.js]
   V --> B[scripts/build-static.js]
   B --> D[dist/<br/>HTML + assets + sitemap + _headers]
-  D --> W[GitHub Actions<br/>tests → build → rama gh-pages]
-  W --> P[GitHub Pages]
+  D --> W[Cloudflare Workers<br/>tests → build → dist/]
+  W --> P[alcance-isle-o.ariel-diaz662.workers.dev]
   P --> JS[public/js/site.js en el navegador<br/>pestañas + formulario → WhatsApp]
 ```
 
@@ -31,8 +31,8 @@ flowchart LR
 
 1. **Contenido:** todo lo editable vive en un único objeto JS, `src/content/site.js`: servicios, material, packs por tipo de negocio, textos, contacto y datos legales.
 2. **Render:** `renderLanding()` recibe `site` + `config` (`static: true`) y compone el HTML con plantillas de texto y escape manual (`esc()`). Ahí mismo se derivan datos: precio del hosting, texto del pack, lista de precios y QR (generado con `qrcode` al construir).
-3. **Build:** `build-static.js` escribe 4 páginas, copia `public/{css,js,img,fonts}` a `dist/assets`, calcula un hash de CSS y JS para la caché y genera `robots.txt`, `sitemap.xml`, `_headers` y `.nojekyll`.
-4. **Despliegue:** en cada push a `main`, GitHub Actions ejecuta `npm ci`, los tests y el build, y fuerza un push de `dist/` a `gh-pages`.
+3. **Build:** `build-static.js` escribe 4 páginas, copia `public/{css,js,img,fonts}` a `dist/assets`, calcula un hash de CSS y JS para la caché y genera `robots.txt`, `sitemap.xml`, y `_headers`.
+4. **Despliegue:** en cada push a `main`, Cloudflare Workers instala dependencias, pasa los tests y construye según `wrangler.jsonc`, y publica `dist/`. GitHub Actions solo pasa los tests (la publicación en GitHub Pages se retiró).
 5. **Navegador:** `site.js` activa las pestañas (carta y packs), gestiona los enlaces `#hosteleria` / `#cita-previa` y el formulario, que **no envía datos**: compone el mensaje y abre WhatsApp.
 
 ### Aplicación con servidor (archivada)
@@ -112,7 +112,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 
 ## 4. Desglose de la web lista para publicar
 
-**URL:** `https://arieldiaz662-svg.github.io/Alcance-isle-o-/` · **Páginas:** inicio, privacidad, cookies, 404.
+**URL:** `https://alcance-isle-o.ariel-diaz662.workers.dev` · **Páginas:** inicio, privacidad, cookies, 404.
 
 ### 4.1 Estructura de la portada (en orden)
 

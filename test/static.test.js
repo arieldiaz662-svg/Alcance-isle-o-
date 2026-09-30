@@ -1,4 +1,4 @@
-// Tests de la web estática (lo que se publica en GitHub Pages).
+// Tests de la web estática (lo que se publica en Cloudflare).
 // Los valores esperados se toman de src/content/site.js siempre que es posible, para que un cambio
 // de redacción no rompa los tests y un error de coherencia (precios, enlaces, nombres) sí lo haga.
 import assert from 'node:assert/strict';
@@ -33,7 +33,7 @@ before(() => {
 after(() => rmSync(outDir, { recursive: true, force: true }));
 
 describe('construcción y publicación', () => {
-  test('_headers da a Cloudflare Pages la misma CSP que el HTML y las cabeceras de seguridad', () => {
+  test('_headers da a Cloudflare la misma CSP que el HTML y las cabeceras de seguridad', () => {
     const dir = mkdtempSync(join(tmpdir(), 'alcance-headers-'));
     try {
       buildStatic({ outDir: dir, publicBaseUrl: '' });
@@ -46,12 +46,12 @@ describe('construcción y publicación', () => {
     }
   });
 
-  test('wrangler.jsonc construye con la URL pública y publica dist/ con la página 404', () => {
+  test('wrangler.jsonc pasa los tests, construye con la URL pública y publica dist/ con la página 404', () => {
     const raw = readFileSync(new URL('../wrangler.jsonc', import.meta.url), 'utf8');
     const config = JSON.parse(raw.replace(/^\s*\/\/.*$/gm, ''));
     assert.equal(config.assets.directory, './dist');
     assert.equal(config.assets.not_found_handling, '404-page');
-    assert.match(config.build.command, /^PUBLIC_BASE_URL=https:\/\/[^ ]+\.workers\.dev npm run build$/);
+    assert.match(config.build.command, /^npm test && PUBLIC_BASE_URL=https:\/\/[^ ]+\.workers\.dev npm run build$/);
   });
 
   test('sitio 100 % estático: una sola dependencia y sin restos del servidor archivado', () => {
@@ -65,7 +65,7 @@ describe('construcción y publicación', () => {
 
   test('genera las páginas y recursos, sin el panel de administración', () => {
     for (const file of ['index.html', 'privacidad.html', 'cookies.html', '404.html', 'robots.txt', 'sitemap.xml',
-      '_headers', '.nojekyll', 'assets/css/site.css', 'assets/js/site.js', 'assets/fonts/familjen-grotesk.woff2',
+      '_headers', 'assets/css/site.css', 'assets/js/site.js', 'assets/fonts/familjen-grotesk.woff2',
       'assets/img/terrazo.svg', 'assets/img/favicon.svg', 'assets/img/og.jpg']) {
       assert.ok(existsSync(join(outDir, file)), file);
     }

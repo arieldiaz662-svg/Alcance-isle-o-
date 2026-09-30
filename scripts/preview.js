@@ -16,7 +16,7 @@ createServer((req, res) => {
   let file = join(root, path);
   if (existsSync(file) && statSync(file).isDirectory()) file = join(file, 'index.html');
   const found = existsSync(file);
-  if (!found) file = join(root, '404.html'); // como GitHub Pages
+  if (!found) file = join(root, '404.html'); // como Cloudflare
   res.writeHead(found ? 200 : 404, { 'content-type': types[extname(file)] || 'application/octet-stream' });
   createReadStream(file).pipe(res);
 }).listen(port, () => console.log(`Vista previa en http://localhost:${port}`));
