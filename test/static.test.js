@@ -62,7 +62,7 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /Así llega un cliente a tu negocio/);
   // Portada con el eslogan y contenido de la propuesta.
   assert.match(index, /<h1>Tu escaparate digital<\/h1>/);
-  assert.match(index, /<p class="lead">Presencia digital para negocios locales de Tenerife\./);
+  assert.match(index, /<p class="lead">Presencia digital para negocios locales de Tenerife\. Tu ficha de Google, tus reseñas y tu web, conectadas entre sí\. Sin tecnicismos/);
   assert.doesNotMatch(index, /mesa digital/i);
   assert.match(index, /Pide tu diagnóstico gratuito/);
   assert.match(index, /id="por-que"/);

@@ -17,7 +17,7 @@ export const site = {
   // PORTADA
   hero: {
     title: 'Tu escaparate digital',
-    lead: 'Presencia digital para negocios locales de Tenerife. Tu ficha de Google, tus reseñas y tu web, conectadas entre sí y listas en 10 días laborables. Sin tecnicismos ni presupuestos de agencia.',
+    lead: 'Presencia digital para negocios locales de Tenerife. Tu ficha de Google, tus reseñas y tu web, conectadas entre sí. Sin tecnicismos ni presupuestos de agencia.',
     cta: 'Pide tu diagnóstico gratuito',
     ctaWhatsappText: 'Hola, me gustaría pedir el diagnóstico gratuito para mi negocio',
     note: 'Equipo local de Tenerife. Diagnóstico gratuito y sin compromiso.',
