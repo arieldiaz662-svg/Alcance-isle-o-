@@ -250,12 +250,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .recorrido-pasos li { padding: 0 0 0 3.8rem; }
 }
 
-/* ---------- 6. Para tu local ---------- */
-.local { background: var(--niebla); }
-.local-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 4rem; align-items: center; }
-.local-foto { margin: 0; }
-.local-foto img { width: 100%; height: auto; border-radius: 6px; }
-.local-foto figcaption { font-size: var(--t-s); color: var(--gris); margin-top: .7rem; }
+/* ---------- 6. Listas de servicios con precio (packs) ---------- */
 .local-lista { margin: 1.8rem 0 2rem; border-top: 2px solid var(--tinta); }
 .local-lista li {
   display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
@@ -264,10 +259,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .local-lista h3 { font-size: var(--t-m); margin: 0 0 .2rem; }
 .local-lista p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
 .local-precio { grid-column: 2; grid-row: 1 / span 2; font-weight: 700; white-space: nowrap; }
-@media (max-width: 860px) {
-  .local-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .local-foto { max-width: 360px; }
-}
 
 /* ---------- 7. Por qué elegirnos ---------- */
 .porque-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 4rem; align-items: start; }
@@ -434,4 +425,21 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
   .movil-suelto .carta-lista li:nth-child(n+5) { display: none; }
   .tarjeta-nfc { position: relative; right: auto; bottom: auto; width: 170px; margin: -1rem 0 0 auto; }
   .mostrador figcaption { position: static; margin-top: 1rem; }
+}
+
+/* Opción con varios productos y miniatura (material para mesas en hostelería) */
+.pack-opcion-lista { grid-template-columns: 110px 1fr; column-gap: 1.2rem; align-items: start; }
+.opcion-foto { margin: 0; }
+.opcion-foto img { width: 100%; height: auto; border-radius: 4px; }
+.opcion-foto figcaption { font-size: .75rem; color: var(--gris); margin-top: .3rem; }
+.pack-opcion-lista > div > p { margin-bottom: .6rem; }
+.pack-opcion-lista ul li {
+  display: grid; grid-template-columns: 1fr auto; column-gap: 1rem;
+  padding: .6rem 0; border-top: 1px solid var(--linea);
+}
+.pack-opcion-lista h5 { font-size: .95rem; margin: 0 0 .1rem; }
+.pack-opcion-lista li p { grid-column: 1; margin: 0; color: var(--gris); font-size: .9rem; line-height: 1.4; }
+@media (max-width: 480px) {
+  .pack-opcion-lista { grid-template-columns: 1fr; }
+  .opcion-foto { max-width: 140px; margin-bottom: .8rem; }
 }

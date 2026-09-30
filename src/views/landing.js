@@ -95,8 +95,8 @@ export function renderLanding({ site, config }) {
       return `
       <li>
         <h3>${esc(step.moment)}</h3>
-        <p class="recorrido-servicio">${esc(service.name)} <span>${esc(priceOf(service))}</span></p>
-        <p>${esc(service.text)}</p>
+        <p class="recorrido-servicio">${esc(step.name || service.name)} <span>${esc(priceOf(service))}</span></p>
+        <p>${esc(step.text || service.text)}</p>
       </li>`;
     }).join('')}
     </ol>
@@ -104,32 +104,9 @@ export function renderLanding({ site, config }) {
   </div>
 </section>`;
 
-  // ---------- Para tu local ----------
+  // Imagen del material para mesas (se muestra en la opción de la pestaña de hostelería).
   const img = extras && extras.image;
-  const extrasSection = extras ? `
-<section class="local" id="local">
-  <div class="wrap local-grid">
-    <figure class="local-foto">
-      <picture>
-        <source type="image/webp" srcset="${esc(to.asset(`${img.small}.webp`))} 480w, ${esc(to.asset(`${img.src}.webp`))} 800w" sizes="(max-width: 860px) 100vw, 420px">
-        <img src="${esc(to.asset(`${img.src}.jpg`))}" srcset="${esc(to.asset(`${img.small}.jpg`))} 480w, ${esc(to.asset(`${img.src}.jpg`))} 800w" sizes="(max-width: 860px) 100vw, 420px" alt="${esc(img.alt)}" width="800" height="800" loading="lazy" decoding="async">
-      </picture>
-      ${img.caption ? `<figcaption>${esc(img.caption)}</figcaption>` : ''}
-    </figure>
-    <div>
-      <h2>${esc(extras.title)}</h2>
-      <p>${esc(extras.text)}</p>
-      <ul class="local-lista">${extras.items.map((item) => `
-        <li>
-          <h3>${esc(item.name)}</h3>
-          <p>${esc(item.text)}</p>
-          <span class="local-precio">${esc(item.price)}</span>
-        </li>`).join('')}
-      </ul>
-      <a class="btn btn-linea" href="${esc(whatsappUrl(whatsapp, extras.whatsappText))}" rel="noopener" target="_blank">Pregúntanos por WhatsApp</a>
-    </div>
-  </div>
-</section>` : '';
+  const extraById = Object.fromEntries((extras ? extras.items : []).map((item) => [item.id, item]));
 
   // ---------- Packs por tipo de negocio (pestañas) ----------
   // Tarifa anual de hosting (primera fila de precios del servicio "hosting").
@@ -182,9 +159,29 @@ export function renderLanding({ site, config }) {
             <p>${esc(sector.hostingNote)}</p>
             <span class="local-precio">${esc(hostingRow.price)}</span>
           </li>` : ''}
-        </ul>${sector.option ? `
+        </ul>${sector.option && sector.option.items ? `
+        <div class="pack-opcion pack-opcion-lista">
+          ${img ? `<figure class="opcion-foto">
+            <picture>
+              <source type="image/webp" srcset="${esc(to.asset(`${img.small}.webp`))}">
+              <img src="${esc(to.asset(`${img.small}.jpg`))}" alt="${esc(img.alt)}" width="480" height="480" loading="lazy" decoding="async">
+            </picture>
+            ${img.caption ? `<figcaption>${esc(img.caption)}</figcaption>` : ''}
+          </figure>` : ''}
+          <div>
+            <h4>Opcional: ${esc(sector.option.name)}</h4>
+            <p>${esc(sector.option.text)}</p>
+            <ul>${sector.option.items.map((id) => extraById[id]).filter(Boolean).map((item) => `
+              <li>
+                <h5>${esc(item.name)}</h5>
+                <p>${esc(item.text)}</p>
+                <span class="local-precio">${esc(item.price)}</span>
+              </li>`).join('')}
+            </ul>
+          </div>
+        </div>` : sector.option ? `
         <div class="pack-opcion">
-          <h4>Opcional: ${sector.option.href ? `<a href="${esc(sector.option.href)}">${esc(sector.option.name)}</a>` : esc(sector.option.name)}</h4>
+          <h4>Opcional: ${esc(sector.option.name)}</h4>
           <p>${esc(sector.option.text)}</p>
           <span class="local-precio">${esc(sector.option.price)}</span>
         </div>` : ''}
@@ -239,7 +236,7 @@ export function renderLanding({ site, config }) {
           <li><span>${esc(label)}</span><span class="guia" aria-hidden="true"></span><span class="importe">${esc(price)}</span></li>`;
   const priceGroups = [
     { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
-    ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
+    ...(extras ? [{ title: 'Material para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
     // Packs propios de cada tipo de negocio (el de hostelería ya aparece destacado arriba).
     ...(sectors || []).filter((sector) => sector.pack !== 'main').map((sector) => ({
       title: sector.title,
@@ -292,7 +289,6 @@ export function renderLanding({ site, config }) {
 ${heroSection}
 ${sectorsSection}
 ${journeySection}
-${extrasSection}
 ${whySection}
 ${stepsSection}
 ${pricesSection}

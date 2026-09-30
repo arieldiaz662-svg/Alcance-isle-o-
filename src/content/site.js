@@ -85,11 +85,11 @@ export const site = {
         { name: 'Placa de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.', badge: 'De regalo' },
       ],
       pack: 'main',
+      // Opción: material para las mesas. "items" son ids de extras.items; se muestran con la imagen de extras.
       option: {
-        name: 'Expositores de mesa y pegatinas QR',
-        text: 'Expositores personalizados impresos en 3D o pegatinas QR para llevar la carta a cada mesa.',
-        price: 'desde 10 €',
-        href: '#local',
+        name: 'Para tus mesas',
+        text: 'Lleva tu carta digital a cada mesa, personalizada con tu marca.',
+        items: ['mesa', 'pegatinas'],
       },
       cta: 'Pide información para tu local',
       whatsappText: 'Hola, tengo un bar, restaurante o cafetería y quiero información sobre el pack completo',
@@ -149,10 +149,15 @@ export const site = {
     title: 'Así llega un cliente a tu negocio',
     steps: [
       { moment: 'Te busca en Google', service: 'gbp' },
-      { moment: 'Mira tu carta', service: 'landing' },
+      {
+        moment: 'Mira tu carta o tus servicios',
+        service: 'landing',
+        name: 'Landing page',
+        text: 'Una página rápida y adaptada a móvil con tu carta o tus servicios y precios, tu ubicación y un botón de WhatsApp para reservar mesa o pedir cita.',
+      },
       { moment: 'Te deja una reseña', service: 'nfc' },
     ],
-    note: 'Y para que todo siga funcionando, alojamos tu web con tu dominio por 90 € al año. Los cambios de la carta solo los pagas cuando los necesitas.',
+    note: 'Y para que todo siga funcionando, alojamos tu web con tu dominio por 90 € al año. Los cambios (carta, servicios o precios) solo los pagas cuando los necesitas.',
   },
 
   // POR QUÉ ELEGIRNOS
@@ -220,17 +225,15 @@ export const site = {
   },
   pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
 
-  // COMPLEMENTOS FÍSICOS: llevan a tus clientes desde la mesa a tu carta, tu web o tus reseñas.
+  // COMPLEMENTOS FÍSICOS: se ofrecen como opción dentro de la pestaña de hostelería (sectors[0].option)
+  // y aparecen en la lista de precios.
   extras: {
-    title: 'Lleva tu carta y tus reseñas a la mesa',
-    text: 'Para que tus clientes lleguen a tu carta digital o a tus reseñas de Google en un segundo, te ofrecemos el material para tu local, personalizado con tu marca.',
     image: {
       src: 'img/productos/expositor-mesa-800', // sin extensión: hay versiones .webp y .jpg de 480 y 800 px
       small: 'img/productos/expositor-mesa-480',
       alt: 'Expositor de mesa personalizado con logo, número de mesa y código QR de la carta',
       caption: 'Imagen de muestra', // quitar cuando se sustituya por la foto real
     },
-    whatsappText: 'Hola, quiero información sobre los expositores y el material para mesas',
     items: [
       {
         id: 'mesa',

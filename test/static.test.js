@@ -26,17 +26,18 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /wa\.me\/34623243294/);
   assert.match(index, /\+34 623 24 32 94/);
   assert.match(index, /100 €/);
-  // Servicios digitales primero; los complementos físicos van después, con la maqueta.
   assert.match(index, /Landing page con carta digital/);
-  assert.match(index, /id="local"/);
-  assert.ok(index.indexOf('id="servicios"') < index.indexOf('id="local"'));
-  assert.match(index, /assets\/img\/productos\/expositor-mesa-800\.webp/);
-  assert.ok(existsSync(join(outDir, 'assets/img/productos/expositor-mesa-800.webp')));
-  assert.match(index, /<figcaption>Imagen de muestra<\/figcaption>/);
+  // El material para mesas ya no tiene sección propia: va como opción en la pestaña de hostelería.
+  assert.doesNotMatch(index, /id="local"|href="#local"/);
+  assert.ok(existsSync(join(outDir, 'assets/img/productos/expositor-mesa-480.webp')));
   assert.doesNotMatch(index, /producto estrella/i);
-  assert.match(index, /Impreso en 3D en Tenerife/);
+  // Recorrido del cliente válido para hostelería y negocios con cita previa.
+  const recorrido = index.slice(index.indexOf('class="recorrido"'), index.indexOf('id="por-que"'));
+  assert.match(recorrido, /<h3>Mira tu carta o tus servicios<\/h3>/);
+  assert.match(recorrido, /reservar mesa o pedir cita/);
+  assert.match(recorrido, /Los cambios \(carta, servicios o precios\)/);
   const precios = index.slice(index.indexOf('id="precios"'));
-  assert.ok(precios.indexOf('Servicios digitales') < precios.indexOf('Para tu local'));
+  assert.ok(precios.indexOf('Servicios digitales') < precios.indexOf('Material para tu local'));
   assert.match(precios, priceRow('Creación u optimización de la ficha de Google Business', '100 €'));
   assert.match(precios, priceRow('Expositor de mesa personalizado', '10 € / unidad'));
   assert.match(precios, priceRow('Pegatinas QR para mesa', '50 € / 10 uds.'));
@@ -57,7 +58,10 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   const citaPrevia = packs.slice(packs.indexOf('id="cita-previa"'));
   assert.match(hosteleria, /Placa de reseñas QR \+ NFC<\/h4>[\s\S]*?De regalo/);
   assert.match(hosteleria, /class="pack-total">[\s\S]*?<s>415 €<\/s> 390 €/);
-  assert.match(hosteleria, /href="#local">Expositores de mesa y pegatinas QR/);
+  assert.match(hosteleria, /class="pack-opcion pack-opcion-lista"[\s\S]*?assets\/img\/productos\/expositor-mesa-480\.webp[\s\S]*?<figcaption>Imagen de muestra<\/figcaption>/);
+  assert.match(hosteleria, /Opcional: Para tus mesas[\s\S]*?Expositor de mesa personalizado<\/h5>[\s\S]*?Impreso en 3D en Tenerife[\s\S]*?10 € \/ unidad/);
+  assert.match(hosteleria, /Pegatinas QR para mesa<\/h5>[\s\S]*?50 € \/ 10 uds\./);
+  assert.doesNotMatch(citaPrevia, /Expositor de mesa/, 'los negocios con cita previa no ven material de mesa');
   assert.doesNotMatch(hosteleria, /pack-hosting/, 'el pack de hostelería incluye el hosting del primer año');
   assert.match(citaPrevia, /Landing page con tus servicios<\/h4>[\s\S]*?Incluido/);
   assert.match(citaPrevia, /Tarjeta NFC de reseñas<\/h4>[\s\S]*?Incluido/);
