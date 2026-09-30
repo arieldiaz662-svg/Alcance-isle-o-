@@ -37,6 +37,15 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(precios, /Creación u optimización de la ficha de Google Business<\/span><span class="importe">100 €/);
   assert.match(precios, /Expositor de mesa personalizado<\/span><span class="importe">10 € \/ unidad/);
   assert.match(precios, /Pegatinas QR para mesa<\/span><span class="importe">50 € \/ 10 uds\./);
+  // Portada con el eslogan y contenido de la propuesta.
+  assert.match(index, /<h1>Tu mesa digital<\/h1>/);
+  assert.match(index, /Pide tu diagnóstico gratuito/);
+  assert.match(index, /id="por-que"/);
+  assert.match(index, /Todo conectado, no piezas sueltas/);
+  assert.match(index, /Listo en 10 días laborables/);
+  assert.match(precios, /Hosting, dominio y mantenimiento \(12 meses\)<\/span><span class="importe">300 € \/ año/);
+  assert.match(precios, /class="pack"[\s\S]*<s>625 €<\/s><strong>600 €<\/strong>/);
+  assert.match(precios, /Precios sin IGIC/);
   // Sin datos del titular no se publica el aviso legal ni su enlace.
   assert.ok(!existsSync(join(outDir, 'aviso-legal.html')));
   assert.doesNotMatch(index, /Aviso legal/);

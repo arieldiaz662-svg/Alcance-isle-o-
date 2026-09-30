@@ -9,7 +9,7 @@ export function renderLanding({ site, config }) {
   const { extras } = site;
   const nav = [
     { id: 'servicios', label: 'Servicios' },
-    ...(extras ? [{ id: 'local', label: 'Para tu local' }] : []),
+    { id: 'por-que', label: 'Por qué elegirnos' },
     { id: 'como', label: 'Cómo trabajamos' },
     { id: 'precios', label: 'Precios' },
     ...(team.length ? [{ id: 'equipo', label: 'Equipo' }] : []),
@@ -28,16 +28,22 @@ export function renderLanding({ site, config }) {
     { title: 'Servicios digitales', rows: site.services.map((s) => ({ label: s.priceLabel || s.name, price: s.price })) },
     ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
   ];
+  const { pack } = site;
+  const packBox = pack ? `
+    <div class="pack">
+      <div>
+        <span class="lema">Recomendado</span>
+        <h3>${esc(pack.name)}</h3>
+        <p>${esc(pack.text)}</p>
+      </div>
+      <div class="pack-precio">${pack.was ? `<s>${esc(pack.was)}</s>` : ''}<strong>${esc(pack.price)}</strong></div>
+    </div>` : '';
   const prices = priceGroups.map((group) => `
     <h3 class="precios-grupo">${esc(group.title)}</h3>
     <div class="precios-lista">${priceRows(group.rows)}
     </div>`).join('');
 
-  const COUNT_WORDS = ['Una', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis'];
   const count = site.services.length;
-  const servicesHeading = count === 1
-    ? 'Una forma de poner tu escaparate a punto'
-    : `${COUNT_WORDS[count - 1] || count} formas de poner tu escaparate a punto`;
   // Con 2 o 4 servicios, rejilla de 2 columnas para que no quede una tarjeta suelta.
   const gridClass = count % 3 !== 0 && count % 2 === 0 ? 'serv-grid serv-grid-2' : 'serv-grid';
 
@@ -94,11 +100,11 @@ export function renderLanding({ site, config }) {
 <div class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="lema">Tu escaparate digital</span>
-      <h1>Que tu negocio se vea y se encuentre en Google</h1>
-      <p class="lead">En ${esc(site.name)} ayudamos a pequeños negocios de ${esc(site.region)} a mejorar su presencia digital: una ficha de Google cuidada, más reseñas y una web con tu carta digital que trabaja por ti.</p>
+      <span class="lema">${esc(site.hero.badge)}</span>
+      <h1>${esc(site.hero.title)}</h1>
+      <p class="lead">${esc(site.hero.lead)}</p>
       <div class="acciones">
-        <a class="btn btn-sol" href="${esc(wa)}" rel="noopener" target="_blank">Escríbenos por WhatsApp</a>
+        <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, site.hero.ctaWhatsappText))}" rel="noopener" target="_blank">${esc(site.hero.cta)}</a>
         <a class="btn btn-linea" href="#servicios">Ver servicios</a>
       </div>
     </div>
@@ -106,15 +112,15 @@ export function renderLanding({ site, config }) {
     <div class="ventana" role="img" aria-label="Ejemplo de ficha de un negocio en Google con reseñas">
       <div class="etiqueta">Así puede verse tu negocio en Google (ejemplo)</div>
       <div class="ficha-cab">
-        <div class="ficha-icono">P</div>
+        <div class="ficha-icono">M</div>
         <div>
-          <strong>Peluquería Marisol</strong>
+          <strong>Cafetería Marisol</strong>
           <span class="estrellas">★★★★★</span> <span class="suave">4,9 · 128 reseñas</span>
         </div>
       </div>
       <div class="ficha-datos"><b>Abierto ahora</b> · Cierra a las 20:00 · La Laguna</div>
-      <div class="ficha-botones"><span>Llamar</span><span>Cómo llegar</span><span>Web</span></div>
-      <div class="resena">“Trato excelente y muy fácil pedir cita.”</div>
+      <div class="ficha-botones"><span>Llamar</span><span>Cómo llegar</span><span>Carta</span><span>Web</span></div>
+      <div class="resena">“Buen café y la carta, a un toque desde la mesa.”</div>
     </div>
   </div>
 </div>
@@ -133,44 +139,43 @@ export function renderLanding({ site, config }) {
 
 <section class="servicios" id="servicios">
   <div class="wrap">
-    <h2>${servicesHeading}</h2>
+    <h2>${esc(site.servicesTitle)}</h2>
     <p class="suave">Puedes contratar cada servicio por separado o combinarlos.</p>
     <div class="${gridClass}">${services}
     </div>
   </div>
 </section>
 ${extrasSection}
-<section id="como">
-  <div class="wrap">
-    <h2>Así de fácil</h2>
-    <ol class="pasos">
-      <li><strong>Hablamos</strong>Nos cuentas cómo funciona tu negocio y qué necesitas.</li>
-      <li><strong>Lo preparamos</strong>Nos encargamos de la parte técnica: ficha de Google, web y carta digital.</li>
-      <li><strong>Empiezas a notarlo</strong>Más visibilidad, más reseñas y más contactos.</li>
-    </ol>
-    <p class="cierre">Sin tecnicismos. Nosotros nos encargamos.</p>
+<section class="porque" id="por-que">
+  <div class="wrap cols">
+    <div>
+      <h2>${esc(site.whyUs.title)}</h2>
+      <p class="porque-intro">${esc(site.whyUs.intro)}</p>
+      <p class="suave">${esc(site.whyUs.team)}</p>
+    </div>
+    <ul>${site.whyUs.reasons.map((reason) => `
+      <li><strong>${esc(reason.title)}</strong>${esc(reason.text)}</li>`).join('')}
+    </ul>
   </div>
 </section>
 
-<section class="porque">
-  <div class="wrap cols">
-    <div>
-      <h2>Entendemos tu negocio, no solo la tecnología</h2>
-      <p>Somos un equipo joven e interdisciplinar de antropología social y administración de empresas. Observamos cómo funciona cada negocio local, cómo se relaciona con su barrio y con sus clientes, y a partir de ahí diseñamos soluciones a medida. Sin plantillas genéricas.</p>
-    </div>
-    <ul>
-      <li>Trato cercano y en persona en ${esc(site.region)}</li>
-      <li>Soluciones adaptadas a cada negocio</li>
-      <li>Precios claros, sin sorpresas</li>
-    </ul>
+<section id="como">
+  <div class="wrap">
+    <h2>Así de fácil</h2>
+    <ol class="pasos">${site.steps.map((step) => `
+      <li><strong>${esc(step.title)}</strong>${esc(step.text)}</li>`).join('')}
+    </ol>
+    <p class="cierre">Sin tecnicismos. ${esc(site.stepsNote)}</p>
   </div>
 </section>
 
 <section id="precios">
   <div class="wrap">
     <h2>Precios claros</h2>
-    <p class="suave">Pídenos un presupuesto sin compromiso.</p>
+    <p class="suave">Contrata cada servicio por separado o todo junto. Pídenos un presupuesto sin compromiso.</p>
+${packBox}
 ${prices}
+    <p class="suave precios-nota">${esc(site.pricesNote)}</p>
   </div>
 </section>
 ${teamSection}

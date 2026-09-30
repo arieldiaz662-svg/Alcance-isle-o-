@@ -50,7 +50,7 @@ describe('web pública', () => {
   test('la landing se sirve con el WhatsApp configurado y cabeceras de seguridad', async () => {
     const response = await app.inject('/');
     assert.equal(response.statusCode, 200);
-    assert.match(response.body, /Que tu negocio se vea y se encuentre en Google/);
+    assert.match(response.body, /<h1>Tu mesa digital<\/h1>/);
     assert.match(response.body, /wa\.me\/34600111222/);
     assert.match(response.headers['content-security-policy'], /default-src 'self'/);
     // La sección de equipo se oculta mientras no haya nombres.
