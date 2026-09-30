@@ -132,6 +132,9 @@ export function renderLanding({ site, config }) {
 </section>` : '';
 
   // ---------- Barberías y salones de belleza ----------
+  // Tarifa anual de hosting (primera fila de precios del servicio "hosting").
+  const hosting = serviceById.hosting;
+  const hostingRow = hosting && hosting.prices ? hosting.prices[0] : null;
   const nfcIcon = `<svg class="nfc" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7.5a6 6 0 0 1 0 9M12 5a9.5 9.5 0 0 1 0 14M15.5 2.5a13 13 0 0 1 0 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="12" r="1.8" fill="currentColor"/></svg>`;
   const beautySection = beauty ? `
 <section class="belleza" id="belleza">
@@ -170,7 +173,12 @@ export function renderLanding({ site, config }) {
         <li class="belleza-total">
           <h3>${esc(beauty.pack.label)}</h3>
           <span class="local-precio">${esc(beauty.pack.price)}</span>
-        </li>
+        </li>${hostingRow ? `
+        <li class="belleza-hosting">
+          <h3>${esc(hostingRow.label)}</h3>
+          <p>${esc(beauty.hostingNote)}</p>
+          <span class="local-precio">${esc(hostingRow.price)}</span>
+        </li>` : ''}
       </ul>
       <div class="belleza-opcion">
         <h3>Opcional: ${esc(beauty.option.name)}</h3>
@@ -219,7 +227,7 @@ export function renderLanding({ site, config }) {
     { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
     ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
     ...(beauty ? [{ title: 'Barberías y salones de belleza', rows: [
-      { label: `${beauty.pack.name} (${beauty.pack.label.charAt(0).toLowerCase()}${beauty.pack.label.slice(1)})`, price: beauty.pack.price },
+      { label: `${beauty.pack.name} (${beauty.pack.label.charAt(0).toLowerCase()}${beauty.pack.label.slice(1)}; hosting aparte)`, price: beauty.pack.price },
       { label: `${beauty.option.name} (opcional)`, price: beauty.option.price },
     ] }] : []),
   ];

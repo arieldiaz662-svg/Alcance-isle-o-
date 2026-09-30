@@ -53,7 +53,9 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(belleza, /Tarjeta NFC de reseñas<\/h3>[\s\S]*?Incluido/);
   assert.match(belleza, /Web \+ tarjeta NFC de reseñas<\/h3>\s*<span class="local-precio">225 €/);
   assert.match(belleza, /Opcional: Tarjetas de visita personalizadas[\s\S]*?50 € \/ 100 uds\./);
-  assert.match(precios, priceRow('Pack barberías y salones de belleza (web + tarjeta NFC de reseñas)', '225 €'));
+  assert.match(precios, priceRow('Pack barberías y salones de belleza (web + tarjeta NFC de reseñas; hosting aparte)', '225 €'));
+  // El pack de belleza no incluye el hosting: se muestra aparte con la tarifa anual.
+  assert.match(belleza, /class="belleza-hosting">[\s\S]*?Hosting y dominio \(12 meses\)[\s\S]*?se paga aparte[\s\S]*?90 € \/ año/);
   assert.match(precios, priceRow('Tarjetas de visita personalizadas (opcional)', '50 € / 100 uds.'));
   assert.match(belleza, /wa\.me\/34623243294\?text=Hola%2C%20tengo%20una%20barber%C3%ADa/);
   // El QR del expositor es real y, además, un enlace (en el móvil no se puede escanear la propia pantalla).

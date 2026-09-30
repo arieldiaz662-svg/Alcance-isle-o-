@@ -413,3 +413,5 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
 }
 .belleza-opcion h3 { font-size: var(--t-m); margin: 0 0 .2rem; }
 .belleza-opcion p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
+
+.belleza-hosting h3 { color: var(--gris); }

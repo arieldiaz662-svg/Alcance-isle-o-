@@ -86,6 +86,8 @@ export const site = {
       },
     ],
     pack: { name: 'Pack barberías y salones de belleza', label: 'Web + tarjeta NFC de reseñas', price: '225 €' },
+    // El pack no incluye el hosting: se cobra aparte con la tarifa anual de "Hosting y dominio".
+    hostingNote: 'El hosting y dominio de tu web se paga aparte, cada año.',
     // Opción de imprenta, aparte del pack.
     option: {
       name: 'Tarjetas de visita personalizadas',
