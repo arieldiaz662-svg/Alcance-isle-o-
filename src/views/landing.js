@@ -21,10 +21,11 @@ export function renderLanding({ site, config }) {
   const to = links(config);
   const wa = whatsappUrl(whatsapp, site.whatsappGreeting);
   const team = site.team.filter((person) => person.name && person.name.trim());
-  const { extras, pack, demoMenu, journey, hero } = site;
+  const { extras, pack, demoMenu, journey, hero, beauty } = site;
 
   const nav = [
     { id: 'servicios', label: 'Servicios' },
+    ...(beauty ? [{ id: 'belleza', label: beauty.navLabel }] : []),
     { id: 'por-que', label: 'Por qué elegirnos' },
     { id: 'precios', label: 'Precios' },
     ...(team.length ? [{ id: 'equipo', label: 'Equipo' }] : []),
@@ -130,6 +131,51 @@ export function renderLanding({ site, config }) {
   </div>
 </section>` : '';
 
+  // ---------- Barberías y salones de belleza ----------
+  const nfcIcon = `<svg class="nfc" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7.5a6 6 0 0 1 0 9M12 5a9.5 9.5 0 0 1 0 14M15.5 2.5a13 13 0 0 1 0 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="12" r="1.8" fill="currentColor"/></svg>`;
+  const beautySection = beauty ? `
+<section class="belleza" id="belleza">
+  <div class="wrap belleza-grid">
+    <figure class="mostrador">
+      <div class="movil movil-suelto" aria-hidden="true">
+        <div class="carta">
+          <div class="carta-cab">
+            <strong>${esc(beauty.demo.business)}</strong>
+            <span>${esc(beauty.demo.label)}</span>
+          </div>
+          <ul class="carta-lista">${beauty.demo.items.map(([name, price]) => `
+            <li><span>${esc(name)}</span><span class="guia"></span><span>${esc(price)}</span></li>`).join('')}
+          </ul>
+          <div class="carta-pie">
+            <span class="carta-boton carta-boton-wa">${esc(beauty.demo.button)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="tarjeta-nfc" aria-hidden="true">
+        ${nfcIcon}
+        <span class="estrellas">★★★★★</span>
+        <strong>${esc(beauty.demo.card)}</strong>
+      </div>
+      <figcaption>${esc(beauty.demo.caption)}</figcaption>
+    </figure>
+    <div>
+      <h2>${esc(beauty.title)}</h2>
+      <p class="belleza-intro">${esc(beauty.intro)}</p>
+      <ul class="local-lista">${beauty.offers.map((offer) => {
+        const service = serviceById[offer.service];
+        return `
+        <li>
+          <h3>${esc(offer.name)}</h3>
+          <p>${esc(offer.text)}</p>
+          <span class="local-precio">${esc(service ? priceOf(service) : '')}</span>
+        </li>`;
+      }).join('')}
+      </ul>
+      <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, beauty.whatsappText))}" rel="noopener" target="_blank">${esc(beauty.cta)}</a>
+    </div>
+  </div>
+</section>` : '';
+
   // ---------- Por qué elegirnos ----------
   const whySection = `
 <section class="porque" id="por-que">
@@ -210,6 +256,7 @@ export function renderLanding({ site, config }) {
 ${heroSection}
 ${journeySection}
 ${extrasSection}
+${beautySection}
 ${whySection}
 ${stepsSection}
 ${pricesSection}

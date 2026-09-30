@@ -5,7 +5,7 @@ export const site = {
   name: 'Alcance Isleño',
   title: 'Alcance Isleño | Tu mesa digital: presencia digital para negocios de Tenerife',
   description:
-    'Ficha de Google Business, reseñas, web con carta digital y hosting para cafeterías, bares y pequeños negocios de Tenerife. Todo conectado y listo en 10 días laborables.',
+    'Ficha de Google Business, reseñas, web con carta digital y hosting para cafeterías, bares, restaurantes, barberías y salones de belleza de Tenerife. Todo conectado y listo en 10 días laborables.',
   region: 'Tenerife',
 
   // Contacto. Las variables de entorno WHATSAPP_NUMBER y CONTACT_EMAIL, si existen, tienen prioridad.
@@ -25,7 +25,7 @@ export const site = {
 
   // CARTA DE DEMOSTRACIÓN que aparece en el móvil de la portada (negocio ficticio).
   demoMenu: {
-    business: 'Cafetería Marisol',
+    business: 'Bar/Restaurante Isleño',
     table: 'Mesa 4',
     caption: 'Ejemplo de carta digital: toca las pestañas. El QR abre nuestro WhatsApp.',
     // El QR del expositor es real: abre WhatsApp con este mensaje ya escrito.
@@ -67,6 +67,43 @@ export const site = {
         ],
       },
     ],
+  },
+
+  // BARBERÍAS Y SALONES DE BELLEZA: web con servicios + tarjeta NFC de reseñas.
+  // "service" enlaza con el precio de la lista de precios (services / extras).
+  beauty: {
+    navLabel: 'Barberías y belleza',
+    title: 'Para barberías y salones de belleza',
+    intro: 'Tu web con tus servicios y precios, citas por WhatsApp y una tarjeta en el mostrador para que cada cliente contento te deje su reseña en Google.',
+    offers: [
+      {
+        service: 'landing',
+        name: 'Landing page con tus servicios',
+        text: 'Servicios y precios, fotos de tus trabajos, horarios, ubicación y un botón para pedir cita por WhatsApp.',
+      },
+      {
+        service: 'nfc',
+        name: 'Tarjeta NFC de reseñas',
+        text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.',
+      },
+    ],
+    cta: 'Pide información para tu negocio',
+    whatsappText: 'Hola, tengo una barbería o salón de belleza y quiero información sobre la web y la tarjeta de reseñas',
+    // Web de ejemplo que aparece en el móvil (negocio ficticio).
+    demo: {
+      business: 'Barbería Isleña',
+      label: 'Servicios',
+      items: [
+        ['Corte de pelo', '12 €'],
+        ['Corte + barba', '18 €'],
+        ['Arreglo de barba', '8 €'],
+        ['Corte infantil', '10 €'],
+        ['Lavado y peinado', '15 €'],
+      ],
+      button: 'Pedir cita por WhatsApp',
+      card: 'Acerca tu móvil y déjanos tu reseña',
+      caption: 'Ejemplo de web y tarjeta de reseñas para una barbería.',
+    },
   },
 
   // RECORRIDO DEL CLIENTE: cada paso muestra el servicio que lo resuelve (por su "id").

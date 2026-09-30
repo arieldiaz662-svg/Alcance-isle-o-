@@ -43,7 +43,15 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   // Portada: la mesa con la carta de demostración (pestañas accesibles) y el recorrido del cliente.
   assert.match(index, /role="tablist"/);
   assert.match(index, /id="carta-panel-1"[^>]*hidden/);
-  assert.match(index, /Cafetería Marisol/);
+  assert.match(index, /Bar\/Restaurante Isleño/);
+  assert.doesNotMatch(index, /Marisol/);
+  // Sección para barberías y salones de belleza: landing + tarjeta NFC, con los precios de la lista.
+  const belleza = index.slice(index.indexOf('id="belleza"'), index.indexOf('id="por-que"'));
+  assert.match(index, /href="#belleza">Barberías y belleza</);
+  assert.match(belleza, /Para barberías y salones de belleza/);
+  assert.match(belleza, /Landing page con tus servicios<\/h3>[\s\S]*?desde 200 €/);
+  assert.match(belleza, /Tarjeta NFC de reseñas<\/h3>[\s\S]*?25 €/);
+  assert.match(belleza, /wa\.me\/34623243294\?text=Hola%2C%20tengo%20una%20barber%C3%ADa/);
   // El QR del expositor es real y, además, un enlace (en el móvil no se puede escanear la propia pantalla).
   assert.match(index, /<a class="expositor" href="https:\/\/wa\.me\/34623243294\?text=Hola%2C%20quiero%20mi%20mesa%20digital"/);
   assert.match(index, /<svg class="qr" viewBox="-1 -1 39 39"/);
@@ -59,7 +67,8 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(precios, priceRow('Actualización completa de la carta', '40 €'));
   assert.match(precios, /class="pack"[\s\S]*<s>415 €<\/s> <strong>390 €<\/strong>/);
   assert.match(precios, priceRow('Placa de reseñas QR + NFC', '25 €'));
-  assert.doesNotMatch(index, /Tarjeta NFC|300 €/);
+  assert.doesNotMatch(precios, /Tarjeta NFC/, 'en la lista de precios se llama "Placa de reseñas QR + NFC"');
+  assert.doesNotMatch(index, /300 €/);
   assert.match(precios, /Precios sin IGIC/);
   // Sin datos del titular no se publica el aviso legal ni su enlace.
   assert.ok(!existsSync(join(outDir, 'aviso-legal.html')));

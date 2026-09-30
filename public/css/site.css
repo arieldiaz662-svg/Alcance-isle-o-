@@ -362,3 +362,42 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
   html { scroll-behavior: auto; }
   .btn { transition: none; }
 }
+
+/* ---------- 14. Barberías y salones de belleza ---------- */
+.belleza-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 4rem; align-items: center; }
+.belleza-intro { font-size: var(--t-l); line-height: 1.45; }
+.mostrador { /* móvil y tarjeta sobre el mostrador del salón */
+  position: relative; margin: 0; padding: 2.5rem 1rem 8rem;
+  background: var(--niebla); border-radius: 6px;
+}
+.movil-suelto {
+  position: relative; left: auto; top: auto;
+  width: 240px; aspect-ratio: 9 / 15.5; margin: 0 auto 0 6%;
+  transform: rotate(-3deg);
+}
+.movil-suelto .carta-cab { margin-bottom: .6rem; }
+.tarjeta-nfc {
+  position: absolute; right: 5%; bottom: 3rem;
+  width: 190px; aspect-ratio: 85.6 / 54; /* tamaño de una tarjeta de crédito */
+  padding: .8rem .9rem;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: var(--tinta); color: var(--papel); border-radius: 10px;
+  transform: rotate(-7deg);
+  box-shadow: -10px 16px 18px -10px rgba(14, 42, 71, .45);
+}
+.tarjeta-nfc .nfc { width: 26px; height: 26px; color: var(--sol); }
+.tarjeta-nfc .estrellas { color: var(--sol); letter-spacing: .12em; font-size: .8rem; }
+.tarjeta-nfc strong { font-size: .82rem; line-height: 1.2; }
+.mostrador figcaption { position: absolute; left: 1rem; bottom: .8rem; font-size: var(--t-s); color: var(--gris); }
+@media (max-width: 860px) {
+  .belleza-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .belleza-grid > div { order: -1; } /* en móvil, primero el texto */
+}
+@media (max-width: 480px) { /* en móvil: sin superponer, móvil arriba y tarjeta debajo */
+  .mostrador { padding: 1.8rem 1rem 1rem; }
+  .movil-suelto { width: 220px; margin: 0 auto; }
+  .movil-suelto .carta { font-size: .84rem; }
+  .movil-suelto .carta-lista li:nth-child(n+5) { display: none; }
+  .tarjeta-nfc { position: relative; right: auto; bottom: auto; width: 170px; margin: -1rem 0 0 auto; }
+  .mostrador figcaption { position: static; margin-top: 1rem; }
+}
