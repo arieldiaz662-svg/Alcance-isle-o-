@@ -5,7 +5,7 @@ const STATUS = {
   new: 'Nuevo', contacted: 'Contactado', proposal: 'Propuesta enviada', won: 'Ganado', lost: 'Perdido',
 };
 const SERVICES = {
-  nfc: 'Tarjeta NFC', gbp: 'Google Business', landing: 'Landing page', hosting: 'Hosting', mesa: 'Expositores de mesa', pegatinas: 'Pegatinas QR',
+  nfc: 'Placa de reseñas', gbp: 'Google Business', landing: 'Landing page', hosting: 'Hosting', mesa: 'Expositores de mesa', pegatinas: 'Pegatinas QR',
   varios: 'Varios', 'no-se': 'No lo sabe',
 };
 

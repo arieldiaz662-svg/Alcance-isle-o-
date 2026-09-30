@@ -71,19 +71,23 @@ export const site = {
     {
       id: 'hosting',
       name: 'Hosting y mantenimiento',
-      priceLabel: 'Hosting, dominio y mantenimiento (12 meses)',
-      text: 'Alojamiento y dominio de tu web, mantenimiento, pequeños cambios de contenido (como actualizar la carta) y soporte cuando lo necesites.',
-      benefit: 'Tu web siempre online y al día.',
-      price: '300 € / año',
+      text: 'Alojamos tu web con tu propio dominio y la mantenemos siempre online. Los cambios (precios, platos, horarios o fotos) solo los pagas cuando los necesitas, sin cuotas de mantenimiento.',
+      benefit: 'Tu web siempre online, y al día cuando tú lo decidas.',
+      // Varias filas de precio para un mismo servicio.
+      prices: [
+        { label: 'Hosting y dominio (12 meses)', price: '90 € / año' },
+        { label: 'Cambio puntual de contenido (precios, horarios, fotos, un plato…)', price: '15 € / cambio' },
+        { label: 'Actualización completa de la carta', price: '40 €' },
+      ],
     },
   ],
 
   // PACK COMPLETO (se muestra destacado en precios). Pon "pack: null" para ocultarlo.
   pack: {
     name: 'Pack completo',
-    text: 'Ficha de Google Business + landing page con carta digital + hosting y mantenimiento 12 meses. La placa QR de reseñas, de regalo.',
-    price: '600 €',
-    was: '625 €',
+    text: 'Ficha de Google Business + landing page con carta digital + hosting y dominio el primer año. La placa de reseñas QR + NFC, de regalo.',
+    price: '390 €',
+    was: '415 €',
   },
   pricesNote: 'Precios sin IGIC. Imprenta y fotografía profesional se presupuestan aparte.',
 
@@ -113,9 +117,9 @@ export const site = {
       },
       {
         id: 'nfc',
-        name: 'Tarjeta NFC de reseñas',
-        text: 'Tus clientes acercan el móvil y dejan su reseña en Google en segundos, sin buscar nada.',
-        price: 'desde 25 €',
+        name: 'Placa de reseñas QR + NFC',
+        text: 'Tus clientes escanean el QR o acercan el móvil y dejan su reseña en Google o Tripadvisor en segundos, sin buscar nada.',
+        price: '25 €',
       },
     ],
   },

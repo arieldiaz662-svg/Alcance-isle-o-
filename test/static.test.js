@@ -43,8 +43,12 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /id="por-que"/);
   assert.match(index, /Todo conectado, no piezas sueltas/);
   assert.match(index, /Listo en 10 días laborables/);
-  assert.match(precios, /Hosting, dominio y mantenimiento \(12 meses\)<\/span><span class="importe">300 € \/ año/);
-  assert.match(precios, /class="pack"[\s\S]*<s>625 €<\/s><strong>600 €<\/strong>/);
+  assert.match(precios, /Hosting y dominio \(12 meses\)<\/span><span class="importe">90 € \/ año/);
+  assert.match(precios, /Cambio puntual de contenido[^<]*<\/span><span class="importe">15 € \/ cambio/);
+  assert.match(precios, /Actualización completa de la carta<\/span><span class="importe">40 €/);
+  assert.match(precios, /class="pack"[\s\S]*<s>415 €<\/s><strong>390 €<\/strong>/);
+  assert.match(precios, /Placa de reseñas QR \+ NFC<\/span><span class="importe">25 €</);
+  assert.doesNotMatch(index, /Tarjeta NFC|300 €/);
   assert.match(precios, /Precios sin IGIC/);
   // Sin datos del titular no se publica el aviso legal ni su enlace.
   assert.ok(!existsSync(join(outDir, 'aviso-legal.html')));

@@ -25,7 +25,7 @@ export function renderLanding({ site, config }) {
   const priceRows = (rows) => rows.map((row) => `
       <div class="precio-fila"><span>${esc(row.label)}</span><span class="importe">${esc(row.price)}</span></div>`).join('');
   const priceGroups = [
-    { title: 'Servicios digitales', rows: site.services.map((s) => ({ label: s.priceLabel || s.name, price: s.price })) },
+    { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
     ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
   ];
   const { pack } = site;
