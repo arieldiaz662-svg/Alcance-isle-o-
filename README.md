@@ -27,7 +27,7 @@ npm run preview      # revísala en http://localhost:4000
 Opciones con dominio gratuito de prueba:
 
 - **Netlify Drop** (la más rápida, sin cuenta de GitHub): entra en <https://app.netlify.com/drop> y arrastra la carpeta `dist/`. Te da una dirección `*.netlify.app` que puedes renombrar (p. ej. `alcance-isleno.netlify.app`) en *Site configuration → Change site name*. Para actualizar, arrastra de nuevo la carpeta en *Deploys*.
-- **GitHub Pages** (se actualiza sola con cada cambio): sube este repositorio a GitHub y en *Settings → Pages → Source* elige **GitHub Actions**. El flujo `.github/workflows/pages.yml` pasa los tests, genera la web y la publica en `https://<usuario>.github.io/alcance-isleno/`.
+- **GitHub Pages** (se actualiza sola con cada cambio): en cada push a `main`, el flujo `.github/workflows/pages.yml` pasa los tests, genera la web y la sube a la rama `gh-pages`, que se publica en `https://<usuario>.github.io/<repositorio>/`. Si Pages no se activa solo: *Settings → Pages → Source: Deploy from a branch → gh-pages / (root)*.
 - **Cloudflare Pages**: conecta el repositorio con comando de build `npm run build` y carpeta de salida `dist` → `*.pages.dev`.
 
 ## Aplicación completa (servidor)
