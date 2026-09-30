@@ -1,5 +1,5 @@
 // Genera la web en dist/ (o en la carpeta indicada). Es 100 % estática: se puede subir tal cual a
-// GitHub Pages, Netlify o Cloudflare Pages.
+// Vercel, GitHub Pages, Netlify o Cloudflare Pages.
 //
 // Uso:  npm run build
 //       PUBLIC_BASE_URL=https://alcance-isleno.netlify.app npm run build   (añade canonical y sitemap)
@@ -15,9 +15,16 @@ import { renderCookies, renderLegalNotice, renderPrivacy } from '../src/views/le
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
+// En Vercel, si no se indica PUBLIC_BASE_URL, se usa el dominio de producción del proyecto
+// (también en las vistas previas, para que canonical y og:image apunten siempre a la web real).
+function vercelProductionUrl() {
+  const host = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  return host ? `https://${host}` : '';
+}
+
 export function buildStatic({
   outDir = join(ROOT, 'dist'),
-  publicBaseUrl = process.env.PUBLIC_BASE_URL || '',
+  publicBaseUrl = process.env.PUBLIC_BASE_URL || vercelProductionUrl(),
   whatsappNumber = process.env.WHATSAPP_NUMBER || '',
   contactEmail = process.env.CONTACT_EMAIL || '',
 } = {}) {
@@ -67,7 +74,8 @@ ${sitemapUrls.map((path) => `  <url><loc>${config.publicBaseUrl}/${path}</loc></
 `);
   }
 
-  // Cabeceras de seguridad para Netlify y Cloudflare Pages (GitHub Pages las ignora).
+  // Cabeceras de seguridad para Netlify y Cloudflare Pages (GitHub Pages las ignora; Vercel las
+  // toma de vercel.json).
   writeFileSync(join(outDir, '_headers'), `/*
   Content-Security-Policy: ${STATIC_CSP}; frame-ancestors 'none'
   X-Content-Type-Options: nosniff

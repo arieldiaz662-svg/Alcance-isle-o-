@@ -9,6 +9,7 @@ import { after, before, describe, test } from 'node:test';
 
 import { buildStatic } from '../scripts/build-static.js';
 import { site } from '../src/content/site.js';
+import { STATIC_CSP } from '../src/views/html.js';
 
 const BASE = 'https://ejemplo.github.io/alcance-isleno';
 const outDir = mkdtempSync(join(tmpdir(), 'alcance-static-'));
@@ -32,6 +33,34 @@ before(() => {
 after(() => rmSync(outDir, { recursive: true, force: true }));
 
 describe('construcción y publicación', () => {
+  test('vercel.json publica dist/ con las mismas cabeceras de seguridad que el HTML', () => {
+    const vercel = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
+    assert.equal(vercel.buildCommand, 'npm run build');
+    assert.equal(vercel.outputDirectory, 'dist');
+    const headers = Object.fromEntries(vercel.headers.find((h) => h.source === '/(.*)').headers.map((h) => [h.key, h.value]));
+    assert.equal(headers['Content-Security-Policy'], `${STATIC_CSP}; frame-ancestors 'none'`);
+    assert.equal(headers['X-Content-Type-Options'], 'nosniff');
+  });
+
+  test('en Vercel, sin PUBLIC_BASE_URL, canonical y og:image usan el dominio de producción', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'alcance-vercel-'));
+    const saved = { base: process.env.PUBLIC_BASE_URL, host: process.env.VERCEL_PROJECT_PRODUCTION_URL };
+    try {
+      delete process.env.PUBLIC_BASE_URL;
+      process.env.VERCEL_PROJECT_PRODUCTION_URL = 'alcance-isleno.vercel.app';
+      buildStatic({ outDir: dir });
+      const html = readFileSync(join(dir, 'index.html'), 'utf8');
+      assert.match(html, /<link rel="canonical" href="https:\/\/alcance-isleno\.vercel\.app\/"/);
+      assert.match(html, /og:image" content="https:\/\/alcance-isleno\.vercel\.app\/assets\//);
+      assert.ok(existsSync(join(dir, 'sitemap.xml')));
+    } finally {
+      for (const [key, value] of [['PUBLIC_BASE_URL', saved.base], ['VERCEL_PROJECT_PRODUCTION_URL', saved.host]]) {
+        if (value === undefined) delete process.env[key]; else process.env[key] = value;
+      }
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   test('sitio 100 % estático: una sola dependencia y sin restos del servidor archivado', () => {
     const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
     assert.deepEqual(Object.keys(pkg.dependencies), ['qrcode']);
