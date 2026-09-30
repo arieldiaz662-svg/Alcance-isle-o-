@@ -10,11 +10,6 @@
   src: url("../fonts/familjen-grotesk.woff2") format("woff2-variations"), url("../fonts/familjen-grotesk.woff2") format("woff2");
   font-weight: 400 700; font-style: normal; font-display: swap;
 }
-@font-face {
-  font-family: "Familjen Grotesk";
-  src: url("../fonts/familjen-grotesk-italic.woff2") format("woff2-variations"), url("../fonts/familjen-grotesk-italic.woff2") format("woff2");
-  font-weight: 400 700; font-style: italic; font-display: swap;
-}
 
 /* ---------- 1. Tokens: cambia aquí colores y medidas ---------- */
 :root {
@@ -96,7 +91,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .nav ul a { text-decoration: none; font-weight: 500; }
 .nav ul a:hover { color: var(--atlantico); }
 .nav .btn { padding: .55rem 1.1rem; }
-@media (max-width: 820px) { .nav ul { display: none; } }
+@media (max-width: 820px) { /* en móvil, los enlaces pasan a una segunda fila desplazable */
+  html { scroll-padding-top: 112px; }
+  .nav .wrap { flex-wrap: wrap; height: auto; padding: .6rem 0 .1rem; row-gap: .15rem; }
+  .nav ul {
+    order: 3; width: 100%; gap: 1.3rem; padding: .35rem 0 .55rem;
+    overflow-x: auto; scrollbar-width: none; white-space: nowrap; font-size: .95rem;
+  }
+  .nav ul::-webkit-scrollbar { display: none; }
+}
 
 /* ---------- 4. Portada: la mesa ---------- */
 .mesa {
@@ -256,7 +259,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
   padding: 1rem 0; border-bottom: 1px solid var(--linea);
 }
-.local-lista h3 { font-size: var(--t-m); margin: 0 0 .2rem; }
 .local-lista p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
 .local-precio { grid-column: 2; grid-row: 1 / span 2; font-weight: 700; white-space: nowrap; }
 

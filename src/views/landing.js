@@ -23,9 +23,9 @@ export function renderLanding({ site, config }) {
   const team = site.team.filter((person) => person.name && person.name.trim());
   const { extras, pack, demoMenu, journey, hero, sectors } = site;
 
-  const nav = [
-    { id: 'servicios', label: 'Servicios' },
+  const nav = [ // mismo orden que las secciones de la página
     ...(sectors ? [{ id: 'packs', label: 'Packs' }] : []),
+    { id: 'servicios', label: 'Servicios' },
     { id: 'por-que', label: 'Por qué elegirnos' },
     { id: 'precios', label: 'Precios' },
     ...(team.length ? [{ id: 'equipo', label: 'Equipo' }] : []),
@@ -34,6 +34,15 @@ export function renderLanding({ site, config }) {
   const allServices = [...site.services, ...(extras ? extras.items : [])];
   const serviceById = Object.fromEntries(allServices.map((service) => [service.id, service]));
   const priceOf = (service) => service.price || (service.prices && service.prices[0].price) || '';
+
+  // Tarifa anual de hosting (primera fila de precios del servicio "hosting").
+  const hostingRow = serviceById.hosting && serviceById.hosting.prices ? serviceById.hosting.prices[0] : null;
+  // Lo que incluye el pack completo se describe a partir de la pestaña que lo usa (sin repetir textos).
+  const mainSector = (sectors || []).find((sector) => sector.pack === 'main');
+  const packText = mainSector
+    ? `${mainSector.includes.filter((i) => !i.badge).map((i, n) => (n ? i.name.charAt(0).toLowerCase() + i.name.slice(1) : i.name)).join(' + ')}.${mainSector.includes.filter((i) => i.badge)
+      .map((i) => ` ${i.name}: ${i.badge.toLowerCase()}.`).join('')}`
+    : '';
 
   const serviceOptions = allServices
     .map((service) => `<option value="${esc(service.id)}">${esc(service.name)}</option>`).join('');
@@ -95,12 +104,12 @@ export function renderLanding({ site, config }) {
       return `
       <li>
         <h3>${esc(step.moment)}</h3>
-        <p class="recorrido-servicio">${esc(step.name || service.name)} <span>${esc(priceOf(service))}</span></p>
-        <p>${esc(step.text || service.text)}</p>
+        <p class="recorrido-servicio">${esc(service.name)} <span>${esc(priceOf(service))}</span></p>
+        <p>${esc(service.text)}</p>
       </li>`;
     }).join('')}
     </ol>
-    <p class="recorrido-nota">${esc(journey.note)}</p>
+    <p class="recorrido-nota">${esc(journey.note.replace('{hosting}', hostingRow ? hostingRow.price.replace(' / año', ' al año') : ''))}</p>
   </div>
 </section>`;
 
@@ -109,9 +118,6 @@ export function renderLanding({ site, config }) {
   const extraById = Object.fromEntries((extras ? extras.items : []).map((item) => [item.id, item]));
 
   // ---------- Packs por tipo de negocio (pestañas) ----------
-  // Tarifa anual de hosting (primera fila de precios del servicio "hosting").
-  const hosting = serviceById.hosting;
-  const hostingRow = hosting && hosting.prices ? hosting.prices[0] : null;
   const packOf = (sector) => (sector.pack === 'main' ? pack : sector.pack);
   const nfcIcon = `<svg class="nfc" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7.5a6 6 0 0 1 0 9M12 5a9.5 9.5 0 0 1 0 14M15.5 2.5a13 13 0 0 1 0 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="12" r="1.8" fill="currentColor"/></svg>`;
 
@@ -254,7 +260,7 @@ export function renderLanding({ site, config }) {
     <div class="carta-precios">${pack ? `
       <div class="pack">
         <h3>${esc(pack.name)}</h3>
-        <p>${esc(pack.text)}</p>
+        <p>${esc(packText)}</p>
         <p class="pack-precio">${pack.was ? `<s>${esc(pack.was)}</s> ` : ''}<strong>${esc(pack.price)}</strong></p>
       </div>` : ''}${priceGroups.map((group) => `
       <div class="carta-grupo">

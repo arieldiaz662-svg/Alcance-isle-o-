@@ -3,12 +3,13 @@
 //
 // Uso:  npm run build
 //       PUBLIC_BASE_URL=https://alcance-isleno.netlify.app npm run build   (añade canonical y sitemap)
-import { cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { site } from '../src/content/site.js';
-import { hasLegalNotice, messagePage } from '../src/views/html.js';
+import { STATIC_CSP, hasLegalNotice, messagePage } from '../src/views/html.js';
 import { renderLanding } from '../src/views/landing.js';
 import { renderCookies, renderLegalNotice, renderPrivacy } from '../src/views/legal.js';
 
@@ -20,8 +21,12 @@ export function buildStatic({
   whatsappNumber = process.env.WHATSAPP_NUMBER || '',
   contactEmail = process.env.CONTACT_EMAIL || '',
 } = {}) {
+  // Versión de CSS y JS según su contenido (?v=...): tras publicar, nadie recibe el HTML nuevo
+  // con una hoja de estilos antigua guardada en caché.
+  const version = (file) => createHash('sha256').update(readFileSync(join(ROOT, 'public', file))).digest('hex').slice(0, 10);
   const config = {
     static: true,
+    assetVersions: { 'css/site.css': version('css/site.css'), 'js/site.js': version('js/site.js') },
     publicBaseUrl: publicBaseUrl.replace(/\/+$/, ''),
     whatsappNumber: whatsappNumber.replace(/\D/g, ''),
     contactEmail,
@@ -35,9 +40,12 @@ export function buildStatic({
     ...(hasLegalNotice(site) ? { 'aviso-legal.html': renderLegalNotice({ site, config }) } : {}),
     'privacidad.html': renderPrivacy({ site, config }),
     'cookies.html': renderCookies({ site, config }),
+    // GitHub Pages sirve 404.html en cualquier ruta: <base> hace que estilos y enlaces funcionen también
+    // en rutas con subcarpetas.
     '404.html': messagePage({
       site, config, title: 'Página no encontrada', heading: 'Esta página no existe',
       text: 'Puede que el enlace esté mal escrito o que la página se haya movido.',
+      baseHref: config.publicBaseUrl ? `${config.publicBaseUrl}/` : '',
     }),
   };
   for (const [file, html] of Object.entries(pages)) writeFileSync(join(outDir, file), html);
@@ -62,7 +70,7 @@ ${sitemapUrls.map((path) => `  <url><loc>${config.publicBaseUrl}/${path}</loc></
 
   // Cabeceras de seguridad para Netlify y Cloudflare Pages (GitHub Pages las ignora).
   writeFileSync(join(outDir, '_headers'), `/*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'
+  Content-Security-Policy: ${STATIC_CSP}; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()

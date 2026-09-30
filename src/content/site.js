@@ -7,6 +7,10 @@ export const site = {
   description:
     'Ficha de Google Business, reseñas, web con carta digital y hosting para cafeterías, bares, restaurantes, barberías y salones de belleza de Tenerife. Todo conectado y sin tecnicismos.',
   region: 'Tenerife',
+  // Imagen de vista previa al compartir el enlace (WhatsApp, redes). 1200×630, en public/img/.
+  // Se regenera con: npm run og-image (tras cambios visibles en la portada).
+  ogImage: 'img/og.jpg',
+  ogImageAlt: 'Alcance Isleño: tu escaparate digital. Carta digital en el móvil sobre una mesa de bar.',
 
   // Contacto. Las variables de entorno WHATSAPP_NUMBER y CONTACT_EMAIL, si existen, tienen prioridad.
   whatsappNumber: '34623243294', // con prefijo de país, solo dígitos
@@ -82,7 +86,7 @@ export const site = {
         { name: 'Landing page con carta digital', text: 'Tu carta con precios, horario, ubicación y contacto por WhatsApp. Se abre desde el QR de la mesa, sin descargar nada.' },
         { name: 'Ficha de Google Business', text: 'La creamos o optimizamos: horarios, fotos, enlace a tu carta y acceso directo a tus reseñas.' },
         { name: 'Hosting y dominio el primer año', text: 'Tu web online desde el primer día.' },
-        { name: 'Placa de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.', badge: 'De regalo' },
+        { name: 'Tarjeta de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.', badge: 'De regalo' },
       ],
       pack: 'main',
       // Opción: material para las mesas. "items" son ids de extras.items; se muestran con la imagen de extras.
@@ -105,7 +109,7 @@ export const site = {
         ],
         button: 'Reservar por WhatsApp',
         card: 'Acerca tu móvil y déjanos tu reseña',
-        caption: 'Ejemplo de carta digital y placa de reseñas para un restaurante.',
+        caption: 'Ejemplo de carta digital y tarjeta de reseñas para un restaurante.',
       },
     },
     {
@@ -115,9 +119,9 @@ export const site = {
       intro: 'Barberías, peluquerías, estética, uñas, tatuajes, fisioterapia… Tu web con tus servicios y precios, citas por WhatsApp y una tarjeta en el mostrador para que cada cliente contento te deje su reseña en Google.',
       includes: [
         { name: 'Landing page con tus servicios', text: 'Servicios y precios, fotos de tus trabajos, horarios, ubicación y un botón para pedir cita por WhatsApp.' },
-        { name: 'Tarjeta NFC de reseñas', text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.' },
+        { name: 'Tarjeta de reseñas QR + NFC', text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.' },
       ],
-      pack: { name: 'Pack negocios con cita previa', label: 'Web + tarjeta NFC de reseñas', price: '225 €' },
+      pack: { name: 'Pack negocios con cita previa', label: 'Web + tarjeta de reseñas QR + NFC', price: '225 €' },
       // El pack no incluye el hosting: se muestra aparte con la tarifa anual de "Hosting y dominio".
       hostingNote: 'El hosting y dominio de tu web se paga aparte, cada año.',
       option: {
@@ -149,15 +153,11 @@ export const site = {
     title: 'Así llega un cliente a tu negocio',
     steps: [
       { moment: 'Te busca en Google', service: 'gbp' },
-      {
-        moment: 'Mira tu carta o tus servicios',
-        service: 'landing',
-        name: 'Landing page',
-        text: 'Una página rápida y adaptada a móvil con tu carta o tus servicios y precios, tu ubicación y un botón de WhatsApp para reservar mesa o pedir cita.',
-      },
+      { moment: 'Mira tu carta o tus servicios', service: 'landing' },
       { moment: 'Te deja una reseña', service: 'nfc' },
     ],
-    note: 'Y para que todo siga funcionando, alojamos tu web con tu dominio por 90 € al año. Los cambios (carta, servicios o precios) solo los pagas cuando los necesitas.',
+    // {hosting} se sustituye por el precio de "Hosting y dominio (12 meses)".
+    note: 'Y para que todo siga funcionando, alojamos tu web con tu dominio por {hosting}. Los cambios (carta, servicios o precios) solo los pagas cuando los necesitas.',
   },
 
   // POR QUÉ ELEGIRNOS
@@ -177,7 +177,7 @@ export const site = {
   // CÓMO TRABAJAMOS
   steps: [
     { title: 'Diagnóstico gratuito', text: 'Vemos cómo aparece hoy tu negocio en internet y qué necesitas, sin compromiso.' },
-    { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta, placa de reseñas y hosting, a partir del material que nos envíes.' },
+    { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta o tus servicios, tarjeta de reseñas y hosting, a partir del material que nos envíes.' },
     { title: 'Entrega y formación', text: 'Revisamos el diseño contigo (2 rondas de cambios), lo publicamos y te enseñamos a usarlo.' },
   ],
   stepsNote: 'Pagas el 50% al empezar y el 50% restante a la entrega.',
@@ -188,10 +188,9 @@ export const site = {
   services: [
     {
       id: 'landing',
-      name: 'Landing page con carta digital',
-      priceLabel: 'Landing page con carta digital',
-      text: 'Una página profesional, rápida y adaptada a móvil con tu carta digital, tus servicios, tu ubicación y contacto directo por WhatsApp. Tus clientes abren la carta desde el QR de la mesa, sin descargar nada.',
-      benefit: 'Tu web y tu carta, siempre a mano.',
+      name: 'Landing page',
+      priceLabel: 'Landing page con carta digital o servicios',
+      text: 'Una página rápida y adaptada a móvil con tu carta o tus servicios y precios, tu ubicación y un botón de WhatsApp para reservar mesa o pedir cita.',
       price: 'desde 200 €',
     },
     {
@@ -199,14 +198,11 @@ export const site = {
       name: 'Ficha de Google Business',
       priceLabel: 'Creación u optimización de la ficha de Google Business',
       text: 'Creamos tu ficha o reclamamos y optimizamos la que ya tienes: horarios, fotos, categorías, descripción, WhatsApp, Google Maps y acceso directo a tus reseñas.',
-      benefit: 'Que Google muestre tu negocio como merece.',
       price: '100 €',
     },
     {
       id: 'hosting',
       name: 'Hosting y mantenimiento',
-      text: 'Alojamos tu web con tu propio dominio y la mantenemos siempre online. Los cambios (precios, platos, horarios o fotos) solo los pagas cuando los necesitas, sin cuotas de mantenimiento.',
-      benefit: 'Tu web siempre online, y al día cuando tú lo decidas.',
       // Varias filas de precio para un mismo servicio.
       prices: [
         { label: 'Hosting y dominio (12 meses)', price: '90 € / año' },
@@ -216,10 +212,11 @@ export const site = {
     },
   ],
 
-  // PACK COMPLETO (se muestra destacado en precios). Pon "pack: null" para ocultarlo.
+  // PACK COMPLETO (se muestra destacado en precios y en la pestaña de hostelería).
+  // Lo que incluye se toma de sectors[0].includes. "was" debe ser la suma de los precios sueltos:
+  // un test lo comprueba. Pon "pack: null" para ocultarlo.
   pack: {
     name: 'Pack completo para hostelería',
-    text: 'Ficha de Google Business + landing page con carta digital + hosting y dominio el primer año. La placa de reseñas QR + NFC, de regalo.',
     price: '390 €',
     was: '415 €',
   },
@@ -229,8 +226,7 @@ export const site = {
   // y aparecen en la lista de precios.
   extras: {
     image: {
-      src: 'img/productos/expositor-mesa-800', // sin extensión: hay versiones .webp y .jpg de 480 y 800 px
-      small: 'img/productos/expositor-mesa-480',
+      small: 'img/productos/expositor-mesa-480', // sin extensión: hay versión .webp y .jpg
       alt: 'Expositor de mesa personalizado con logo, número de mesa y código QR de la carta',
       caption: 'Imagen de muestra', // quitar cuando se sustituya por la foto real
     },
@@ -249,7 +245,7 @@ export const site = {
       },
       {
         id: 'nfc',
-        name: 'Placa de reseñas QR + NFC',
+        name: 'Tarjeta de reseñas QR + NFC',
         text: 'Tus clientes escanean el QR o acercan el móvil y dejan su reseña en Google o Tripadvisor en segundos, sin buscar nada.',
         price: '25 €',
       },

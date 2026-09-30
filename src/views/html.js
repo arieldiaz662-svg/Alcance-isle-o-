@@ -29,13 +29,17 @@ export function contact(site, config) {
   };
 }
 
+// Política de seguridad de contenidos. En el servidor la envía helmet como cabecera; en la web
+// estática (GitHub Pages no permite cabeceras propias) va como <meta>. Debe coincidir con _headers.
+export const STATIC_CSP = "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; object-src 'none'; base-uri 'self'";
+
 // Rutas de enlaces y recursos. En modo servidor son absolutas ("/privacidad"); en la versión
 // estática son relativas y con .html, para que funcionen en cualquier subcarpeta (p. ej. GitHub Pages).
 export function links(config) {
   if (config.static) {
     return {
       home: './', legal: 'aviso-legal.html', privacy: 'privacidad.html', cookies: 'cookies.html',
-      asset: (file) => `assets/${file}`,
+      asset: (file) => `assets/${file}${config.assetVersions && config.assetVersions[file] ? `?v=${config.assetVersions[file]}` : ''}`,
       page: (path) => (path === '/' ? '' : `${path.slice(1)}.html`),
     };
   }
@@ -47,8 +51,12 @@ export function links(config) {
 }
 
 // Esqueleto común: <head>, navegación y pie. "nav" es la lista de enlaces del menú.
-export function layout({ site, config, title, description, path = '/', nav = [], body, scripts = [] }) {
+// baseHref: para páginas que se sirven desde cualquier ruta (404 de GitHub Pages), fija la base de los
+// enlaces relativos en la raíz de la web.
+export function layout({ site, config, title, description, path = '/', nav = [], body, scripts = [], baseHref = '' }) {
   const to = links(config);
+  // og:image necesita URL absoluta: solo se añade cuando se conoce la dirección pública.
+  const ogImage = config.publicBaseUrl && site.ogImage ? `${config.publicBaseUrl}/assets/${site.ogImage}` : '';
   const canonical = config.publicBaseUrl ? `${config.publicBaseUrl}${config.static ? `/${to.page(path)}` : path}` : '';
   const year = new Date().getFullYear();
   const home = path === '/' ? '' : to.home;
@@ -57,7 +65,10 @@ export function layout({ site, config, title, description, path = '/', nav = [],
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(title)}</title>
+${baseHref ? `<base href="${esc(baseHref)}">
+` : ''}${config.static ? `<meta http-equiv="Content-Security-Policy" content="${STATIC_CSP}">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+` : ''}<title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 ${canonical ? `<link rel="canonical" href="${esc(canonical)}">
 <meta property="og:url" content="${esc(canonical)}">
@@ -65,6 +76,13 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="${esc(site.name)}">
+${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(site.ogImageAlt || title)}">
+<meta name="twitter:card" content="summary_large_image">
+` : ''}
 <meta name="theme-color" content="#0E2A47">
 <link rel="icon" href="${to.asset('img/favicon.svg')}" type="image/svg+xml">
 <link rel="preload" href="${to.asset('fonts/familjen-grotesk.woff2')}" as="font" type="font/woff2" crossorigin>
@@ -103,9 +121,9 @@ ${scripts.map((file) => `<script src="${esc(to.asset(file))}" defer></script>`).
 }
 
 // Página sencilla para errores o mensajes (404, tarjeta desactivada...).
-export function messagePage({ site, config, title, heading, text }) {
+export function messagePage({ site, config, title, heading, text, baseHref = '' }) {
   return layout({
-    site, config, title: `${title} | ${site.name}`, description: text, path: '/',
+    site, config, title: `${title} | ${site.name}`, description: text, path: '/', baseHref,
     body: `<main class="pagina-simple"><div class="wrap">
   <h1>${esc(heading)}</h1>
   <p>${esc(text)}</p>

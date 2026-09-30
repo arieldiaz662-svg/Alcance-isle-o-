@@ -13,7 +13,8 @@
     "build": "node scripts/build-static.js",
     "preview": "node scripts/build-static.js && node scripts/preview.js",
     "create-admin": "node --env-file-if-exists=.env scripts/create-admin.js",
-    "test": "node --test"
+    "test": "node --test",
+    "og-image": "node scripts/og-image.cjs"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.2",
