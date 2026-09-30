@@ -27,8 +27,9 @@ const clean = (value) => {
 };
 
 export default async function leadRoutes(app, { repos, site, notify }) {
-  const serviceIds = new Set([...site.services.map((service) => service.id), 'varios', 'no-se']);
-  const serviceNames = Object.fromEntries(site.services.map((service) => [service.id, service.name]));
+  const allServices = [...(site.featured ? [site.featured] : []), ...site.services];
+  const serviceIds = new Set([...allServices.map((service) => service.id), 'varios', 'no-se']);
+  const serviceNames = Object.fromEntries(allServices.map((service) => [service.id, service.name]));
 
   app.post('/api/leads', {
     schema: createLeadSchema,

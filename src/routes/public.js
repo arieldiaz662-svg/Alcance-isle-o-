@@ -1,11 +1,12 @@
 import { renderLanding } from '../views/landing.js';
+import { hasLegalNotice } from '../views/html.js';
 import { renderCookies, renderLegalNotice, renderPrivacy } from '../views/legal.js';
 
 export default async function publicRoutes(app, { site, config, db }) {
   // Las páginas se generan una vez al arrancar: el contenido solo cambia con un despliegue.
   const pages = {
     '/': renderLanding({ site, config }),
-    '/aviso-legal': renderLegalNotice({ site, config }),
+    ...(hasLegalNotice(site) ? { '/aviso-legal': renderLegalNotice({ site, config }) } : {}),
     '/privacidad': renderPrivacy({ site, config }),
     '/cookies': renderCookies({ site, config }),
   };

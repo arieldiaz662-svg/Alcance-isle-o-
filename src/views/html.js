@@ -15,6 +15,11 @@ const LOGO = `<svg viewBox="0 0 48 60" aria-hidden="true">
         <polygon points="13,22 24,22 24,42" fill="#9EC1F2"/>
       </svg>`;
 
+// El aviso legal solo se publica cuando están los datos del titular (site.legal.owner).
+export function hasLegalNotice(site) {
+  return Boolean(site.legal && site.legal.owner && site.legal.owner.trim());
+}
+
 // Datos de contacto efectivos: las variables de entorno tienen prioridad sobre site.js.
 export function contact(site, config) {
   return {
@@ -86,7 +91,7 @@ ${body}
   <div class="wrap">
     <div>© ${year} ${esc(site.name)}</div>
     <nav aria-label="Información legal">
-      <a href="${to.legal}">Aviso legal</a>
+      ${hasLegalNotice(site) ? `<a href="${to.legal}">Aviso legal</a>` : ''}
       <a href="${to.privacy}">Política de privacidad</a>
       <a href="${to.cookies}">Cookies</a>
     </nav>

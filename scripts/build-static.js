@@ -8,7 +8,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { site } from '../src/content/site.js';
-import { messagePage } from '../src/views/html.js';
+import { hasLegalNotice, messagePage } from '../src/views/html.js';
 import { renderLanding } from '../src/views/landing.js';
 import { renderCookies, renderLegalNotice, renderPrivacy } from '../src/views/legal.js';
 
@@ -32,7 +32,7 @@ export function buildStatic({
 
   const pages = {
     'index.html': renderLanding({ site, config }),
-    'aviso-legal.html': renderLegalNotice({ site, config }),
+    ...(hasLegalNotice(site) ? { 'aviso-legal.html': renderLegalNotice({ site, config }) } : {}),
     'privacidad.html': renderPrivacy({ site, config }),
     'cookies.html': renderCookies({ site, config }),
     '404.html': messagePage({
@@ -47,7 +47,9 @@ export function buildStatic({
     cpSync(join(ROOT, 'public', folder), join(outDir, 'assets', folder), { recursive: true });
   }
 
-  const sitemapUrls = ['', 'aviso-legal.html', 'privacidad.html', 'cookies.html'];
+  const sitemapUrls = Object.keys(pages)
+    .filter((file) => file !== '404.html')
+    .map((file) => (file === 'index.html' ? '' : file));
   writeFileSync(join(outDir, 'robots.txt'), `User-agent: *\nAllow: /\n${
     config.publicBaseUrl ? `Sitemap: ${config.publicBaseUrl}/sitemap.xml\n` : ''}`);
   if (config.publicBaseUrl) {

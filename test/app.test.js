@@ -58,10 +58,14 @@ describe('web pública', () => {
   });
 
   test('páginas legales, robots, sitemap y healthz', async () => {
-    for (const url of ['/aviso-legal', '/privacidad', '/cookies', '/robots.txt', '/sitemap.xml', '/healthz']) {
+    for (const url of ['/privacidad', '/cookies', '/robots.txt', '/sitemap.xml', '/healthz']) {
       const response = await app.inject(url);
       assert.equal(response.statusCode, 200, url);
     }
+  });
+
+  test('sin datos del titular no hay aviso legal', async () => {
+    assert.equal((await app.inject('/aviso-legal')).statusCode, 404);
   });
 
   test('404 en HTML para páginas y en JSON para la API', async () => {

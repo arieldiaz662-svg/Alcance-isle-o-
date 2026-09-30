@@ -6,7 +6,9 @@ export function renderLanding({ site, config }) {
   const wa = whatsappUrl(whatsapp, site.whatsappGreeting);
   const team = site.team.filter((person) => person.name && person.name.trim());
 
+  const { featured } = site;
   const nav = [
+    ...(featured ? [{ id: 'expositores', label: 'Expositores' }] : []),
     { id: 'servicios', label: 'Servicios' },
     { id: 'como', label: 'Cómo trabajamos' },
     { id: 'precios', label: 'Precios' },
@@ -20,21 +22,48 @@ export function renderLanding({ site, config }) {
         <p class="beneficio">${esc(service.benefit)}</p>
       </article>`).join('');
 
-  const prices = site.services
+  const prices = [...(featured ? [featured] : []), ...site.services]
     .flatMap((service) => service.prices || [{ label: service.priceLabel || service.name, price: service.price }])
     .map((row) => `
       <div class="precio-fila"><span>${esc(row.label)}</span><span class="importe">${esc(row.price)}</span></div>`).join('');
 
   const COUNT_WORDS = ['Una', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis'];
   const count = site.services.length;
-  const servicesHeading = count === 1
+  let servicesHeading = count === 1
     ? 'Una forma de poner tu escaparate a punto'
     : `${COUNT_WORDS[count - 1] || count} formas de poner tu escaparate a punto`;
+  if (featured) servicesHeading = 'Y además, tu escaparate en Google y en internet';
   // Con 2 o 4 servicios, rejilla de 2 columnas para que no quede una tarjeta suelta.
   const gridClass = count % 3 !== 0 && count % 2 === 0 ? 'serv-grid serv-grid-2' : 'serv-grid';
 
-  const serviceOptions = site.services
+  const serviceOptions = [...(featured ? [featured] : []), ...site.services]
     .map((service) => `<option value="${esc(service.id)}">${esc(service.name)}</option>`).join('');
+
+  const featuredSection = featured ? `
+<section class="estrella" id="expositores">
+  <div class="wrap estrella-grid">
+    <picture class="estrella-foto">
+      <source type="image/webp" srcset="${esc(to.asset(`${featured.image.small}.webp`))} 480w, ${esc(to.asset(`${featured.image.src}.webp`))} 800w" sizes="(max-width: 860px) 100vw, 480px">
+      <img src="${esc(to.asset(`${featured.image.src}.jpg`))}" srcset="${esc(to.asset(`${featured.image.small}.jpg`))} 480w, ${esc(to.asset(`${featured.image.src}.jpg`))} 800w" sizes="(max-width: 860px) 100vw, 480px" alt="${esc(featured.image.alt)}" width="800" height="800" loading="lazy" decoding="async">
+    </picture>
+    <div>
+      <span class="lema">${esc(featured.badge)}</span>
+      <h2>${esc(featured.name)}</h2>
+      <p>${esc(featured.text)}</p>
+      <ul class="ventajas">${featured.points.map((point) => `
+        <li>${esc(point)}</li>`).join('')}
+      </ul>
+      <div class="opciones">${featured.prices.map((row) => `
+        <div class="opcion"><span>${esc(row.label)}</span><strong>${esc(row.price)}</strong></div>`).join('')}
+      </div>
+      <div class="acciones">
+        <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, featured.whatsappText))}" rel="noopener" target="_blank">Pide el tuyo por WhatsApp</a>
+        <a class="btn btn-linea" href="#precios">Ver precios</a>
+      </div>
+    </div>
+  </div>
+</section>
+` : '';
 
   const initials = (name) => name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase();
   const teamSection = team.length ? `
@@ -61,7 +90,7 @@ export function renderLanding({ site, config }) {
     <div>
       <span class="lema">Tu escaparate digital</span>
       <h1>Que tu negocio se vea y se encuentre en Google</h1>
-      <p class="lead">En ${esc(site.name)} ayudamos a pequeños negocios de ${esc(site.region)} a mejorar su presencia digital: más reseñas, una ficha de Google cuidada y una web sencilla que trabaja por ti.</p>
+      <p class="lead">En ${esc(site.name)} ayudamos a pequeños negocios de ${esc(site.region)} a mejorar su presencia digital: expositores de mesa con QR y NFC, más reseñas, una ficha de Google cuidada y una web sencilla que trabaja por ti.</p>
       <div class="acciones">
         <a class="btn btn-sol" href="${esc(wa)}" rel="noopener" target="_blank">Escríbenos por WhatsApp</a>
         <a class="btn btn-linea" href="#servicios">Ver servicios</a>
@@ -84,6 +113,7 @@ export function renderLanding({ site, config }) {
   </div>
 </div>
 
+${featuredSection}
 <section class="problema">
   <div class="wrap">
     <h2>Tu negocio es bueno, pero ¿te encuentran?</h2>

@@ -12,7 +12,7 @@ after(() => rmSync(outDir, { recursive: true, force: true }));
 test('genera la web estática con rutas relativas y el contacto de site.js', () => {
   buildStatic({ outDir, publicBaseUrl: 'https://ejemplo.github.io/alcance-isleno/' });
 
-  for (const file of ['index.html', 'aviso-legal.html', 'privacidad.html', 'cookies.html', '404.html',
+  for (const file of ['index.html', 'privacidad.html', 'cookies.html', '404.html',
     'robots.txt', 'sitemap.xml', '_headers', '.nojekyll', 'assets/css/site.css', 'assets/js/site.js',
     'assets/fonts/figtree.woff2', 'assets/fonts/bricolage-grotesque.woff2', 'assets/img/favicon.svg']) {
     assert.ok(existsSync(join(outDir, file)), file);
@@ -23,9 +23,19 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /wa\.me\/34623243294/);
   assert.match(index, /\+34 623 24 32 94/);
   assert.match(index, /100 €/);
-  assert.match(index, /Cuatro formas de poner tu escaparate a punto/);
-  assert.match(index, /Expositor de mesa personalizado \(impresión 3D\)<\/span><span class="importe">10 € \/ unidad/);
-  assert.match(index, /Pegatinas QR para mesa<\/span><span class="importe">50 € \/ 10 uds\./);
+  // Producto estrella: sección destacada con foto, primero en el menú y en precios.
+  assert.match(index, /id="expositores"/);
+  assert.match(index, /assets\/img\/productos\/expositor-mesa-800\.webp/);
+  assert.ok(existsSync(join(outDir, 'assets/img/productos/expositor-mesa-800.webp')));
+  assert.ok(index.indexOf('id="expositores"') < index.indexOf('class="problema"'), 'va justo después de la portada');
+  const precios = index.slice(index.indexOf('id="precios"'));
+  assert.ok(precios.indexOf('Expositor de mesa personalizado') < precios.indexOf('Tarjeta NFC de reseñas'));
+  assert.match(precios, /Expositor de mesa personalizado \(impresión 3D\)<\/span><span class="importe">10 € \/ unidad/);
+  assert.match(precios, /Pegatinas QR para mesa \(opción económica\)<\/span><span class="importe">50 € \/ 10 uds\./);
+  // Sin datos del titular no se publica el aviso legal ni su enlace.
+  assert.ok(!existsSync(join(outDir, 'aviso-legal.html')));
+  assert.doesNotMatch(index, /Aviso legal/);
+  assert.doesNotMatch(readFileSync(join(outDir, 'privacidad.html'), 'utf8'), /\[|NIF\/CIF/);
   assert.match(index, /data-mode="whatsapp"/);
   assert.doesNotMatch(index, /name="consent"/, 'la versión estática no guarda datos');
   assert.match(index, /<link rel="canonical" href="https:\/\/ejemplo\.github\.io\/alcance-isleno\/">/);

@@ -39,7 +39,9 @@ export function renderPrivacy({ site, config }) {
   const { legal } = site;
   const reach = contactLine(site, config);
   const sections = [
-    ['Responsable del tratamiento', `<p>${esc(legal.owner)} (NIF/CIF ${esc(legal.taxId)}), ${esc(legal.address)}. Contacto: ${reach}.</p>`],
+    ['Responsable del tratamiento', legal.owner
+      ? `<p>${esc(legal.owner)} (NIF/CIF ${esc(legal.taxId)}), ${esc(legal.address)}. Contacto: ${reach}.</p>`
+      : `<p>${esc(site.name)}, ${esc(site.region)}. Contacto: ${reach}.</p>`],
   ];
 
   if (config.static) {
