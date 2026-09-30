@@ -147,6 +147,7 @@ p { margin: 0 0 1rem; max-width: 62ch; }
 .servicios { background: var(--marino); color: var(--blanco); }
 .servicios .suave { color: #B9C7DC; }
 .serv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-top: 2.2rem; }
+.serv-grid-2 { grid-template-columns: repeat(2, 1fr); }
 .serv {
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.18);

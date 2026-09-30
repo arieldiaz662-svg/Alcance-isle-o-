@@ -20,8 +20,18 @@ export function renderLanding({ site, config }) {
         <p class="beneficio">${esc(service.benefit)}</p>
       </article>`).join('');
 
-  const prices = site.services.map((service) => `
-      <div class="precio-fila"><span>${esc(service.priceLabel || service.name)}</span><span class="importe">${esc(service.price)}</span></div>`).join('');
+  const prices = site.services
+    .flatMap((service) => service.prices || [{ label: service.priceLabel || service.name, price: service.price }])
+    .map((row) => `
+      <div class="precio-fila"><span>${esc(row.label)}</span><span class="importe">${esc(row.price)}</span></div>`).join('');
+
+  const COUNT_WORDS = ['Una', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis'];
+  const count = site.services.length;
+  const servicesHeading = count === 1
+    ? 'Una forma de poner tu escaparate a punto'
+    : `${COUNT_WORDS[count - 1] || count} formas de poner tu escaparate a punto`;
+  // Con 2 o 4 servicios, rejilla de 2 columnas para que no quede una tarjeta suelta.
+  const gridClass = count % 3 !== 0 && count % 2 === 0 ? 'serv-grid serv-grid-2' : 'serv-grid';
 
   const serviceOptions = site.services
     .map((service) => `<option value="${esc(service.id)}">${esc(service.name)}</option>`).join('');
@@ -88,9 +98,9 @@ export function renderLanding({ site, config }) {
 
 <section class="servicios" id="servicios">
   <div class="wrap">
-    <h2>Tres formas de poner tu escaparate a punto</h2>
+    <h2>${servicesHeading}</h2>
     <p class="suave">Puedes contratar cada servicio por separado o combinarlos.</p>
-    <div class="serv-grid">${services}
+    <div class="${gridClass}">${services}
     </div>
   </div>
 </section>
@@ -100,7 +110,7 @@ export function renderLanding({ site, config }) {
     <h2>Así de fácil</h2>
     <ol class="pasos">
       <li><strong>Hablamos</strong>Nos cuentas cómo funciona tu negocio y qué necesitas.</li>
-      <li><strong>Lo preparamos</strong>Nos encargamos de la parte técnica: ficha, tarjeta y web.</li>
+      <li><strong>Lo preparamos</strong>Nos encargamos de todo: ficha, tarjeta, web y material para tus mesas.</li>
       <li><strong>Empiezas a notarlo</strong>Más visibilidad, más reseñas y más contactos.</li>
     </ol>
     <p class="cierre">Sin tecnicismos. Nosotros nos encargamos.</p>

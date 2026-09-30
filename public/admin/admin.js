@@ -5,7 +5,8 @@ const STATUS = {
   new: 'Nuevo', contacted: 'Contactado', proposal: 'Propuesta enviada', won: 'Ganado', lost: 'Perdido',
 };
 const SERVICES = {
-  nfc: 'Tarjeta NFC', gbp: 'Google Business', landing: 'Landing page', varios: 'Varios', 'no-se': 'No lo sabe',
+  nfc: 'Tarjeta NFC', gbp: 'Google Business', landing: 'Landing page', mesa: 'Expositores / QR de mesa',
+  varios: 'Varios', 'no-se': 'No lo sabe',
 };
 
 const $ = (selector) => document.querySelector(selector);

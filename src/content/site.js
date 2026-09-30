@@ -39,6 +39,17 @@ export const site = {
       benefit: 'Una web propia sin complicaciones.',
       price: 'desde 200 €',
     },
+    {
+      id: 'mesa',
+      name: 'Expositores de mesa y pegatinas QR',
+      text: 'Diseñamos e imprimimos en 3D expositores de mesa personalizados con tu marca, o pegatinas QR para tus mesas, para que tus clientes dejen su reseña o te encuentren en un momento.',
+      benefit: 'Tu escaparate digital, también en la mesa.',
+      // Si un servicio tiene varias opciones, "prices" sustituye a "price" en la lista de precios.
+      prices: [
+        { label: 'Expositor de mesa personalizado (impresión 3D)', price: '10 € / unidad' },
+        { label: 'Pegatinas QR para mesa', price: '50 € / 10 uds.' },
+      ],
+    },
   ],
 
   // Rellena "name" (y opcionalmente "role" y "photo": guarda la foto en public/img/equipo/ y pon "img/equipo/ana.jpg").

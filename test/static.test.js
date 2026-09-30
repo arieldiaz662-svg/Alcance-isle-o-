@@ -23,6 +23,9 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /wa\.me\/34623243294/);
   assert.match(index, /\+34 623 24 32 94/);
   assert.match(index, /100 €/);
+  assert.match(index, /Cuatro formas de poner tu escaparate a punto/);
+  assert.match(index, /Expositor de mesa personalizado \(impresión 3D\)<\/span><span class="importe">10 € \/ unidad/);
+  assert.match(index, /Pegatinas QR para mesa<\/span><span class="importe">50 € \/ 10 uds\./);
   assert.match(index, /data-mode="whatsapp"/);
   assert.doesNotMatch(index, /name="consent"/, 'la versión estática no guarda datos');
   assert.match(index, /<link rel="canonical" href="https:\/\/ejemplo\.github\.io\/alcance-isleno\/">/);
