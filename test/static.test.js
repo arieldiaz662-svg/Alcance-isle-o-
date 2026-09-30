@@ -124,6 +124,11 @@ describe('coherencia del contenido', () => {
     assert.match(between(index, 'id="cita-previa"'), new RegExp(`class="pack-hosting">[\\s\\S]*?${escapeRe(hosting)}`));
   });
 
+  test('"Por qué elegirnos" presenta al equipo sin mencionar formaciones concretas', () => {
+    assert.match(between(index, 'id="por-que"', 'id="como"'), /Somos un equipo interdisciplinar: observamos/);
+    assert.doesNotMatch(index, /antropolog|administración de empresas/i);
+  });
+
   test('no se publica ningún plazo de entrega ni datos de ejemplo antiguos', () => {
     assert.doesNotMatch(index, /10 días|dos semanas|laborables/);
     assert.doesNotMatch(index, /Marisol|mesa digital|300 €/i);

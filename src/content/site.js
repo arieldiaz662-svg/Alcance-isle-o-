@@ -164,7 +164,7 @@ export const site = {
   whyUs: {
     title: 'Por qué elegirnos',
     intro: 'Google Business, reseñas, landing y hosting, coordinados entre sí. Sin depender de una agencia grande ni de presupuestos complicados.',
-    team: 'Somos un equipo joven e interdisciplinar de antropología social y administración de empresas: observamos cómo funciona cada negocio local y cómo se relaciona con sus clientes, y a partir de ahí diseñamos soluciones a medida.',
+    team: 'Somos un equipo interdisciplinar: observamos cómo funciona cada negocio local y cómo se relaciona con sus clientes, y a partir de ahí diseñamos soluciones a medida.',
     reasons: [
       { title: 'Equipo local', text: 'Especializados en proyectos digitales personalizados para negocios de la isla. Trato cercano y en persona.' },
       { title: 'Puesta en marcha ágil', text: 'Estudio, diagnóstico y puesta en marcha rápidos desde que recibimos tu material.' },
