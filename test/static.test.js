@@ -46,23 +46,12 @@ describe('construcción y publicación', () => {
     }
   });
 
-  test('en Cloudflare Pages, sin PUBLIC_BASE_URL, canonical y og:image usan el dominio del proyecto', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'alcance-cf-'));
-    const saved = { base: process.env.PUBLIC_BASE_URL, host: process.env.CF_PAGES_URL };
-    try {
-      delete process.env.PUBLIC_BASE_URL;
-      process.env.CF_PAGES_URL = 'https://3f2a9c1b.alcance-isleno.pages.dev';
-      buildStatic({ outDir: dir });
-      const html = readFileSync(join(dir, 'index.html'), 'utf8');
-      assert.match(html, /<link rel="canonical" href="https:\/\/alcance-isleno\.pages\.dev\/"/);
-      assert.match(html, /og:image" content="https:\/\/alcance-isleno\.pages\.dev\/assets\//);
-      assert.ok(existsSync(join(dir, 'sitemap.xml')));
-    } finally {
-      for (const [key, value] of [['PUBLIC_BASE_URL', saved.base], ['CF_PAGES_URL', saved.host]]) {
-        if (value === undefined) delete process.env[key]; else process.env[key] = value;
-      }
-      rmSync(dir, { recursive: true, force: true });
-    }
+  test('wrangler.jsonc construye con la URL pública y publica dist/ con la página 404', () => {
+    const raw = readFileSync(new URL('../wrangler.jsonc', import.meta.url), 'utf8');
+    const config = JSON.parse(raw.replace(/^\s*\/\/.*$/gm, ''));
+    assert.equal(config.assets.directory, './dist');
+    assert.equal(config.assets.not_found_handling, '404-page');
+    assert.match(config.build.command, /^PUBLIC_BASE_URL=https:\/\/[^ ]+\.workers\.dev npm run build$/);
   });
 
   test('sitio 100 % estático: una sola dependencia y sin restos del servidor archivado', () => {
