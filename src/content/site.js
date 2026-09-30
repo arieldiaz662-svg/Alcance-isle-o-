@@ -184,7 +184,7 @@ export const site = {
 
 
   // SERVICIOS PRINCIPALES: lo que hacemos nosotros (software).
-  // El "id" se usa en el formulario y en los leads guardados: no lo cambies en producción.
+  // El "id" enlaza cada servicio con el recorrido y los packs.
   services: [
     {
       id: 'landing',

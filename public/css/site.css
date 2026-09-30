@@ -75,7 +75,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .btn-linea { border-color: var(--tinta); color: var(--tinta); background: transparent; }
 .btn-linea:hover { background: var(--tinta); color: var(--papel); }
 .btn-full { width: 100%; text-align: center; }
-.btn[disabled] { opacity: .6; cursor: wait; }
 
 /* ---------- 3. Navegación ---------- */
 .nav {
@@ -322,20 +321,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .contacto-datos { color: #C7D4E4; }
 form { background: var(--papel); color: var(--tinta); border-radius: 14px; padding: 1.6rem; }
 label { display: block; font-weight: 600; margin-bottom: .9rem; font-size: .95rem; }
-input, textarea, select {
+input, textarea {
   width: 100%; margin-top: .3rem;
   font: 400 1rem/1.4 var(--fuente); padding: .7rem .85rem;
   border: 1.5px solid #B9C6D5; border-radius: 10px; background: var(--papel); color: var(--tinta);
 }
-input:focus, textarea:focus, select:focus { outline: 3px solid var(--sol); border-color: var(--tinta); }
+input:focus, textarea:focus { outline: 3px solid var(--sol); border-color: var(--tinta); }
 textarea { min-height: 100px; resize: vertical; }
 .legal-form { font-size: .82rem; color: var(--gris); margin: .2rem 0 1rem; }
-.trampa { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
-.consentimiento { display: flex; gap: .6rem; align-items: flex-start; font-weight: 500; font-size: .9rem; }
-.consentimiento input { width: auto; margin-top: .25rem; flex-shrink: 0; }
 .form-error { background: #FDECEC; color: #9B1C1C; border-radius: 10px; padding: .6rem .85rem; font-size: .92rem; }
-.form-ok h3 { color: var(--atlantico); }
-.form-ok:focus { outline: none; }
 @media (max-width: 860px) { .contacto-grid { grid-template-columns: 1fr; gap: 2rem; } }
 
 /* ---------- 12. Pie ---------- */

@@ -44,9 +44,6 @@ export function renderLanding({ site, config }) {
       .map((i) => ` ${i.name}: ${i.badge.toLowerCase()}.`).join('')}`
     : '';
 
-  const serviceOptions = allServices
-    .map((service) => `<option value="${esc(service.id)}">${esc(service.name)}</option>`).join('');
-
   // ---------- Portada: la mesa ----------
   const qrUrl = whatsappUrl(whatsapp, demoMenu.qrWhatsappText);
   const menuTabs = demoMenu.sections.map((section, i) => `
@@ -310,8 +307,8 @@ ${teamSection}
       Email: <a href="mailto:${esc(email)}">${esc(email)}</a>` : ''}</p>
     </div>
 
-    <form id="formulario" novalidate data-whatsapp="${esc(whatsapp)}" data-mode="${config.static ? 'whatsapp' : 'api'}">
-      ${config.static ? whatsappFormFields(to) : apiFormFields(to, serviceOptions, wa)}
+    <form id="formulario" novalidate data-whatsapp="${esc(whatsapp)}">
+      ${formFields(to)}
       <noscript><p class="form-error">Para enviar el formulario necesitas JavaScript. También puedes escribirnos por <a href="${esc(wa)}">WhatsApp</a>.</p></noscript>
     </form>
   </div>
@@ -325,8 +322,8 @@ ${teamSection}
   });
 }
 
-// Versión estática: sin servidor, el formulario compone el mensaje y abre WhatsApp.
-function whatsappFormFields(to) {
+// Formulario de contacto: no envía datos a ningún servidor; compone el mensaje y abre WhatsApp.
+function formFields(to) {
   return `<label>Nombre *
         <input type="text" name="name" autocomplete="name" required maxlength="80">
       </label>
@@ -339,47 +336,4 @@ function whatsappFormFields(to) {
       <p class="form-error" id="form-error" role="alert" hidden></p>
       <p class="legal-form">Al enviar se abrirá WhatsApp con tu mensaje ya escrito; tú decides si lo mandas. Usaremos tus datos solo para responderte. Más información en la <a href="${to.privacy}">política de privacidad</a>.</p>
       <button class="btn btn-sol btn-full" type="submit">Enviar por WhatsApp</button>`;
-}
-
-// Versión con servidor: guarda el lead en la base de datos y después ofrece seguir por WhatsApp.
-function apiFormFields(to, serviceOptions, wa) {
-  return `<div id="form-campos">
-        <label>Nombre *
-          <input type="text" name="name" autocomplete="name" required minlength="2" maxlength="80">
-        </label>
-        <label>Teléfono / WhatsApp *
-          <input type="tel" name="phone" autocomplete="tel" inputmode="tel" required maxlength="30" placeholder="600 000 000">
-        </label>
-        <label>Email (opcional)
-          <input type="email" name="email" autocomplete="email" maxlength="120">
-        </label>
-        <label>Tipo de negocio
-          <input type="text" name="business_type" maxlength="80" placeholder="Peluquería, restaurante, tienda...">
-        </label>
-        <label>¿Qué te interesa?
-          <select name="service">
-            <option value="">Elige una opción</option>
-            ${serviceOptions}
-            <option value="varios">Varios servicios</option>
-            <option value="no-se">Aún no lo sé</option>
-          </select>
-        </label>
-        <label>¿Qué necesitas?
-          <textarea name="message" maxlength="1000" placeholder="Cuéntanos en pocas palabras"></textarea>
-        </label>
-        <label class="trampa" aria-hidden="true">No rellenar
-          <input type="text" name="website" tabindex="-1" autocomplete="off">
-        </label>
-        <label class="consentimiento">
-          <input type="checkbox" name="consent" required>
-          <span>He leído la <a href="${to.privacy}" target="_blank">política de privacidad</a> y acepto que usen mis datos para responder a mi solicitud. *</span>
-        </label>
-        <p class="form-error" id="form-error" role="alert" hidden></p>
-        <button class="btn btn-sol btn-full" type="submit">Enviar solicitud</button>
-      </div>
-      <div id="form-ok" class="form-ok" hidden tabindex="-1">
-        <h3>¡Recibido!</h3>
-        <p>Te contactaremos en menos de 24 horas. Si lo prefieres, puedes adelantarlo por WhatsApp:</p>
-        <a class="btn btn-sol btn-full" id="form-ok-whatsapp" href="${esc(wa)}" rel="noopener" target="_blank">Continuar en WhatsApp</a>
-      </div>`;
 }

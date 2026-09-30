@@ -32,6 +32,15 @@ before(() => {
 after(() => rmSync(outDir, { recursive: true, force: true }));
 
 describe('construcción y publicación', () => {
+  test('sitio 100 % estático: una sola dependencia y sin restos del servidor archivado', () => {
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+    assert.deepEqual(Object.keys(pkg.dependencies), ['qrcode']);
+    for (const path of ['src/app.js', 'src/routes', 'public/admin', 'Dockerfile']) {
+      assert.ok(!existsSync(new URL(`../${path}`, import.meta.url)), `${path} está en la rama archivo-app-servidor`);
+    }
+  });
+
+
   test('genera las páginas y recursos, sin el panel de administración', () => {
     for (const file of ['index.html', 'privacidad.html', 'cookies.html', '404.html', 'robots.txt', 'sitemap.xml',
       '_headers', '.nojekyll', 'assets/css/site.css', 'assets/js/site.js', 'assets/fonts/familjen-grotesk.woff2',
@@ -184,9 +193,9 @@ describe('textos legales', () => {
     assert.doesNotMatch(read('privacidad.html'), /\[|NIF\/CIF/);
   });
 
-  test('la versión estática no guarda datos: el formulario solo abre WhatsApp', () => {
-    assert.match(index, /data-mode="whatsapp"/);
-    assert.doesNotMatch(index, /name="consent"/);
+  test('la web no guarda datos: el formulario solo abre WhatsApp', () => {
+    assert.match(index, /<form id="formulario" novalidate data-whatsapp="34623243294">/);
+    assert.doesNotMatch(index, /name="consent"|name="phone"|\/api\//);
     assert.match(read('privacidad.html'), /no guarda ningún dato/);
     assert.doesNotMatch(read('privacidad.html'), /Tarjetas NFC/);
   });

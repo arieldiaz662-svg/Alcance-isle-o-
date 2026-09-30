@@ -44,24 +44,13 @@ export function renderPrivacy({ site, config }) {
       : `<p>${esc(site.name)}, ${esc(site.region)}. Contacto: ${reach}.</p>`],
   ];
 
-  if (config.static) {
-    sections.push(
-      ['Qué datos tratamos', '<p>Esta web no guarda ningún dato. El formulario de contacto solo prepara un mensaje de WhatsApp en tu dispositivo: nos llega únicamente si tú decides enviarlo. En ese caso tratamos tu nombre, tu número de teléfono y lo que nos escribas.</p>'],
-      ['Para qué los usamos', '<p>Únicamente para responder a tu consulta y, si te interesa, preparar un presupuesto. No enviamos publicidad ni tomamos decisiones automatizadas.</p>'],
-      ['Base legal', '<p>Tu consentimiento al escribirnos (art. 6.1.a RGPD) y, si contratas, la ejecución del contrato (art. 6.1.b RGPD).</p>'],
-      ['Cuánto tiempo los guardamos', '<p>Si no llegas a contratar, borramos la conversación en un plazo máximo de 12 meses. Si contratas, durante la relación comercial y los plazos legales de conservación.</p>'],
-      ['Con quién los compartimos', '<p>No cedemos tus datos a terceros salvo obligación legal. Al usar WhatsApp se aplican además las condiciones y la política de privacidad de WhatsApp (Meta).</p>'],
-    );
-  } else {
-    sections.push(
-      ['Qué datos tratamos', '<p>Los que nos facilitas en el formulario de contacto: nombre, teléfono, email (opcional), tipo de negocio y el mensaje que escribas. También la fecha en la que aceptas esta política.</p>'],
-      ['Para qué los usamos', '<p>Únicamente para responder a tu solicitud y, en su caso, preparar y gestionar el presupuesto o servicio que nos pidas. No enviamos publicidad ni tomamos decisiones automatizadas.</p>'],
-      ['Base legal', '<p>Tu consentimiento al enviar el formulario (art. 6.1.a RGPD) y, si contratas, la ejecución del contrato (art. 6.1.b RGPD).</p>'],
-      ['Cuánto tiempo los guardamos', '<p>Si no llegas a contratar, eliminamos tus datos en un plazo máximo de 12 meses. Si contratas, durante la relación comercial y los plazos legales de conservación.</p>'],
-      ['Con quién los compartimos', '<p>No cedemos tus datos a terceros salvo obligación legal. Usamos un proveedor de alojamiento web que actúa como encargado del tratamiento. Si decides escribirnos por WhatsApp, se aplicarán además las condiciones de WhatsApp.</p>'],
-      ['Tarjetas NFC', '<p>Cuando alguien usa una tarjeta NFC de reseñas, registramos solo la fecha y el tipo de navegador para ofrecer estadísticas de uso al negocio. No guardamos la dirección IP ni datos que identifiquen a la persona.</p>'],
-    );
-  }
+  sections.push(
+    ['Qué datos tratamos', '<p>Esta web no guarda ningún dato. El formulario de contacto solo prepara un mensaje de WhatsApp en tu dispositivo: nos llega únicamente si tú decides enviarlo. En ese caso tratamos tu nombre, tu número de teléfono y lo que nos escribas.</p>'],
+    ['Para qué los usamos', '<p>Únicamente para responder a tu consulta y, si te interesa, preparar un presupuesto. No enviamos publicidad ni tomamos decisiones automatizadas.</p>'],
+    ['Base legal', '<p>Tu consentimiento al escribirnos (art. 6.1.a RGPD) y, si contratas, la ejecución del contrato (art. 6.1.b RGPD).</p>'],
+    ['Cuánto tiempo los guardamos', '<p>Si no llegas a contratar, borramos la conversación en un plazo máximo de 12 meses. Si contratas, durante la relación comercial y los plazos legales de conservación.</p>'],
+    ['Con quién los compartimos', '<p>No cedemos tus datos a terceros salvo obligación legal. Al usar WhatsApp se aplican además las condiciones y la política de privacidad de WhatsApp (Meta).</p>'],
+  );
 
   sections.push(['Tus derechos', `<p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiéndonos a ${reach}. Si consideras que no hemos atendido correctamente tu solicitud, puedes reclamar ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" rel="noopener">www.aepd.es</a>).</p>`]);
 
@@ -70,11 +59,8 @@ export function renderPrivacy({ site, config }) {
 
 export function renderCookies({ site, config }) {
   const sections = [
-    ['Qué cookies usamos', `<p>La web de ${esc(site.name)} no utiliza cookies de analítica ni de publicidad, y las tipografías se sirven desde nuestro propio alojamiento. Por eso no te mostramos un aviso de cookies.</p>`],
+    ['Qué cookies usamos', `<p>La web de ${esc(site.name)} no utiliza cookies de ningún tipo, y las tipografías se sirven desde nuestro propio alojamiento. Por eso no te mostramos un aviso de cookies.</p>`],
+    ['Enlaces externos', '<p>Al pulsar los botones de WhatsApp sales de esta web; desde ese momento se aplica la política de cookies de WhatsApp.</p>'],
   ];
-  if (!config.static) {
-    sections.push(['Cookies técnicas', '<p>Solo el panel interno de administración usa una cookie técnica de sesión (<code>ai_session</code>) para mantener iniciada la sesión del equipo. Es estrictamente necesaria y está exenta de consentimiento.</p>']);
-  }
-  sections.push(['Enlaces externos', '<p>Al pulsar los botones de WhatsApp sales de esta web; desde ese momento se aplica la política de cookies de WhatsApp.</p>']);
   return page({ site, config, path: '/cookies', title: 'Política de cookies', sections });
 }

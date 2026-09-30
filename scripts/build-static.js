@@ -1,5 +1,5 @@
-// Genera la versión estática de la web en dist/ (o en la carpeta indicada).
-// No necesita servidor ni base de datos: se puede subir tal cual a GitHub Pages, Netlify o Cloudflare Pages.
+// Genera la web en dist/ (o en la carpeta indicada). Es 100 % estática: se puede subir tal cual a
+// GitHub Pages, Netlify o Cloudflare Pages.
 //
 // Uso:  npm run build
 //       PUBLIC_BASE_URL=https://alcance-isleno.netlify.app npm run build   (añade canonical y sitemap)
@@ -25,7 +25,6 @@ export function buildStatic({
   // con una hoja de estilos antigua guardada en caché.
   const version = (file) => createHash('sha256').update(readFileSync(join(ROOT, 'public', file))).digest('hex').slice(0, 10);
   const config = {
-    static: true,
     assetVersions: { 'css/site.css': version('css/site.css'), 'js/site.js': version('js/site.js') },
     publicBaseUrl: publicBaseUrl.replace(/\/+$/, ''),
     whatsappNumber: whatsappNumber.replace(/\D/g, ''),
@@ -50,7 +49,7 @@ export function buildStatic({
   };
   for (const [file, html] of Object.entries(pages)) writeFileSync(join(outDir, file), html);
 
-  // Recursos públicos, sin el panel de administración (no tiene sentido sin servidor).
+  // Recursos públicos.
   for (const folder of ['css', 'js', 'img', 'fonts']) {
     cpSync(join(ROOT, 'public', folder), join(outDir, 'assets', folder), { recursive: true });
   }

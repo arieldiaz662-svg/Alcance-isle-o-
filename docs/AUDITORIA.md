@@ -2,14 +2,14 @@
 
 Revisión completa del repositorio como si fuera código heredado: ingeniería inversa de la arquitectura, flujo de datos, problemas encontrados (con lo que ya se ha corregido) y el desglose de la web lista para publicar.
 
-Estado: rama `seccion-belleza`, **sin publicar**. 31 tests en verde.
+Estado: rama `seccion-belleza`, **sin publicar**. 20 tests en verde. La web es una **landing estática**: sin servidor, sin base de datos y sin cookies.
 
 ---
 
 ## 1. Resumen ejecutivo
 
 - **La web publicada es sana:** estática, 53 KB en total, sin dependencias de terceros en el navegador, accesible y rápida. No hay cuellos de botella de rendimiento.
-- **El problema principal es de arquitectura, no de código:** el repositorio contiene **dos productos** (la web estática que se publica y una aplicación con servidor, base de datos y panel que no se usa). El 46 % del código y 6 de 7 dependencias sirven solo a la parte que no se publica, y aun así el despliegue las instala y las prueba.
+- **El problema principal era de arquitectura, no de código:** el repositorio contenía **dos productos** (la landing que se publica y una aplicación con servidor, base de datos y panel que no se usaba). El 46 % del código y 6 de 7 dependencias servían solo a la parte no publicada. **Resuelto:** la aplicación se archivó en la rama `archivo-app-servidor` y el repositorio queda como una landing con una sola dependencia (`qrcode`).
 - **El segundo problema era de datos:** el mismo producto estaba definido en varios sitios con nombres distintos (placa / tarjeta NFC / tarjeta de reseñas) y había importes escritos a mano en textos. Corregido; ahora hay tests que impiden que vuelva a pasar.
 - **Faltaban piezas para publicar con garantías:** seguridad en GitHub Pages, vista previa al compartir por WhatsApp, menú en móvil y caché tras publicar. Corregido.
 
@@ -18,36 +18,13 @@ Estado: rama `seccion-belleza`, **sin publicar**. 31 tests en verde.
 ## 2. Arquitectura (ingeniería inversa)
 
 ```mermaid
-flowchart TB
-  subgraph Contenido
-    C[src/content/site.js<br/>textos, precios, packs, contacto]
-  end
-  subgraph Vistas["Vistas (compartidas)"]
-    L[views/landing.js<br/>portada, packs, recorrido, precios]
-    H[views/html.js<br/>layout, rutas, CSP, og:image]
-    G[views/legal.js<br/>privacidad, cookies, aviso legal]
-  end
-  C --> L & G
-  L & G --> H
-
-  subgraph Estatica["Modo estático (PUBLICADO)"]
-    B[scripts/build-static.js] --> D[dist/<br/>HTML + assets + _headers + sitemap]
-    D --> W[.github/workflows/pages.yml<br/>tests → build → rama gh-pages]
-    W --> P[GitHub Pages]
-  end
-  H --> B
-
-  subgraph Servidor["Modo servidor (NO publicado)"]
-    A[src/app.js Fastify] --> R[routes: web, leads, /r/:slug, auth, admin]
-    R --> RP[repositories] --> DB[(SQLite)]
-    AD[public/admin SPA] --> R
-  end
-  H --> A
-
-  subgraph Navegador
-    JS[public/js/site.js<br/>pestañas + formulario]
-  end
-  P --> JS
+flowchart LR
+  C[src/content/site.js<br/>textos, precios, packs, contacto] --> V[src/views<br/>landing.js · html.js · legal.js]
+  V --> B[scripts/build-static.js]
+  B --> D[dist/<br/>HTML + assets + sitemap + _headers]
+  D --> W[GitHub Actions<br/>tests → build → rama gh-pages]
+  W --> P[GitHub Pages]
+  P --> JS[public/js/site.js en el navegador<br/>pestañas + formulario → WhatsApp]
 ```
 
 ### Flujo de datos de la web publicada
@@ -58,9 +35,9 @@ flowchart TB
 4. **Despliegue:** en cada push a `main`, GitHub Actions ejecuta `npm ci`, los tests y el build, y fuerza un push de `dist/` a `gh-pages`.
 5. **Navegador:** `site.js` activa las pestañas (carta y packs), gestiona los enlaces `#hosteleria` / `#cita-previa` y el formulario, que **no envía datos**: compone el mensaje y abre WhatsApp.
 
-### Modo servidor (existe, no se publica)
+### Aplicación con servidor (archivada)
 
-Fastify + SQLite + panel `/admin`: guarda leads, gestiona clientes y sirve un redirector `/r/:slug` para tarjetas NFC con estadísticas. Comparte vistas con la web estática mediante ramas `config.static` en 3 archivos.
+Hasta la versión 0.1 convivía una aplicación Fastify + SQLite con panel `/admin`, registro de contactos y redirector `/r/:slug` para tarjetas NFC. Se archivó intacta en la rama `archivo-app-servidor` por si en el futuro hiciera falta.
 
 ---
 
@@ -72,8 +49,8 @@ Prioridad: **P0** bloquea publicar · **P1** afecta a clientes o a la operación
 
 | # | Hallazgo | Impacto | Prioridad | Estado |
 |---|---|---|---|---|
-| A1 | **Dos productos en un repositorio.** 1.557 líneas y 6 dependencias (Fastify, SQLite nativo…) solo para el modo servidor, que no se usa. | El despliegue de una web estática instala y compila `better-sqlite3` y ejecuta tests del servidor: más lento y puede fallar por algo que no se publica. Cada cambio de contenido debe mantener compatible un modo que nadie usa. | P1 | Recomendado (§5) |
-| A2 | **Vistas con ramas `config.static`** (enlaces, formulario, textos legales). | Dos comportamientos por archivo; fácil romper uno sin darse cuenta. | P2 | Recomendado |
+| A1 | **Dos productos en un repositorio.** 1.557 líneas y 6 dependencias (Fastify, SQLite nativo…) solo para el modo servidor, que no se usaba. | El despliegue de una web estática instalaba y compilaba `better-sqlite3` y ejecutaba tests del servidor. | P1 | **Resuelto:** archivado en `archivo-app-servidor` |
+| A2 | **Vistas con ramas `config.static`** (enlaces, formulario, textos legales). | Dos comportamientos por archivo; fácil romper uno sin darse cuenta. | P2 | **Resuelto:** un solo modo |
 | A3 | **Plantilla monolítica** (`landing.js`, 380 líneas) que mezcla derivar datos y generar HTML. | Difícil de leer y de cambiar sin efectos colaterales. | P2 | Recomendado |
 | A4 | **Precios como texto** ("desde 200 €", "90 € / año"). | No se pueden calcular totales; el "antes 415 €" del pack era una suma hecha a mano. | P1 | Mitigado: test que verifica las sumas |
 
@@ -86,7 +63,7 @@ Prioridad: **P0** bloquea publicar · **P1** afecta a clientes o a la operación
 | D3 | El texto del pack completo repetía lo que incluye la pestaña de hostelería. | **Corregido:** se genera a partir de la pestaña |
 | D4 | El recorrido sobrescribía nombre y texto de la landing. | **Corregido:** una sola definición en el catálogo |
 | D5 | Campos que no se mostraban en ningún sitio (`benefit`, textos de servicios). Editarlos no cambiaba nada. | **Corregido:** eliminados |
-| D6 | El panel de administración tiene su propia lista de nombres de servicios. | Corregido el nombre; la lista duplicada sigue (A1) |
+| D6 | El panel de administración tenía su propia lista de nombres de servicios. | **Resuelto** con el archivado |
 | D7 | El móvil de la portada y los de las pestañas repiten el mismo marcado. | Recomendado: extraer un componente |
 
 ### 3.3 Rendimiento y cuellos de botella
@@ -107,7 +84,6 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 
 - **Un tercer tipo de negocio** (p. ej. comercio local) obligaría a añadir más casos especiales al modelo de pestañas: `pack: 'main'`, `hostingNote`, `option.items` frente a `option.price`, o el filtro de packs en la lista de precios. **Recomendado:** un catálogo único de productos con precio numérico y packs definidos como lista de ids de productos, con el "antes" calculado.
 - **El contenido en JS** no escala a editores no técnicos: una coma mal puesta rompe el build. Los tests lo detectan antes de publicar, pero no lo evitan.
-- **El modo servidor** (si algún día se usa) va sobre SQLite en un solo nodo con límites de peticiones en memoria. Es suficiente para empezar; ver `ARCHITECTURE.md` §9.
 
 ### 3.5 Mantenimiento
 
@@ -116,7 +92,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 | M1 | Test de la web: **un único test con 60 comprobaciones de textos exactos**; cada cambio de redacción lo rompía. | **Corregido:** 19 tests por tema, con valores tomados de `site.js` y comprobaciones de coherencia nuevas |
 | M2 | CSS crecido por acumulación: numeración de secciones desordenada, `!important`, clases con nombres heredados (`.local-lista` en los packs). | Limpiadas las reglas muertas; renombrar pendiente (P2) |
 | M3 | Recursos publicados sin uso: imágenes de 800 px (73 KB) y fuente cursiva (18 KB). | **Corregido** + test que lo impide |
-| M4 | `ARCHITECTURE.md` describe sobre todo el modo servidor. | Recomendado: actualizar cuando se decida A1 |
+| M4 | `ARCHITECTURE.md` describía sobre todo el modo servidor. | **Resuelto:** archivado con la aplicación; el README describe la landing |
 
 ### 3.6 Seguridad, SEO y experiencia
 
@@ -191,11 +167,11 @@ Cada mensaje dice de dónde viene el cliente: sirve como analítica básica mien
 | Accesibilidad | Pestañas con teclado (flechas, Inicio/Fin), jerarquía de títulos correcta, contraste AA, sin JavaScript se ve todo el contenido |
 | Responsive | Verificado a 360, 390, 820 y 1280 px sin desbordes |
 | Enlaces profundos | `…/#hosteleria` y `…/#cita-previa` abren su pestaña |
-| Tests | 31 (web estática + servidor) |
+| Tests | 20 (construcción, coherencia, portada, packs, precios, textos legales) |
 
 ### 4.5 Lista de comprobación antes de publicar
 
-- [x] Tests en verde (31/31)
+- [x] Tests en verde (20/20)
 - [x] Sin enlaces internos rotos (test)
 - [x] Sumas de los packs coherentes (test)
 - [x] Un solo nombre por producto (test)
@@ -213,11 +189,7 @@ Cada mensaje dice de dónde viene el cliente: sirve como analítica básica mien
 
 ## 5. Recomendaciones priorizadas (no aplicadas)
 
-1. **Decidir el futuro del modo servidor (A1).** Opciones:
-   - **Separarlo** en `server/` con su propio `package.json`: la web estática queda con una sola dependencia (`qrcode`).
-   - **Archivarlo** en una rama y borrarlo de `main`.
-
-   Mientras no se use, es coste de mantenimiento sin retorno.
+1. ~~Decidir el futuro del modo servidor (A1)~~ → **archivado** en `archivo-app-servidor`.
 2. **Catálogo de productos único con precios numéricos** (A4, 3.4), antes de añadir un tercer tipo de negocio.
 3. **Analítica sin cookies** (p. ej. GoatCounter o Plausible) para saber qué pestaña y qué botón funcionan. Requiere actualizar la política de cookies.
 4. **Vista previa por rama** (Netlify o Cloudflare Pages conectados al repositorio) para revisar cambios sin capturas.
