@@ -14,56 +14,59 @@ export const site = {
   email: '', // p. ej. 'hola@alcanceisleno.es' cuando tengáis dominio propio
   whatsappGreeting: 'Hola, quiero información sobre Alcance Isleño',
 
-  // PRODUCTO ESTRELLA: se muestra en una sección destacada justo después de la portada
-  // y encabeza la lista de precios.
-  featured: {
-    id: 'mesa', // se usa en el formulario y en los leads guardados
-    badge: 'Nuestro producto estrella',
-    name: 'Expositores de mesa personalizados',
-    text: 'Diseñamos e imprimimos en 3D, bajo pedido, expositores para las mesas de tu local con tu logo, el número de mesa y un código QR que lleva a tu carta, a tus reseñas de Google o a tu WhatsApp.',
-    points: [
-      'Diseño a medida con tu marca y el número de cada mesa',
-      'Funciona con QR y, si quieres, con chip NFC integrado: basta con acercar el móvil',
-      'Impresión 3D resistente, hecha en Tenerife',
-    ],
-    image: {
-      src: 'img/productos/expositor-mesa-800', // sin extensión: hay versiones .webp y .jpg de 480 y 800 px
-      small: 'img/productos/expositor-mesa-480',
-      alt: 'Expositor de mesa impreso en 3D con logo, número de mesa y código QR de la carta',
-    },
-    whatsappText: 'Hola, quiero información sobre los expositores de mesa personalizados',
-    prices: [
-      { label: 'Expositor de mesa personalizado (impresión 3D)', price: '10 € / unidad' },
-      { label: 'Pegatinas QR para mesa (opción económica)', price: '50 € / 10 uds.' },
-    ],
-  },
-
-  // Resto de servicios. El "id" se usa en el formulario y en los leads guardados: no lo cambies en producción.
+  // SERVICIOS PRINCIPALES: lo que hacemos nosotros (software).
+  // El "id" se usa en el formulario y en los leads guardados: no lo cambies en producción.
   services: [
     {
-      id: 'nfc',
-      name: 'Tarjeta NFC de reseñas',
-      text: 'Tus clientes acercan el móvil a la tarjeta y dejan su reseña en Google en segundos, sin buscar nada.',
-      benefit: 'Más reseñas con menos esfuerzo.',
-      price: 'desde 25 €',
+      id: 'landing',
+      name: 'Landing page con carta digital',
+      priceLabel: 'Landing page con carta digital',
+      text: 'Una página profesional, rápida y adaptada a móvil con tu carta digital, tus servicios, tu ubicación y contacto directo por WhatsApp. Tus clientes abren la carta desde el QR de la mesa, sin descargar nada.',
+      benefit: 'Tu web y tu carta, siempre a mano.',
+      price: 'desde 200 €',
     },
     {
       id: 'gbp',
       name: 'Ficha de Google Business',
-      priceLabel: 'Configuración de Google Business Profile',
-      text: 'Reclamamos, verificamos y optimizamos tu ficha: horarios, fotos, categorías, descripción y datos de contacto.',
+      priceLabel: 'Creación u optimización de la ficha de Google Business',
+      text: 'Creamos tu ficha o reclamamos y optimizamos la que ya tienes: horarios, fotos, categorías, descripción, enlace a tu carta y datos de contacto.',
       benefit: 'Que Google muestre tu negocio como merece.',
       price: '100 €',
     },
-    {
-      id: 'landing',
-      name: 'Landing page',
-      priceLabel: 'Landing page completa',
-      text: 'Una página profesional, rápida y adaptada a móvil, con tus servicios, ubicación y contacto directo por WhatsApp.',
-      benefit: 'Una web propia sin complicaciones.',
-      price: 'desde 200 €',
-    },
   ],
+
+  // COMPLEMENTOS FÍSICOS: llevan a tus clientes desde la mesa a tu carta, tu web o tus reseñas.
+  extras: {
+    title: 'Lleva tu carta y tus reseñas a la mesa',
+    text: 'Para que tus clientes lleguen a tu carta digital o a tus reseñas de Google en un segundo, te ofrecemos el material para tu local, personalizado con tu marca.',
+    image: {
+      src: 'img/productos/expositor-mesa-800', // sin extensión: hay versiones .webp y .jpg de 480 y 800 px
+      small: 'img/productos/expositor-mesa-480',
+      alt: 'Expositor de mesa personalizado con logo, número de mesa y código QR de la carta',
+      caption: 'Imagen de muestra', // quitar cuando se sustituya por la foto real
+    },
+    whatsappText: 'Hola, quiero información sobre los expositores y el material para mesas',
+    items: [
+      {
+        id: 'mesa',
+        name: 'Expositor de mesa personalizado',
+        text: 'Impreso en 3D con tu logo, el número de mesa y un QR. Con chip NFC opcional: basta con acercar el móvil.',
+        price: '10 € / unidad',
+      },
+      {
+        id: 'pegatinas',
+        name: 'Pegatinas QR para mesa',
+        text: 'La opción más sencilla y económica para llevar a tus clientes a la carta.',
+        price: '50 € / 10 uds.',
+      },
+      {
+        id: 'nfc',
+        name: 'Tarjeta NFC de reseñas',
+        text: 'Tus clientes acercan el móvil y dejan su reseña en Google en segundos, sin buscar nada.',
+        price: 'desde 25 €',
+      },
+    ],
+  },
 
   // Rellena "name" (y opcionalmente "role" y "photo": guarda la foto en public/img/equipo/ y pon "img/equipo/ana.jpg").
   // Si ninguna persona tiene nombre, la sección "Quiénes somos" no se muestra.

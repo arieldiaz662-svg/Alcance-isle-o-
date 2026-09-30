@@ -27,7 +27,7 @@ const clean = (value) => {
 };
 
 export default async function leadRoutes(app, { repos, site, notify }) {
-  const allServices = [...(site.featured ? [site.featured] : []), ...site.services];
+  const allServices = [...site.services, ...(site.extras ? site.extras.items : [])];
   const serviceIds = new Set([...allServices.map((service) => service.id), 'varios', 'no-se']);
   const serviceNames = Object.fromEntries(allServices.map((service) => [service.id, service.name]));
 

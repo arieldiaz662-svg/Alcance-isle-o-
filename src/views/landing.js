@@ -6,10 +6,10 @@ export function renderLanding({ site, config }) {
   const wa = whatsappUrl(whatsapp, site.whatsappGreeting);
   const team = site.team.filter((person) => person.name && person.name.trim());
 
-  const { featured } = site;
+  const { extras } = site;
   const nav = [
-    ...(featured ? [{ id: 'expositores', label: 'Expositores' }] : []),
     { id: 'servicios', label: 'Servicios' },
+    ...(extras ? [{ id: 'local', label: 'Para tu local' }] : []),
     { id: 'como', label: 'Cómo trabajamos' },
     { id: 'precios', label: 'Precios' },
     ...(team.length ? [{ id: 'equipo', label: 'Equipo' }] : []),
@@ -22,44 +22,50 @@ export function renderLanding({ site, config }) {
         <p class="beneficio">${esc(service.benefit)}</p>
       </article>`).join('');
 
-  const prices = [...(featured ? [featured] : []), ...site.services]
-    .flatMap((service) => service.prices || [{ label: service.priceLabel || service.name, price: service.price }])
-    .map((row) => `
+  const priceRows = (rows) => rows.map((row) => `
       <div class="precio-fila"><span>${esc(row.label)}</span><span class="importe">${esc(row.price)}</span></div>`).join('');
+  const priceGroups = [
+    { title: 'Servicios digitales', rows: site.services.map((s) => ({ label: s.priceLabel || s.name, price: s.price })) },
+    ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
+  ];
+  const prices = priceGroups.map((group) => `
+    <h3 class="precios-grupo">${esc(group.title)}</h3>
+    <div class="precios-lista">${priceRows(group.rows)}
+    </div>`).join('');
 
   const COUNT_WORDS = ['Una', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis'];
   const count = site.services.length;
-  let servicesHeading = count === 1
+  const servicesHeading = count === 1
     ? 'Una forma de poner tu escaparate a punto'
     : `${COUNT_WORDS[count - 1] || count} formas de poner tu escaparate a punto`;
-  if (featured) servicesHeading = 'Y además, tu escaparate en Google y en internet';
   // Con 2 o 4 servicios, rejilla de 2 columnas para que no quede una tarjeta suelta.
   const gridClass = count % 3 !== 0 && count % 2 === 0 ? 'serv-grid serv-grid-2' : 'serv-grid';
 
-  const serviceOptions = [...(featured ? [featured] : []), ...site.services]
+  const serviceOptions = [...site.services, ...(extras ? extras.items : [])]
     .map((service) => `<option value="${esc(service.id)}">${esc(service.name)}</option>`).join('');
 
-  const featuredSection = featured ? `
-<section class="estrella" id="expositores">
-  <div class="wrap estrella-grid">
-    <picture class="estrella-foto">
-      <source type="image/webp" srcset="${esc(to.asset(`${featured.image.small}.webp`))} 480w, ${esc(to.asset(`${featured.image.src}.webp`))} 800w" sizes="(max-width: 860px) 100vw, 480px">
-      <img src="${esc(to.asset(`${featured.image.src}.jpg`))}" srcset="${esc(to.asset(`${featured.image.small}.jpg`))} 480w, ${esc(to.asset(`${featured.image.src}.jpg`))} 800w" sizes="(max-width: 860px) 100vw, 480px" alt="${esc(featured.image.alt)}" width="800" height="800" loading="lazy" decoding="async">
-    </picture>
+  const img = extras && extras.image;
+  const extrasSection = extras ? `
+<section class="local" id="local">
+  <div class="wrap local-grid">
+    <figure class="local-foto">
+      <picture>
+        <source type="image/webp" srcset="${esc(to.asset(`${img.small}.webp`))} 480w, ${esc(to.asset(`${img.src}.webp`))} 800w" sizes="(max-width: 860px) 100vw, 440px">
+        <img src="${esc(to.asset(`${img.src}.jpg`))}" srcset="${esc(to.asset(`${img.small}.jpg`))} 480w, ${esc(to.asset(`${img.src}.jpg`))} 800w" sizes="(max-width: 860px) 100vw, 440px" alt="${esc(img.alt)}" width="800" height="800" loading="lazy" decoding="async">
+      </picture>
+      ${img.caption ? `<figcaption>${esc(img.caption)}</figcaption>` : ''}
+    </figure>
     <div>
-      <span class="lema">${esc(featured.badge)}</span>
-      <h2>${esc(featured.name)}</h2>
-      <p>${esc(featured.text)}</p>
-      <ul class="ventajas">${featured.points.map((point) => `
-        <li>${esc(point)}</li>`).join('')}
-      </ul>
-      <div class="opciones">${featured.prices.map((row) => `
-        <div class="opcion"><span>${esc(row.label)}</span><strong>${esc(row.price)}</strong></div>`).join('')}
+      <span class="lema">Complementos</span>
+      <h2>${esc(extras.title)}</h2>
+      <p>${esc(extras.text)}</p>
+      <div class="opciones">${extras.items.map((item) => `
+        <div class="opcion">
+          <div><strong class="opcion-nombre">${esc(item.name)}</strong><span class="suave">${esc(item.text)}</span></div>
+          <strong class="opcion-precio">${esc(item.price)}</strong>
+        </div>`).join('')}
       </div>
-      <div class="acciones">
-        <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, featured.whatsappText))}" rel="noopener" target="_blank">Pide el tuyo por WhatsApp</a>
-        <a class="btn btn-linea" href="#precios">Ver precios</a>
-      </div>
+      <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, extras.whatsappText))}" rel="noopener" target="_blank">Pregúntanos por WhatsApp</a>
     </div>
   </div>
 </section>
@@ -90,7 +96,7 @@ export function renderLanding({ site, config }) {
     <div>
       <span class="lema">Tu escaparate digital</span>
       <h1>Que tu negocio se vea y se encuentre en Google</h1>
-      <p class="lead">En ${esc(site.name)} ayudamos a pequeños negocios de ${esc(site.region)} a mejorar su presencia digital: expositores de mesa con QR y NFC, más reseñas, una ficha de Google cuidada y una web sencilla que trabaja por ti.</p>
+      <p class="lead">En ${esc(site.name)} ayudamos a pequeños negocios de ${esc(site.region)} a mejorar su presencia digital: una ficha de Google cuidada, más reseñas y una web con tu carta digital que trabaja por ti.</p>
       <div class="acciones">
         <a class="btn btn-sol" href="${esc(wa)}" rel="noopener" target="_blank">Escríbenos por WhatsApp</a>
         <a class="btn btn-linea" href="#servicios">Ver servicios</a>
@@ -113,7 +119,6 @@ export function renderLanding({ site, config }) {
   </div>
 </div>
 
-${featuredSection}
 <section class="problema">
   <div class="wrap">
     <h2>Tu negocio es bueno, pero ¿te encuentran?</h2>
@@ -121,7 +126,7 @@ ${featuredSection}
     <div class="items">
       <div class="item">Ficha de Google sin reclamar o desactualizada</div>
       <div class="item">Pocas reseñas, o ninguna</div>
-      <div class="item">Sin una web a la que dirigir a los clientes</div>
+      <div class="item">Sin una web ni una carta digital a la que dirigir a los clientes</div>
     </div>
   </div>
 </section>
@@ -134,13 +139,13 @@ ${featuredSection}
     </div>
   </div>
 </section>
-
+${extrasSection}
 <section id="como">
   <div class="wrap">
     <h2>Así de fácil</h2>
     <ol class="pasos">
       <li><strong>Hablamos</strong>Nos cuentas cómo funciona tu negocio y qué necesitas.</li>
-      <li><strong>Lo preparamos</strong>Nos encargamos de todo: ficha, tarjeta, web y material para tus mesas.</li>
+      <li><strong>Lo preparamos</strong>Nos encargamos de la parte técnica: ficha de Google, web y carta digital.</li>
       <li><strong>Empiezas a notarlo</strong>Más visibilidad, más reseñas y más contactos.</li>
     </ol>
     <p class="cierre">Sin tecnicismos. Nosotros nos encargamos.</p>
@@ -165,8 +170,7 @@ ${featuredSection}
   <div class="wrap">
     <h2>Precios claros</h2>
     <p class="suave">Pídenos un presupuesto sin compromiso.</p>
-    <div class="precios-lista">${prices}
-    </div>
+${prices}
   </div>
 </section>
 ${teamSection}

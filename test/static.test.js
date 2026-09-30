@@ -23,15 +23,19 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /wa\.me\/34623243294/);
   assert.match(index, /\+34 623 24 32 94/);
   assert.match(index, /100 €/);
-  // Producto estrella: sección destacada con foto, primero en el menú y en precios.
-  assert.match(index, /id="expositores"/);
+  // Servicios digitales primero; los complementos físicos van después, con la maqueta.
+  assert.match(index, /Landing page con carta digital/);
+  assert.match(index, /id="local"/);
+  assert.ok(index.indexOf('id="servicios"') < index.indexOf('id="local"'));
   assert.match(index, /assets\/img\/productos\/expositor-mesa-800\.webp/);
   assert.ok(existsSync(join(outDir, 'assets/img/productos/expositor-mesa-800.webp')));
-  assert.ok(index.indexOf('id="expositores"') < index.indexOf('class="problema"'), 'va justo después de la portada');
+  assert.match(index, /<figcaption>Imagen de muestra<\/figcaption>/);
+  assert.doesNotMatch(index, /producto estrella|hecha en Tenerife/i);
   const precios = index.slice(index.indexOf('id="precios"'));
-  assert.ok(precios.indexOf('Expositor de mesa personalizado') < precios.indexOf('Tarjeta NFC de reseñas'));
-  assert.match(precios, /Expositor de mesa personalizado \(impresión 3D\)<\/span><span class="importe">10 € \/ unidad/);
-  assert.match(precios, /Pegatinas QR para mesa \(opción económica\)<\/span><span class="importe">50 € \/ 10 uds\./);
+  assert.ok(precios.indexOf('Servicios digitales') < precios.indexOf('Para tu local'));
+  assert.match(precios, /Creación u optimización de la ficha de Google Business<\/span><span class="importe">100 €/);
+  assert.match(precios, /Expositor de mesa personalizado<\/span><span class="importe">10 € \/ unidad/);
+  assert.match(precios, /Pegatinas QR para mesa<\/span><span class="importe">50 € \/ 10 uds\./);
   // Sin datos del titular no se publica el aviso legal ni su enlace.
   assert.ok(!existsSync(join(outDir, 'aviso-legal.html')));
   assert.doesNotMatch(index, /Aviso legal/);
