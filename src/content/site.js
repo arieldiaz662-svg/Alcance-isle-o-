@@ -109,14 +109,14 @@ export const site = {
         ],
         button: 'Reservar por WhatsApp',
         card: 'Acerca tu móvil y déjanos tu reseña',
-        caption: 'Ejemplo de carta digital y tarjeta de reseñas para un restaurante.',
+        caption: 'Ejemplo de carta digital y tarjeta de reseñas QR + NFC para un restaurante.',
       },
     },
     {
       id: 'cita-previa',
       tab: 'Negocios con cita previa',
       title: 'Negocios con cita previa',
-      intro: 'Barberías, peluquerías, estética, uñas, tatuajes, fisioterapia… Tu web con tus servicios y precios, citas por WhatsApp y una tarjeta en el mostrador para que cada cliente contento te deje su reseña en Google.',
+      intro: 'Barberías, peluquerías, estética, uñas, tatuajes, fisioterapia… Tu web con tus servicios y precios, citas por WhatsApp y una tarjeta de reseñas QR + NFC en el mostrador para que cada cliente contento te deje su reseña en Google.',
       includes: [
         { name: 'Landing page con tus servicios', text: 'Servicios y precios, fotos de tus trabajos, horarios, ubicación y un botón para pedir cita por WhatsApp.' },
         { name: 'Tarjeta de reseñas QR + NFC', text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.' },
@@ -126,11 +126,11 @@ export const site = {
       hostingNote: 'El hosting y dominio de tu web se paga aparte, cada año.',
       option: {
         name: 'Tarjetas de visita personalizadas',
-        text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas.',
+        text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas QR + NFC.',
         price: '50 € / 100 uds.',
       },
       cta: 'Pide información para tu negocio',
-      whatsappText: 'Hola, tengo un negocio con cita previa y quiero información sobre el pack de web y tarjeta de reseñas',
+      whatsappText: 'Hola, tengo un negocio con cita previa y quiero información sobre el pack de web y tarjeta de reseñas QR + NFC',
       demo: {
         business: 'Barbería Isleña',
         label: 'Servicios',
@@ -143,7 +143,7 @@ export const site = {
         ],
         button: 'Pedir cita por WhatsApp',
         card: 'Acerca tu móvil y déjanos tu reseña',
-        caption: 'Ejemplo de web y tarjeta de reseñas para una barbería.',
+        caption: 'Ejemplo de web y tarjeta de reseñas QR + NFC para una barbería.',
       },
     },
   ],
@@ -177,7 +177,7 @@ export const site = {
   // CÓMO TRABAJAMOS
   steps: [
     { title: 'Diagnóstico gratuito', text: 'Vemos cómo aparece hoy tu negocio en internet y qué necesitas, sin compromiso.' },
-    { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta o tus servicios, tarjeta de reseñas y hosting, a partir del material que nos envíes.' },
+    { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta o tus servicios, tarjeta de reseñas QR + NFC y hosting, a partir del material que nos envíes.' },
     { title: 'Entrega y formación', text: 'Revisamos el diseño contigo (2 rondas de cambios), lo publicamos y te enseñamos a usarlo.' },
   ],
   stepsNote: 'Pagas el 50% al empezar y el 50% restante a la entrega.',

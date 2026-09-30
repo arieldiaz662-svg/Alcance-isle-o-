@@ -105,7 +105,14 @@ describe('coherencia del contenido', () => {
 
   test('un solo nombre para la tarjeta de reseñas en toda la web', () => {
     const name = extra('nfc').name;
-    assert.doesNotMatch(index, /[Pp]laca de reseñas|Tarjeta NFC de reseñas/);
+    assert.equal(name, 'Tarjeta de reseñas QR + NFC');
+    // Texto visible y mensajes de WhatsApp de todas las páginas (sin etiquetas ni clases CSS).
+    const text = ['index.html', 'privacidad.html', 'cookies.html', '404.html'].map(read).join(' ')
+      .replace(/<[^>]+>/g, ' ').concat(' ', decodeURIComponent((index.match(/text=[^"]+/g) || []).join(' ')));
+    assert.doesNotMatch(text, /[Pp]laca de reseñas|tarjetas? NFC|tarjeta en el mostrador/);
+    for (const [mention] of text.matchAll(/[Tt]arjetas? de reseñas.{0,9}/g)) {
+      assert.match(mention, /^[Tt]arjetas? de reseñas QR \+ NFC/, `nombre incompleto: "${mention}"`);
+    }
     for (const sector of site.sectors) {
       assert.ok(sector.includes.some((i) => i.name === name), `${sector.id} debe usar "${name}"`);
     }

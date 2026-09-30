@@ -27,7 +27,7 @@ export function renderLegalNotice({ site, config }) {
     sections: [
       ['Titular del sitio web', `<p>En cumplimiento de la Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa de que este sitio web es titularidad de <strong>${esc(legal.owner)}</strong>, con NIF/CIF ${esc(legal.taxId)} y domicilio en ${esc(legal.address)}. ${esc(legal.registry)}.</p>
   <p>Contacto: ${contactLine(site, config)}.</p>`],
-      ['Objeto', `<p>Este sitio web ofrece información sobre los servicios de ${esc(site.name)}: tarjetas NFC de reseñas, configuración de fichas de Google Business Profile y creación de landing pages para negocios locales.</p>`],
+      ['Objeto', `<p>Este sitio web ofrece información sobre los servicios de ${esc(site.name)}: tarjetas de reseñas QR + NFC, configuración de fichas de Google Business Profile y creación de landing pages para negocios locales.</p>`],
       ['Propiedad intelectual', '<p>Los textos, diseños y logotipos de este sitio web son propiedad de su titular o se usan con autorización. No se permite su reproducción sin consentimiento previo.</p>'],
       ['Responsabilidad', '<p>El titular no se hace responsable del uso que terceros hagan de la información publicada ni de los contenidos de sitios web externos enlazados.</p>'],
       ['Legislación aplicable', '<p>Este aviso legal se rige por la legislación española.</p>'],
