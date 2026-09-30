@@ -15,6 +15,7 @@ El proyecto tiene **dos modos** que comparten plantillas y contenido:
 | Aplicación completa | Guardar leads, panel `/admin` y tarjetas NFC con estadísticas. Necesita un servidor. | `npm start` |
 
 Arquitectura, esquema de base de datos y API: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Auditoría técnica y desglose de la web publicada: [docs/AUDITORIA.md](docs/AUDITORIA.md). Diseño: [docs/DISENO.md](docs/DISENO.md).
 
 ## Publicar la web estática gratis
 
@@ -22,6 +23,7 @@ Arquitectura, esquema de base de datos y API: [docs/ARCHITECTURE.md](docs/ARCHIT
 npm install
 npm run build        # genera dist/
 npm run preview      # revísala en http://localhost:4000
+npm run og-image     # regenera la imagen para compartir (tras cambiar la portada; necesita Playwright)
 ```
 
 Opciones con dominio gratuito de prueba:
