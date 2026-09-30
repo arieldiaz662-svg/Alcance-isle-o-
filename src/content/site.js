@@ -3,7 +3,7 @@
 
 export const site = {
   name: 'Alcance Isleño',
-  title: 'Alcance Isleño | Tu mesa digital: presencia digital para negocios de Tenerife',
+  title: 'Alcance Isleño | Tu escaparate digital: presencia digital para negocios de Tenerife',
   description:
     'Ficha de Google Business, reseñas, web con carta digital y hosting para cafeterías, bares, restaurantes, barberías y salones de belleza de Tenerife. Todo conectado y listo en 10 días laborables.',
   region: 'Tenerife',
@@ -16,8 +16,8 @@ export const site = {
 
   // PORTADA
   hero: {
-    title: 'Tu mesa digital',
-    lead: 'Que quien te busque en internet, te encuentre. Tu ficha de Google, tus reseñas, tu web y tu carta, conectadas entre sí y listas en 10 días laborables. Sin tecnicismos ni presupuestos de agencia.',
+    title: 'Tu escaparate digital',
+    lead: 'Presencia digital para bares, restaurantes, cafeterías, barberías y salones de belleza de Tenerife. Tu ficha de Google, tus reseñas y tu web, conectadas entre sí y listas en 10 días laborables. Sin tecnicismos ni presupuestos de agencia.',
     cta: 'Pide tu diagnóstico gratuito',
     ctaWhatsappText: 'Hola, me gustaría pedir el diagnóstico gratuito para mi negocio',
     note: 'Equipo local de Tenerife. Diagnóstico gratuito y sin compromiso.',
@@ -29,7 +29,7 @@ export const site = {
     table: 'Mesa 4',
     caption: 'Ejemplo de carta digital: toca las pestañas. El QR abre nuestro WhatsApp.',
     // El QR del expositor es real: abre WhatsApp con este mensaje ya escrito.
-    qrWhatsappText: 'Hola, quiero mi mesa digital',
+    qrWhatsappText: 'Hola, quiero mi escaparate digital',
     qrCaption: 'Escanéame',
     qrLabel: 'Código QR: escríbenos por WhatsApp',
     sections: [
@@ -69,26 +69,31 @@ export const site = {
     ],
   },
 
-  // BARBERÍAS Y SALONES DE BELLEZA: web con servicios + tarjeta NFC de reseñas.
-  // "service" enlaza con el precio de la lista de precios (services / extras).
+  // BARBERÍAS Y SALONES DE BELLEZA: pack de precio fijo (web + tarjeta NFC) y tarjetas de visita opcionales.
   beauty: {
     navLabel: 'Barberías y belleza',
     title: 'Para barberías y salones de belleza',
     intro: 'Tu web con tus servicios y precios, citas por WhatsApp y una tarjeta en el mostrador para que cada cliente contento te deje su reseña en Google.',
+    // Lo que incluye el pack (sin precio por separado).
     offers: [
       {
-        service: 'landing',
         name: 'Landing page con tus servicios',
         text: 'Servicios y precios, fotos de tus trabajos, horarios, ubicación y un botón para pedir cita por WhatsApp.',
       },
       {
-        service: 'nfc',
         name: 'Tarjeta NFC de reseñas',
         text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.',
       },
     ],
+    pack: { name: 'Pack barberías y salones de belleza', label: 'Web + tarjeta NFC de reseñas', price: '225 €' },
+    // Opción de imprenta, aparte del pack.
+    option: {
+      name: 'Tarjetas de visita personalizadas',
+      text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas.',
+      price: '50 € / 100 uds.',
+    },
     cta: 'Pide información para tu negocio',
-    whatsappText: 'Hola, tengo una barbería o salón de belleza y quiero información sobre la web y la tarjeta de reseñas',
+    whatsappText: 'Hola, tengo una barbería o salón de belleza y quiero información sobre el pack de web y tarjeta de reseñas',
     // Web de ejemplo que aparece en el móvil (negocio ficticio).
     demo: {
       business: 'Barbería Isleña',
@@ -108,7 +113,7 @@ export const site = {
 
   // RECORRIDO DEL CLIENTE: cada paso muestra el servicio que lo resuelve (por su "id").
   journey: {
-    title: 'Así llega un cliente a tu mesa',
+    title: 'Así llega un cliente a tu negocio',
     steps: [
       { moment: 'Te busca en Google', service: 'gbp' },
       { moment: 'Mira tu carta', service: 'landing' },
@@ -175,12 +180,12 @@ export const site = {
 
   // PACK COMPLETO (se muestra destacado en precios). Pon "pack: null" para ocultarlo.
   pack: {
-    name: 'Pack completo',
+    name: 'Pack completo para hostelería',
     text: 'Ficha de Google Business + landing page con carta digital + hosting y dominio el primer año. La placa de reseñas QR + NFC, de regalo.',
     price: '390 €',
     was: '415 €',
   },
-  pricesNote: 'Precios sin IGIC. Imprenta y fotografía profesional se presupuestan aparte.',
+  pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
 
   // COMPLEMENTOS FÍSICOS: llevan a tus clientes desde la mesa a tu carta, tu web o tus reseñas.
   extras: {

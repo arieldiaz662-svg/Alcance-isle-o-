@@ -112,10 +112,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   padding: 4.5rem 0 5rem;
 }
 .mesa h1 {
-  font-size: clamp(3.6rem, 10.5vw, 7.8rem);
-  line-height: .88;
+  font-size: clamp(3.1rem, 8.4vw, 6.4rem);
+  line-height: .9;
   letter-spacing: -0.045em;
-  max-width: 7.2ch;
+  max-width: 9ch;
   margin-bottom: 1.6rem;
 }
 .mesa .lead { font-size: var(--t-l); line-height: 1.45; max-width: 30ch; }
@@ -401,3 +401,15 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
   .tarjeta-nfc { position: relative; right: auto; bottom: auto; width: 170px; margin: -1rem 0 0 auto; }
   .mostrador figcaption { position: static; margin-top: 1rem; }
 }
+
+/* Pack de belleza: servicios incluidos, total y opción de imprenta */
+.local-precio.incluido { font-weight: 500; color: var(--gris); }
+.belleza-total { border-bottom: 2px solid var(--tinta) !important; }
+.belleza-total h3 { margin: 0; font-size: var(--t-l); }
+.belleza-total .local-precio { grid-row: 1; font-size: var(--t-xl); color: var(--atlantico); }
+.belleza-opcion {
+  display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
+  margin: -1rem 0 2rem; padding: 1rem; background: var(--niebla); border-radius: 6px;
+}
+.belleza-opcion h3 { font-size: var(--t-m); margin: 0 0 .2rem; }
+.belleza-opcion p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }

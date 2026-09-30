@@ -161,16 +161,22 @@ export function renderLanding({ site, config }) {
     <div>
       <h2>${esc(beauty.title)}</h2>
       <p class="belleza-intro">${esc(beauty.intro)}</p>
-      <ul class="local-lista">${beauty.offers.map((offer) => {
-        const service = serviceById[offer.service];
-        return `
+      <ul class="local-lista">${beauty.offers.map((offer) => `
         <li>
           <h3>${esc(offer.name)}</h3>
           <p>${esc(offer.text)}</p>
-          <span class="local-precio">${esc(service ? priceOf(service) : '')}</span>
-        </li>`;
-      }).join('')}
+          <span class="local-precio incluido">Incluido</span>
+        </li>`).join('')}
+        <li class="belleza-total">
+          <h3>${esc(beauty.pack.label)}</h3>
+          <span class="local-precio">${esc(beauty.pack.price)}</span>
+        </li>
       </ul>
+      <div class="belleza-opcion">
+        <h3>Opcional: ${esc(beauty.option.name)}</h3>
+        <p>${esc(beauty.option.text)}</p>
+        <span class="local-precio">${esc(beauty.option.price)}</span>
+      </div>
       <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, beauty.whatsappText))}" rel="noopener" target="_blank">${esc(beauty.cta)}</a>
     </div>
   </div>
@@ -212,6 +218,10 @@ export function renderLanding({ site, config }) {
   const priceGroups = [
     { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
     ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
+    ...(beauty ? [{ title: 'Barberías y salones de belleza', rows: [
+      { label: `${beauty.pack.name} (${beauty.pack.label.charAt(0).toLowerCase()}${beauty.pack.label.slice(1)})`, price: beauty.pack.price },
+      { label: `${beauty.option.name} (opcional)`, price: beauty.option.price },
+    ] }] : []),
   ];
   const pricesSection = `
 <section class="precios" id="precios">

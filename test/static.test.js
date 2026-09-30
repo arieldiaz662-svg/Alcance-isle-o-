@@ -49,15 +49,20 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   const belleza = index.slice(index.indexOf('id="belleza"'), index.indexOf('id="por-que"'));
   assert.match(index, /href="#belleza">Barberías y belleza</);
   assert.match(belleza, /Para barberías y salones de belleza/);
-  assert.match(belleza, /Landing page con tus servicios<\/h3>[\s\S]*?desde 200 €/);
-  assert.match(belleza, /Tarjeta NFC de reseñas<\/h3>[\s\S]*?25 €/);
+  assert.match(belleza, /Landing page con tus servicios<\/h3>[\s\S]*?Incluido/);
+  assert.match(belleza, /Tarjeta NFC de reseñas<\/h3>[\s\S]*?Incluido/);
+  assert.match(belleza, /Web \+ tarjeta NFC de reseñas<\/h3>\s*<span class="local-precio">225 €/);
+  assert.match(belleza, /Opcional: Tarjetas de visita personalizadas[\s\S]*?50 € \/ 100 uds\./);
+  assert.match(precios, priceRow('Pack barberías y salones de belleza (web + tarjeta NFC de reseñas)', '225 €'));
+  assert.match(precios, priceRow('Tarjetas de visita personalizadas (opcional)', '50 € / 100 uds.'));
   assert.match(belleza, /wa\.me\/34623243294\?text=Hola%2C%20tengo%20una%20barber%C3%ADa/);
   // El QR del expositor es real y, además, un enlace (en el móvil no se puede escanear la propia pantalla).
-  assert.match(index, /<a class="expositor" href="https:\/\/wa\.me\/34623243294\?text=Hola%2C%20quiero%20mi%20mesa%20digital"/);
+  assert.match(index, /<a class="expositor" href="https:\/\/wa\.me\/34623243294\?text=Hola%2C%20quiero%20mi%20escaparate%20digital"/);
   assert.match(index, /<svg class="qr" viewBox="-1 -1 39 39"/);
-  assert.match(index, /Así llega un cliente a tu mesa/);
+  assert.match(index, /Así llega un cliente a tu negocio/);
   // Portada con el eslogan y contenido de la propuesta.
-  assert.match(index, /<h1>Tu mesa digital<\/h1>/);
+  assert.match(index, /<h1>Tu escaparate digital<\/h1>/);
+  assert.doesNotMatch(index, /mesa digital/i);
   assert.match(index, /Pide tu diagnóstico gratuito/);
   assert.match(index, /id="por-que"/);
   assert.match(index, /Todo conectado, no piezas sueltas/);
