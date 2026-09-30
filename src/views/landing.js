@@ -1,7 +1,9 @@
-import { esc, layout, whatsappUrl } from './html.js';
+import { contact, esc, layout, links, whatsappUrl } from './html.js';
 
 export function renderLanding({ site, config }) {
-  const wa = whatsappUrl(config.whatsappNumber, site.whatsappGreeting);
+  const { whatsapp, phoneDisplay, email } = contact(site, config);
+  const to = links(config);
+  const wa = whatsappUrl(whatsapp, site.whatsappGreeting);
   const team = site.team.filter((person) => person.name && person.name.trim());
 
   const nav = [
@@ -33,7 +35,7 @@ export function renderLanding({ site, config }) {
     <div class="equipo-grid">${team.map((person) => `
       <div class="persona">
         <div class="foto">${person.photo
-          ? `<img src="${esc(person.photo)}" alt="${esc(person.name)}" loading="lazy" width="400" height="400">`
+          ? `<img src="${esc(to.asset(person.photo))}" alt="${esc(person.name)}" loading="lazy" width="400" height="400">`
           : esc(initials(person.name))}</div>
         <strong>${esc(person.name)}</strong>
         ${person.role ? `<span class="suave">${esc(person.role)}</span>` : ''}
@@ -134,12 +136,45 @@ ${teamSection}
       <h2>¿Hablamos?</h2>
       <p>Cuéntanos qué necesitas y te respondemos en menos de 24 horas.</p>
       <p><a class="btn btn-sol" href="${esc(wa)}" rel="noopener" target="_blank">Escribir por WhatsApp</a></p>
-      <p class="suave">Trabajamos en ${esc(site.region)}.${config.contactEmail ? `<br>
-      Email: <a href="mailto:${esc(config.contactEmail)}">${esc(config.contactEmail)}</a>` : ''}</p>
+      <p class="suave">Trabajamos en ${esc(site.region)}.${phoneDisplay ? `<br>
+      Teléfono: <a href="tel:+${esc(whatsapp)}">${esc(phoneDisplay)}</a>` : ''}${email ? `<br>
+      Email: <a href="mailto:${esc(email)}">${esc(email)}</a>` : ''}</p>
     </div>
 
-    <form id="formulario" novalidate data-whatsapp="${esc(config.whatsappNumber)}">
-      <div id="form-campos">
+    <form id="formulario" novalidate data-whatsapp="${esc(whatsapp)}" data-mode="${config.static ? 'whatsapp' : 'api'}">
+      ${config.static ? whatsappFormFields(to) : apiFormFields(to, serviceOptions, wa)}
+      <noscript><p class="form-error">Para enviar el formulario necesitas JavaScript. También puedes escribirnos por <a href="${esc(wa)}">WhatsApp</a>.</p></noscript>
+    </form>
+  </div>
+</section>
+
+</main>`;
+
+  return layout({
+    site, config, title: site.title, description: site.description, path: '/', nav, body,
+    scripts: ['js/site.js'],
+  });
+}
+
+// Versión estática: sin servidor, el formulario compone el mensaje y abre WhatsApp.
+function whatsappFormFields(to) {
+  return `<label>Nombre *
+        <input type="text" name="name" autocomplete="name" required maxlength="80">
+      </label>
+      <label>Tipo de negocio
+        <input type="text" name="business_type" maxlength="80" placeholder="Peluquería, restaurante, tienda...">
+      </label>
+      <label>¿Qué necesitas?
+        <textarea name="message" maxlength="1000" placeholder="Cuéntanos en pocas palabras"></textarea>
+      </label>
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+      <p class="legal-form">Al enviar se abrirá WhatsApp con tu mensaje ya escrito; tú decides si lo mandas. Usaremos tus datos solo para responderte. Más información en la <a href="${to.privacy}">política de privacidad</a>.</p>
+      <button class="btn btn-sol btn-full" type="submit">Enviar por WhatsApp</button>`;
+}
+
+// Versión con servidor: guarda el lead en la base de datos y después ofrece seguir por WhatsApp.
+function apiFormFields(to, serviceOptions, wa) {
+  return `<div id="form-campos">
         <label>Nombre *
           <input type="text" name="name" autocomplete="name" required minlength="2" maxlength="80">
         </label>
@@ -168,7 +203,7 @@ ${teamSection}
         </label>
         <label class="consentimiento">
           <input type="checkbox" name="consent" required>
-          <span>He leído la <a href="/privacidad" target="_blank">política de privacidad</a> y acepto que usen mis datos para responder a mi solicitud. *</span>
+          <span>He leído la <a href="${to.privacy}" target="_blank">política de privacidad</a> y acepto que usen mis datos para responder a mi solicitud. *</span>
         </label>
         <p class="form-error" id="form-error" role="alert" hidden></p>
         <button class="btn btn-sol btn-full" type="submit">Enviar solicitud</button>
@@ -177,16 +212,5 @@ ${teamSection}
         <h3>¡Recibido!</h3>
         <p>Te contactaremos en menos de 24 horas. Si lo prefieres, puedes adelantarlo por WhatsApp:</p>
         <a class="btn btn-sol btn-full" id="form-ok-whatsapp" href="${esc(wa)}" rel="noopener" target="_blank">Continuar en WhatsApp</a>
-      </div>
-      <noscript><p class="form-error">Para enviar el formulario necesitas JavaScript. También puedes escribirnos por <a href="${esc(wa)}">WhatsApp</a>.</p></noscript>
-    </form>
-  </div>
-</section>
-
-</main>`;
-
-  return layout({
-    site, config, title: site.title, description: site.description, path: '/', nav, body,
-    scripts: ['/assets/js/site.js'],
-  });
+      </div>`;
 }

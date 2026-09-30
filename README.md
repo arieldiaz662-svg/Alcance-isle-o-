@@ -7,9 +7,30 @@ MVP de la web de Alcance Isleño: landing para negocios de Tenerife, captación 
 - **Panel** en `/admin`: leads con estados y notas, clientes y tarjetas NFC.
 - **Tarjetas NFC** que apuntan a `/r/<slug>`: miden los usos y permiten cambiar el destino sin reprogramarlas.
 
+El proyecto tiene **dos modos** que comparten plantillas y contenido:
+
+| Modo | Para qué | Comando |
+|---|---|---|
+| **Web estática** (actual) | Enseñar la información. Sin servidor ni base de datos; el formulario abre WhatsApp. Se aloja gratis. | `npm run build` → carpeta `dist/` |
+| Aplicación completa | Guardar leads, panel `/admin` y tarjetas NFC con estadísticas. Necesita un servidor. | `npm start` |
+
 Arquitectura, esquema de base de datos y API: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Puesta en marcha
+## Publicar la web estática gratis
+
+```bash
+npm install
+npm run build        # genera dist/
+npm run preview      # revísala en http://localhost:4000
+```
+
+Opciones con dominio gratuito de prueba:
+
+- **Netlify Drop** (la más rápida, sin cuenta de GitHub): entra en <https://app.netlify.com/drop> y arrastra la carpeta `dist/`. Te da una dirección `*.netlify.app` que puedes renombrar (p. ej. `alcance-isleno.netlify.app`) en *Site configuration → Change site name*. Para actualizar, arrastra de nuevo la carpeta en *Deploys*.
+- **GitHub Pages** (se actualiza sola con cada cambio): sube este repositorio a GitHub y en *Settings → Pages → Source* elige **GitHub Actions**. El flujo `.github/workflows/pages.yml` pasa los tests, genera la web y la publica en `https://<usuario>.github.io/alcance-isleno/`.
+- **Cloudflare Pages**: conecta el repositorio con comando de build `npm run build` y carpeta de salida `dist` → `*.pages.dev`.
+
+## Aplicación completa (servidor)
 
 Requisitos: Node.js 22.9 o superior.
 
@@ -28,9 +49,9 @@ Tests: `npm test`
 |---|---|
 | Textos, servicios, precios y equipo | `src/content/site.js` |
 | Datos del titular para los textos legales | `src/content/site.js` → `legal` |
-| WhatsApp, email y dominio | variables de entorno (`.env.example`) |
+| WhatsApp, teléfono y email | `src/content/site.js` (las variables de entorno tienen prioridad) |
 | Colores y tipografías | `public/css/site.css` → `:root` |
-| Fotos del equipo | `public/img/equipo/` y la ruta `/assets/img/equipo/nombre.jpg` en `site.js` |
+| Fotos del equipo | `public/img/equipo/` y la ruta `img/equipo/nombre.jpg` en `site.js` |
 
 ## Producción
 

@@ -15,11 +15,38 @@ const LOGO = `<svg viewBox="0 0 48 60" aria-hidden="true">
         <polygon points="13,22 24,22 24,42" fill="#9EC1F2"/>
       </svg>`;
 
+// Datos de contacto efectivos: las variables de entorno tienen prioridad sobre site.js.
+export function contact(site, config) {
+  return {
+    whatsapp: config.whatsappNumber || site.whatsappNumber,
+    phoneDisplay: site.phoneDisplay,
+    email: config.contactEmail || site.email,
+  };
+}
+
+// Rutas de enlaces y recursos. En modo servidor son absolutas ("/privacidad"); en la versión
+// estática son relativas y con .html, para que funcionen en cualquier subcarpeta (p. ej. GitHub Pages).
+export function links(config) {
+  if (config.static) {
+    return {
+      home: './', legal: 'aviso-legal.html', privacy: 'privacidad.html', cookies: 'cookies.html',
+      asset: (file) => `assets/${file}`,
+      page: (path) => (path === '/' ? '' : `${path.slice(1)}.html`),
+    };
+  }
+  return {
+    home: '/', legal: '/aviso-legal', privacy: '/privacidad', cookies: '/cookies',
+    asset: (file) => `/assets/${file}`,
+    page: (path) => path,
+  };
+}
+
 // Esqueleto común: <head>, navegación y pie. "nav" es la lista de enlaces del menú.
 export function layout({ site, config, title, description, path = '/', nav = [], body, scripts = [] }) {
-  const canonical = `${config.publicBaseUrl}${path}`;
+  const to = links(config);
+  const canonical = config.publicBaseUrl ? `${config.publicBaseUrl}${config.static ? `/${to.page(path)}` : path}` : '';
   const year = new Date().getFullYear();
-  const home = path === '/' ? '' : '/';
+  const home = path === '/' ? '' : to.home;
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -27,17 +54,16 @@ export function layout({ site, config, title, description, path = '/', nav = [],
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
-<link rel="canonical" href="${esc(canonical)}">
-<meta property="og:type" content="website">
+${canonical ? `<link rel="canonical" href="${esc(canonical)}">
 <meta property="og:url" content="${esc(canonical)}">
+` : ''}<meta property="og:type" content="website">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:locale" content="es_ES">
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/site.css">
+<meta name="theme-color" content="#0E2A47">
+<link rel="icon" href="${to.asset('img/favicon.svg')}" type="image/svg+xml">
+<link rel="preload" href="${to.asset('fonts/bricolage-grotesque.woff2')}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="${to.asset('css/site.css')}">
 </head>
 <body>
 
@@ -60,13 +86,13 @@ ${body}
   <div class="wrap">
     <div>© ${year} ${esc(site.name)}</div>
     <nav aria-label="Información legal">
-      <a href="/aviso-legal">Aviso legal</a>
-      <a href="/privacidad">Política de privacidad</a>
-      <a href="/cookies">Cookies</a>
+      <a href="${to.legal}">Aviso legal</a>
+      <a href="${to.privacy}">Política de privacidad</a>
+      <a href="${to.cookies}">Cookies</a>
     </nav>
   </div>
 </footer>
-${scripts.map((src) => `<script src="${esc(src)}" defer></script>`).join('\n')}
+${scripts.map((file) => `<script src="${esc(to.asset(file))}" defer></script>`).join('\n')}
 </body>
 </html>`;
 }
@@ -78,7 +104,7 @@ export function messagePage({ site, config, title, heading, text }) {
     body: `<main class="pagina-simple"><div class="wrap">
   <h1>${esc(heading)}</h1>
   <p>${esc(text)}</p>
-  <p><a class="btn btn-sol" href="/">Volver al inicio</a></p>
+  <p><a class="btn btn-sol" href="${links(config).home}">Volver al inicio</a></p>
 </div></main>`,
   });
 }

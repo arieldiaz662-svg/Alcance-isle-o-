@@ -1,4 +1,18 @@
 /* =========================================================
+   0. TIPOGRAFÍAS alojadas en la propia web (sin Google Fonts: más rápido y sin enviar la IP a terceros)
+   ========================================================= */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("../fonts/bricolage-grotesque.woff2") format("woff2-variations"), url("../fonts/bricolage-grotesque.woff2") format("woff2");
+  font-weight: 200 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/figtree.woff2") format("woff2-variations"), url("../fonts/figtree.woff2") format("woff2");
+  font-weight: 300 900; font-style: normal; font-display: swap;
+}
+
+/* =========================================================
    1. VARIABLES: cambia aquí colores y tipografías
    ========================================================= */
 :root {
@@ -204,6 +218,7 @@ input, textarea {
   width: 100%; margin-top: .3rem;
   font: inherit; padding: .7rem .85rem;
   border: 1.5px solid #C4D3E8; border-radius: 10px; background: var(--blanco); color: var(--marino);
+  font-weight: 400;
 }
 input:focus, textarea:focus { outline: 3px solid var(--sol); border-color: var(--marino); }
 textarea { min-height: 100px; resize: vertical; }
@@ -229,7 +244,7 @@ footer a:hover { color: var(--blanco); text-decoration: underline; }
    ========================================================= */
 select {
   width: 100%; margin-top: .3rem;
-  font: inherit; padding: .7rem .85rem;
+  font: inherit; font-weight: 400; padding: .7rem .85rem;
   border: 1.5px solid #C4D3E8; border-radius: 10px; background: var(--blanco); color: var(--marino);
 }
 select:focus { outline: 3px solid var(--sol); border-color: var(--marino); }

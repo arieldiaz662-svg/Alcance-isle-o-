@@ -19,6 +19,13 @@ El MVP resuelve exactamente eso y nada más:
 
 Queda **fuera** a propósito: pagos online, portal para clientes, multiidioma, blog, CMS visual. Ver la sección 8.
 
+### Fase 0: web estática (lo que se publica ahora)
+
+`npm run build` genera `dist/` con las mismas plantillas y contenido que usa el servidor, pero en modo `static`:
+enlaces relativos (funciona en subcarpetas como GitHub Pages), formulario que abre WhatsApp sin guardar datos,
+textos legales adaptados (sin tratamiento de datos en la web ni cookies) y sin el panel. Cero coste y cero mantenimiento.
+Cuando se quiera guardar leads o vender las tarjetas NFC con estadísticas, se despliega el servidor sin reescribir la web.
+
 ## 2. Arquitectura del sistema
 
 Monolito modular en Node.js. Un solo proceso sirve la web, la API y el panel. Es la opción más barata de operar para un equipo de tres personas y se puede dividir más adelante sin reescribir, porque las capas ya están separadas.
@@ -224,7 +231,7 @@ Respuestas: `201 {ok:true}`, `400` validación, `429` demasiadas peticiones.
 
 ## 6. Seguridad y cumplimiento
 
-- **CSP estricta** sin `unsafe-inline`: todo el JS y CSS son ficheros propios. Solo se permite Google Fonts.
+- **CSP estricta** sin `unsafe-inline` y sin terceros: JS, CSS y tipografías (licencia OFL) se sirven desde la propia web.
 - **CSRF**: cookie `SameSite=Strict` + la API solo acepta JSON (no hay parser de formularios).
 - **Contraseñas**: scrypt con sal por usuario; comparación en tiempo constante, también cuando el email no existe.
 - **Sesiones**: token aleatorio de 256 bits, solo el hash en BD, caducidad configurable, cookie `Secure` en producción.

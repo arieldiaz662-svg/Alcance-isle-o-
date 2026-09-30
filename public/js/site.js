@@ -1,30 +1,59 @@
-// Formulario de contacto: guarda el lead en el servidor y después ofrece continuar por WhatsApp.
-// El enlace a WhatsApp se muestra como botón (no con window.open) para que los bloqueadores de
-// ventanas emergentes no lo corten tras la petición asíncrona.
+// Formulario de contacto.
+// - Modo "whatsapp" (web estática): abre WhatsApp con el mensaje ya escrito.
+// - Modo "api" (con servidor): guarda el lead y después ofrece continuar por WhatsApp. Ahí el enlace
+//   se muestra como botón (no con window.open) para que los bloqueadores de ventanas emergentes
+//   no lo corten tras la petición asíncrona.
 (function () {
   var form = document.getElementById('formulario');
   if (!form) return;
 
-  var fields = document.getElementById('form-campos');
-  var errorBox = document.getElementById('form-error');
-  var okBox = document.getElementById('form-ok');
-  var okWhatsapp = document.getElementById('form-ok-whatsapp');
-  var button = form.querySelector('button[type="submit"]');
   var whatsapp = form.dataset.whatsapp;
+  var errorBox = document.getElementById('form-error');
 
   function showError(message) {
     errorBox.textContent = message;
     errorBox.hidden = false;
   }
 
-  function utm(name) {
-    try { return new URLSearchParams(location.search).get(name) || undefined; } catch (e) { return undefined; }
-  }
-
   function whatsappText(data) {
     return 'Hola, soy ' + data.name +
       (data.business_type ? ' y tengo un negocio de tipo: ' + data.business_type : '') + '.' +
       (data.message ? ' ' + data.message : ' Me gustaría recibir información sobre Alcance Isleño.');
+  }
+
+  function whatsappLink(data) {
+    return 'https://wa.me/' + whatsapp + '?text=' + encodeURIComponent(whatsappText(data));
+  }
+
+  // Versión estática (sin servidor): abre WhatsApp con el mensaje ya escrito.
+  // Se abre dentro del propio evento submit para que el navegador no lo trate como ventana emergente.
+  if (form.dataset.mode === 'whatsapp') {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      errorBox.hidden = true;
+      var el = form.elements;
+      var data = {
+        name: el.name.value.trim(),
+        business_type: el.business_type.value.trim(),
+        message: el.message.value.trim(),
+      };
+      if (!data.name) { el.name.focus(); return showError('Escribe tu nombre.'); }
+      var url = whatsappLink(data);
+      // Con "noopener" window.open siempre devuelve null, así que se corta el opener a mano.
+      var win = window.open(url, '_blank');
+      if (win) win.opener = null;
+      else location.href = url; // si el navegador bloquea la pestaña nueva, se abre en la misma
+    });
+    return;
+  }
+
+  var fields = document.getElementById('form-campos');
+  var okBox = document.getElementById('form-ok');
+  var okWhatsapp = document.getElementById('form-ok-whatsapp');
+  var button = form.querySelector('button[type="submit"]');
+
+  function utm(name) {
+    try { return new URLSearchParams(location.search).get(name) || undefined; } catch (e) { return undefined; }
   }
 
   form.addEventListener('submit', function (event) {
@@ -61,7 +90,7 @@
     })
       .then(function (response) {
         if (response.status === 201) {
-          okWhatsapp.href = 'https://wa.me/' + whatsapp + '?text=' + encodeURIComponent(whatsappText(data));
+          okWhatsapp.href = whatsappLink(data);
           fields.hidden = true;
           okBox.hidden = false;
           okBox.focus();

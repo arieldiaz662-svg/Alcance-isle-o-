@@ -24,7 +24,6 @@ export function loadConfig(env = process.env) {
 
   if (isProduction) {
     const missing = [];
-    if (!config.whatsappNumber) missing.push('WHATSAPP_NUMBER');
     if (!env.PUBLIC_BASE_URL) missing.push('PUBLIC_BASE_URL');
     if (missing.length) {
       throw new Error(`Faltan variables de entorno obligatorias en producción: ${missing.join(', ')}`);
