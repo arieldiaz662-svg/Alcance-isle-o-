@@ -45,19 +45,28 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /id="carta-panel-1"[^>]*hidden/);
   assert.match(index, /Bar\/Restaurante Isleño/);
   assert.doesNotMatch(index, /Marisol/);
-  // Sección para barberías y salones de belleza: landing + tarjeta NFC, con los precios de la lista.
-  const belleza = index.slice(index.indexOf('id="belleza"'), index.indexOf('id="por-que"'));
-  assert.match(index, /href="#belleza">Barberías y belleza</);
-  assert.match(belleza, /Para barberías y salones de belleza/);
-  assert.match(belleza, /Landing page con tus servicios<\/h3>[\s\S]*?Incluido/);
-  assert.match(belleza, /Tarjeta NFC de reseñas<\/h3>[\s\S]*?Incluido/);
-  assert.match(belleza, /Web \+ tarjeta NFC de reseñas<\/h3>\s*<span class="local-precio">225 €/);
-  assert.match(belleza, /Opcional: Tarjetas de visita personalizadas[\s\S]*?50 € \/ 100 uds\./);
-  assert.match(precios, priceRow('Pack barberías y salones de belleza (web + tarjeta NFC de reseñas; hosting aparte)', '225 €'));
-  // El pack de belleza no incluye el hosting: se muestra aparte con la tarifa anual.
-  assert.match(belleza, /class="belleza-hosting">[\s\S]*?Hosting y dominio \(12 meses\)[\s\S]*?se paga aparte[\s\S]*?90 € \/ año/);
+  // Packs por tipo de negocio: selector de dos pestañas justo después de la portada.
+  const packs = index.slice(index.indexOf('id="packs"'), index.indexOf('class="recorrido"'));
+  assert.ok(index.indexOf('id="packs"') < index.indexOf('id="servicios"'), 'va justo después de la portada');
+  assert.match(index, /href="#packs">Packs</);
+  assert.match(packs, /<h2>¿Qué tipo de negocio tienes\?<\/h2>/);
+  assert.match(packs, /role="tab" id="tab-hosteleria" aria-controls="hosteleria" aria-selected="true">Bares, restaurantes y cafeterías</);
+  assert.match(packs, /role="tab" id="tab-cita-previa" aria-controls="cita-previa" aria-selected="false" tabindex="-1">Negocios con cita previa</);
+  assert.doesNotMatch(packs, /Barberías y salones de belleza|belleza"/, 'la categoría ahora es "Negocios con cita previa"');
+  const hosteleria = packs.slice(packs.indexOf('id="hosteleria"'), packs.indexOf('id="cita-previa"'));
+  const citaPrevia = packs.slice(packs.indexOf('id="cita-previa"'));
+  assert.match(hosteleria, /Placa de reseñas QR \+ NFC<\/h4>[\s\S]*?De regalo/);
+  assert.match(hosteleria, /class="pack-total">[\s\S]*?<s>415 €<\/s> 390 €/);
+  assert.match(hosteleria, /href="#local">Expositores de mesa y pegatinas QR/);
+  assert.doesNotMatch(hosteleria, /pack-hosting/, 'el pack de hostelería incluye el hosting del primer año');
+  assert.match(citaPrevia, /Landing page con tus servicios<\/h4>[\s\S]*?Incluido/);
+  assert.match(citaPrevia, /Tarjeta NFC de reseñas<\/h4>[\s\S]*?Incluido/);
+  assert.match(citaPrevia, /Web \+ tarjeta NFC de reseñas<\/h4>\s*<span class="local-precio">225 €/);
+  assert.match(citaPrevia, /class="pack-hosting">[\s\S]*?Hosting y dominio \(12 meses\)[\s\S]*?se paga aparte[\s\S]*?90 € \/ año/);
+  assert.match(citaPrevia, /Opcional: Tarjetas de visita personalizadas[\s\S]*?50 € \/ 100 uds\./);
+  assert.match(citaPrevia, /wa\.me\/34623243294\?text=Hola%2C%20tengo%20un%20negocio%20con%20cita%20previa/);
+  assert.match(precios, priceRow('Pack negocios con cita previa (web + tarjeta NFC de reseñas; hosting aparte)', '225 €'));
   assert.match(precios, priceRow('Tarjetas de visita personalizadas (opcional)', '50 € / 100 uds.'));
-  assert.match(belleza, /wa\.me\/34623243294\?text=Hola%2C%20tengo%20una%20barber%C3%ADa/);
   // El QR del expositor es real y, además, un enlace (en el móvil no se puede escanear la propia pantalla).
   assert.match(index, /<a class="expositor" href="https:\/\/wa\.me\/34623243294\?text=Hola%2C%20quiero%20mi%20escaparate%20digital"/);
   assert.match(index, /<svg class="qr" viewBox="-1 -1 39 39"/);

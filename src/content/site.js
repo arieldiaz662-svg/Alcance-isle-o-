@@ -69,49 +69,80 @@ export const site = {
     ],
   },
 
-  // BARBERÍAS Y SALONES DE BELLEZA: pack de precio fijo (web + tarjeta NFC) y tarjetas de visita opcionales.
-  beauty: {
-    navLabel: 'Barberías y belleza',
-    title: 'Para barberías y salones de belleza',
-    intro: 'Tu web con tus servicios y precios, citas por WhatsApp y una tarjeta en el mostrador para que cada cliente contento te deje su reseña en Google.',
-    // Lo que incluye el pack (sin precio por separado).
-    offers: [
-      {
-        name: 'Landing page con tus servicios',
-        text: 'Servicios y precios, fotos de tus trabajos, horarios, ubicación y un botón para pedir cita por WhatsApp.',
-      },
-      {
-        name: 'Tarjeta NFC de reseñas',
-        text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.',
-      },
-    ],
-    pack: { name: 'Pack barberías y salones de belleza', label: 'Web + tarjeta NFC de reseñas', price: '225 €' },
-    // El pack no incluye el hosting: se cobra aparte con la tarifa anual de "Hosting y dominio".
-    hostingNote: 'El hosting y dominio de tu web se paga aparte, cada año.',
-    // Opción de imprenta, aparte del pack.
-    option: {
-      name: 'Tarjetas de visita personalizadas',
-      text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas.',
-      price: '50 € / 100 uds.',
-    },
-    cta: 'Pide información para tu negocio',
-    whatsappText: 'Hola, tengo una barbería o salón de belleza y quiero información sobre el pack de web y tarjeta de reseñas',
-    // Web de ejemplo que aparece en el móvil (negocio ficticio).
-    demo: {
-      business: 'Barbería Isleña',
-      label: 'Servicios',
-      items: [
-        ['Corte de pelo', '12 €'],
-        ['Corte + barba', '18 €'],
-        ['Arreglo de barba', '8 €'],
-        ['Corte infantil', '10 €'],
-        ['Lavado y peinado', '15 €'],
+  // PACKS POR TIPO DE NEGOCIO: sección con pestañas justo después de la portada.
+  // pack: 'main' usa el "Pack completo" definido más abajo (pack), para no repetir precios.
+  sectorsTitle: '¿Qué tipo de negocio tienes?',
+  sectors: [
+    {
+      id: 'hosteleria',
+      tab: 'Bares, restaurantes y cafeterías',
+      title: 'Bares, restaurantes y cafeterías',
+      intro: 'Tu carta en el móvil de tus clientes, tu ficha de Google al día y reseñas desde la mesa.',
+      includes: [
+        { name: 'Landing page con carta digital', text: 'Tu carta con precios, horario, ubicación y contacto por WhatsApp. Se abre desde el QR de la mesa, sin descargar nada.' },
+        { name: 'Ficha de Google Business', text: 'La creamos o optimizamos: horarios, fotos, enlace a tu carta y acceso directo a tus reseñas.' },
+        { name: 'Hosting y dominio el primer año', text: 'Tu web online desde el primer día.' },
+        { name: 'Placa de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.', badge: 'De regalo' },
       ],
-      button: 'Pedir cita por WhatsApp',
-      card: 'Acerca tu móvil y déjanos tu reseña',
-      caption: 'Ejemplo de web y tarjeta de reseñas para una barbería.',
+      pack: 'main',
+      option: {
+        name: 'Expositores de mesa y pegatinas QR',
+        text: 'Expositores personalizados impresos en 3D o pegatinas QR para llevar la carta a cada mesa.',
+        price: 'desde 10 €',
+        href: '#local',
+      },
+      cta: 'Pide información para tu local',
+      whatsappText: 'Hola, tengo un bar, restaurante o cafetería y quiero información sobre el pack completo',
+      demo: {
+        business: 'Bar/Restaurante Isleño',
+        label: 'Carta',
+        items: [
+          ['Papas con mojo', '4,50 €'],
+          ['Queso asado', '6,00 €'],
+          ['Carne de cabra', '12 €'],
+          ['Vieja sancochada', '14 €'],
+          ['Postre casero', '3,50 €'],
+        ],
+        button: 'Reservar por WhatsApp',
+        card: 'Acerca tu móvil y déjanos tu reseña',
+        caption: 'Ejemplo de carta digital y placa de reseñas para un restaurante.',
+      },
     },
-  },
+    {
+      id: 'cita-previa',
+      tab: 'Negocios con cita previa',
+      title: 'Negocios con cita previa',
+      intro: 'Barberías, peluquerías, estética, uñas, tatuajes, fisioterapia… Tu web con tus servicios y precios, citas por WhatsApp y una tarjeta en el mostrador para que cada cliente contento te deje su reseña en Google.',
+      includes: [
+        { name: 'Landing page con tus servicios', text: 'Servicios y precios, fotos de tus trabajos, horarios, ubicación y un botón para pedir cita por WhatsApp.' },
+        { name: 'Tarjeta NFC de reseñas', text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.' },
+      ],
+      pack: { name: 'Pack negocios con cita previa', label: 'Web + tarjeta NFC de reseñas', price: '225 €' },
+      // El pack no incluye el hosting: se muestra aparte con la tarifa anual de "Hosting y dominio".
+      hostingNote: 'El hosting y dominio de tu web se paga aparte, cada año.',
+      option: {
+        name: 'Tarjetas de visita personalizadas',
+        text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas.',
+        price: '50 € / 100 uds.',
+      },
+      cta: 'Pide información para tu negocio',
+      whatsappText: 'Hola, tengo un negocio con cita previa y quiero información sobre el pack de web y tarjeta de reseñas',
+      demo: {
+        business: 'Barbería Isleña',
+        label: 'Servicios',
+        items: [
+          ['Corte de pelo', '12 €'],
+          ['Corte + barba', '18 €'],
+          ['Arreglo de barba', '8 €'],
+          ['Corte infantil', '10 €'],
+          ['Lavado y peinado', '15 €'],
+        ],
+        button: 'Pedir cita por WhatsApp',
+        card: 'Acerca tu móvil y déjanos tu reseña',
+        caption: 'Ejemplo de web y tarjeta de reseñas para una barbería.',
+      },
+    },
+  ],
 
   // RECORRIDO DEL CLIENTE: cada paso muestra el servicio que lo resuelve (por su "id").
   journey: {

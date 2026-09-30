@@ -6,7 +6,7 @@ Notas de diseño para mantener la web coherente en futuros cambios.
 
 La portada es una **mesa de cafetería canaria** (terrazo) con los tres objetos que vende Alcance Isleño: el móvil con la **carta digital funcionando** (pestañas reales), el expositor con QR y un barraquito. Es el único elemento llamativo de la página; todo lo demás es sobrio y legible.
 
-Eslogan: **"Tu escaparate digital"**, que engloba todos los sectores (hostelería, barberías y salones de belleza). La mesa de la portada sigue siendo la imagen principal; los salones tienen su propia sección con un móvil de servicios y la tarjeta NFC.
+Eslogan: **"Tu escaparate digital"**, que engloba todos los sectores (hostelería, barberías y salones de belleza). La mesa de la portada sigue siendo la imagen principal. Justo después, **"¿Qué tipo de negocio tienes?"** separa la oferta en dos pestañas: *Bares, restaurantes y cafeterías* y *Negocios con cita previa* (barberías, peluquerías, estética, uñas, tatuajes, fisio…). Cada pestaña tiene su móvil de ejemplo, su pack y su WhatsApp. Los enlaces `…/#hosteleria` y `…/#cita-previa` abren directamente la pestaña; sin JavaScript se ven los dos paneles seguidos.
 
 Público: dueños de bares, restaurantes, cafeterías, barberías y salones de belleza de Tenerife, poco técnicos, que la ven en el móvil. Objetivo: que pidan el diagnóstico gratuito por WhatsApp.
 

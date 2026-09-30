@@ -363,10 +363,27 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
   .btn { transition: none; }
 }
 
-/* ---------- 14. Barberías y salones de belleza ---------- */
-.belleza-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 4rem; align-items: center; }
-.belleza-intro { font-size: var(--t-l); line-height: 1.45; }
-.mostrador { /* móvil y tarjeta sobre el mostrador del salón */
+/* ---------- 14. Packs por tipo de negocio (pestañas) ---------- */
+.packs h2 { margin-bottom: 1.6rem; }
+.sector-tabs {
+  display: inline-flex; flex-wrap: wrap; gap: .3rem; padding: .3rem;
+  background: var(--niebla); border-radius: 999px; margin-bottom: 2.6rem;
+}
+.sector-tabs button {
+  border: 0; border-radius: 999px; padding: .75rem 1.3rem;
+  background: transparent; color: var(--tinta);
+  font: 600 1rem/1.2 var(--fuente); cursor: pointer;
+}
+.sector-tabs button:hover { background: #E4E9EF; }
+.sector-tabs button[aria-selected="true"] { background: var(--tinta); color: var(--papel); }
+.sector-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 4rem; align-items: center; }
+.sector-tabs[hidden] ~ .sector-panel + .sector-panel { margin-top: 4rem; } /* sin JavaScript se ven seguidos */
+.sector-panel { scroll-margin-top: 13rem; } /* al entrar por .../#cita-previa se ven también título y pestañas */
+.sector-titulo { font-size: var(--t-2xl); letter-spacing: -0.02em; }
+.sector-tabs:not([hidden]) ~ .sector-panel .sector-titulo { display: none; } /* con pestañas, el título ya es la pestaña */
+.sector-intro { font-size: var(--t-l); line-height: 1.45; }
+.local-lista h4 { font-size: var(--t-m); margin: 0 0 .2rem; }
+.mostrador { /* móvil y tarjeta sobre el mostrador */
   position: relative; margin: 0; padding: 2.5rem 1rem 8rem;
   background: var(--niebla); border-radius: 6px;
 }
@@ -389,11 +406,28 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
 .tarjeta-nfc .estrellas { color: var(--sol); letter-spacing: .12em; font-size: .8rem; }
 .tarjeta-nfc strong { font-size: .82rem; line-height: 1.2; }
 .mostrador figcaption { position: absolute; left: 1rem; bottom: .8rem; font-size: var(--t-s); color: var(--gris); }
+
+/* Pack: servicios incluidos, total, hosting aparte y opción */
+.local-precio.incluido { font-weight: 500; color: var(--gris); }
+.pack-total { border-bottom: 2px solid var(--tinta) !important; }
+.pack-total h4 { margin: 0; font-size: var(--t-l); }
+.pack-total .local-precio { grid-row: 1; font-size: var(--t-xl); color: var(--atlantico); }
+.pack-total s { font-size: var(--t-m); color: var(--gris); font-weight: 500; margin-right: .3rem; }
+.pack-hosting h4 { color: var(--gris); }
+.pack-opcion {
+  display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
+  margin: -1rem 0 2rem; padding: 1rem; background: var(--niebla); border-radius: 6px;
+}
+.pack-opcion h4 { font-size: var(--t-m); margin: 0 0 .2rem; }
+.pack-opcion p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
+
 @media (max-width: 860px) {
-  .belleza-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-  .belleza-grid > div { order: -1; } /* en móvil, primero el texto */
+  .sector-panel { grid-template-columns: 1fr; gap: 2.5rem; }
+  .sector-panel > div { order: -1; } /* en móvil, primero el texto */
 }
 @media (max-width: 480px) { /* en móvil: sin superponer, móvil arriba y tarjeta debajo */
+  .sector-tabs { display: flex; border-radius: 16px; }
+  .sector-tabs button { flex: 1 1 100%; border-radius: 12px; text-align: left; }
   .mostrador { padding: 1.8rem 1rem 1rem; }
   .movil-suelto { width: 220px; margin: 0 auto; }
   .movil-suelto .carta { font-size: .84rem; }
@@ -401,17 +435,3 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
   .tarjeta-nfc { position: relative; right: auto; bottom: auto; width: 170px; margin: -1rem 0 0 auto; }
   .mostrador figcaption { position: static; margin-top: 1rem; }
 }
-
-/* Pack de belleza: servicios incluidos, total y opción de imprenta */
-.local-precio.incluido { font-weight: 500; color: var(--gris); }
-.belleza-total { border-bottom: 2px solid var(--tinta) !important; }
-.belleza-total h3 { margin: 0; font-size: var(--t-l); }
-.belleza-total .local-precio { grid-row: 1; font-size: var(--t-xl); color: var(--atlantico); }
-.belleza-opcion {
-  display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
-  margin: -1rem 0 2rem; padding: 1rem; background: var(--niebla); border-radius: 6px;
-}
-.belleza-opcion h3 { font-size: var(--t-m); margin: 0 0 .2rem; }
-.belleza-opcion p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
-
-.belleza-hosting h3 { color: var(--gris); }

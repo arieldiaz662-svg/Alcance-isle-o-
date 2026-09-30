@@ -21,11 +21,11 @@ export function renderLanding({ site, config }) {
   const to = links(config);
   const wa = whatsappUrl(whatsapp, site.whatsappGreeting);
   const team = site.team.filter((person) => person.name && person.name.trim());
-  const { extras, pack, demoMenu, journey, hero, beauty } = site;
+  const { extras, pack, demoMenu, journey, hero, sectors } = site;
 
   const nav = [
     { id: 'servicios', label: 'Servicios' },
-    ...(beauty ? [{ id: 'belleza', label: beauty.navLabel }] : []),
+    ...(sectors ? [{ id: 'packs', label: 'Packs' }] : []),
     { id: 'por-que', label: 'Por qué elegirnos' },
     { id: 'precios', label: 'Precios' },
     ...(team.length ? [{ id: 'equipo', label: 'Equipo' }] : []),
@@ -131,62 +131,76 @@ export function renderLanding({ site, config }) {
   </div>
 </section>` : '';
 
-  // ---------- Barberías y salones de belleza ----------
+  // ---------- Packs por tipo de negocio (pestañas) ----------
   // Tarifa anual de hosting (primera fila de precios del servicio "hosting").
   const hosting = serviceById.hosting;
   const hostingRow = hosting && hosting.prices ? hosting.prices[0] : null;
+  const packOf = (sector) => (sector.pack === 'main' ? pack : sector.pack);
   const nfcIcon = `<svg class="nfc" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7.5a6 6 0 0 1 0 9M12 5a9.5 9.5 0 0 1 0 14M15.5 2.5a13 13 0 0 1 0 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="12" r="1.8" fill="currentColor"/></svg>`;
-  const beautySection = beauty ? `
-<section class="belleza" id="belleza">
-  <div class="wrap belleza-grid">
-    <figure class="mostrador">
-      <div class="movil movil-suelto" aria-hidden="true">
-        <div class="carta">
-          <div class="carta-cab">
-            <strong>${esc(beauty.demo.business)}</strong>
-            <span>${esc(beauty.demo.label)}</span>
-          </div>
-          <ul class="carta-lista">${beauty.demo.items.map(([name, price]) => `
-            <li><span>${esc(name)}</span><span class="guia"></span><span>${esc(price)}</span></li>`).join('')}
-          </ul>
-          <div class="carta-pie">
-            <span class="carta-boton carta-boton-wa">${esc(beauty.demo.button)}</span>
+
+  const sectorPanel = (sector, i) => {
+    const sectorPack = packOf(sector);
+    return `
+    <div class="sector-panel" role="tabpanel" id="${esc(sector.id)}" aria-labelledby="tab-${esc(sector.id)}">
+      <figure class="mostrador">
+        <div class="movil movil-suelto" aria-hidden="true">
+          <div class="carta">
+            <div class="carta-cab">
+              <strong>${esc(sector.demo.business)}</strong>
+              <span>${esc(sector.demo.label)}</span>
+            </div>
+            <ul class="carta-lista">${sector.demo.items.map(([name, price]) => `
+              <li><span>${esc(name)}</span><span class="guia"></span><span>${esc(price)}</span></li>`).join('')}
+            </ul>
+            <div class="carta-pie">
+              <span class="carta-boton carta-boton-wa">${esc(sector.demo.button)}</span>
+            </div>
           </div>
         </div>
+        <div class="tarjeta-nfc" aria-hidden="true">
+          ${nfcIcon}
+          <span class="estrellas">★★★★★</span>
+          <strong>${esc(sector.demo.card)}</strong>
+        </div>
+        <figcaption>${esc(sector.demo.caption)}</figcaption>
+      </figure>
+      <div>
+        <h3 class="sector-titulo">${esc(sector.title)}</h3>
+        <p class="sector-intro">${esc(sector.intro)}</p>
+        <ul class="local-lista">${sector.includes.map((item) => `
+          <li>
+            <h4>${esc(item.name)}</h4>
+            <p>${esc(item.text)}</p>
+            <span class="local-precio incluido">${esc(item.badge || 'Incluido')}</span>
+          </li>`).join('')}
+          <li class="pack-total">
+            <h4>${esc(sectorPack.label || sectorPack.name)}</h4>
+            <span class="local-precio">${sectorPack.was ? `<s>${esc(sectorPack.was)}</s> ` : ''}${esc(sectorPack.price)}</span>
+          </li>${sector.hostingNote && hostingRow ? `
+          <li class="pack-hosting">
+            <h4>${esc(hostingRow.label)}</h4>
+            <p>${esc(sector.hostingNote)}</p>
+            <span class="local-precio">${esc(hostingRow.price)}</span>
+          </li>` : ''}
+        </ul>${sector.option ? `
+        <div class="pack-opcion">
+          <h4>Opcional: ${sector.option.href ? `<a href="${esc(sector.option.href)}">${esc(sector.option.name)}</a>` : esc(sector.option.name)}</h4>
+          <p>${esc(sector.option.text)}</p>
+          <span class="local-precio">${esc(sector.option.price)}</span>
+        </div>` : ''}
+        <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, sector.whatsappText))}" rel="noopener" target="_blank">${esc(sector.cta)}</a>
       </div>
-      <div class="tarjeta-nfc" aria-hidden="true">
-        ${nfcIcon}
-        <span class="estrellas">★★★★★</span>
-        <strong>${esc(beauty.demo.card)}</strong>
-      </div>
-      <figcaption>${esc(beauty.demo.caption)}</figcaption>
-    </figure>
-    <div>
-      <h2>${esc(beauty.title)}</h2>
-      <p class="belleza-intro">${esc(beauty.intro)}</p>
-      <ul class="local-lista">${beauty.offers.map((offer) => `
-        <li>
-          <h3>${esc(offer.name)}</h3>
-          <p>${esc(offer.text)}</p>
-          <span class="local-precio incluido">Incluido</span>
-        </li>`).join('')}
-        <li class="belleza-total">
-          <h3>${esc(beauty.pack.label)}</h3>
-          <span class="local-precio">${esc(beauty.pack.price)}</span>
-        </li>${hostingRow ? `
-        <li class="belleza-hosting">
-          <h3>${esc(hostingRow.label)}</h3>
-          <p>${esc(beauty.hostingNote)}</p>
-          <span class="local-precio">${esc(hostingRow.price)}</span>
-        </li>` : ''}
-      </ul>
-      <div class="belleza-opcion">
-        <h3>Opcional: ${esc(beauty.option.name)}</h3>
-        <p>${esc(beauty.option.text)}</p>
-        <span class="local-precio">${esc(beauty.option.price)}</span>
-      </div>
-      <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, beauty.whatsappText))}" rel="noopener" target="_blank">${esc(beauty.cta)}</a>
-    </div>
+    </div>`;
+  };
+
+  // Sin JavaScript se ven los dos paneles seguidos; site.js activa las pestañas.
+  const sectorsSection = sectors ? `
+<section class="packs" id="packs">
+  <div class="wrap">
+    <h2>${esc(site.sectorsTitle)}</h2>
+    <div class="sector-tabs" role="tablist" aria-label="${esc(site.sectorsTitle)}" hidden>${sectors.map((sector, i) => `
+      <button type="button" role="tab" id="tab-${esc(sector.id)}" aria-controls="${esc(sector.id)}" aria-selected="${i === 0}"${i === 0 ? '' : ' tabindex="-1"'}>${esc(sector.tab)}</button>`).join('')}
+    </div>${sectors.map(sectorPanel).join('')}
   </div>
 </section>` : '';
 
@@ -226,10 +240,14 @@ export function renderLanding({ site, config }) {
   const priceGroups = [
     { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
     ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
-    ...(beauty ? [{ title: 'Barberías y salones de belleza', rows: [
-      { label: `${beauty.pack.name} (${beauty.pack.label.charAt(0).toLowerCase()}${beauty.pack.label.slice(1)}; hosting aparte)`, price: beauty.pack.price },
-      { label: `${beauty.option.name} (opcional)`, price: beauty.option.price },
-    ] }] : []),
+    // Packs propios de cada tipo de negocio (el de hostelería ya aparece destacado arriba).
+    ...(sectors || []).filter((sector) => sector.pack !== 'main').map((sector) => ({
+      title: sector.title,
+      rows: [
+        { label: `${sector.pack.name} (${sector.pack.label.charAt(0).toLowerCase()}${sector.pack.label.slice(1)}${sector.hostingNote ? '; hosting aparte' : ''})`, price: sector.pack.price },
+        ...(sector.option ? [{ label: `${sector.option.name} (opcional)`, price: sector.option.price }] : []),
+      ],
+    })),
   ];
   const pricesSection = `
 <section class="precios" id="precios">
@@ -272,9 +290,9 @@ export function renderLanding({ site, config }) {
 
   const body = `<main>
 ${heroSection}
+${sectorsSection}
 ${journeySection}
 ${extrasSection}
-${beautySection}
 ${whySection}
 ${stepsSection}
 ${pricesSection}
