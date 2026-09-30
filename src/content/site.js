@@ -27,7 +27,11 @@ export const site = {
   demoMenu: {
     business: 'Cafetería Marisol',
     table: 'Mesa 4',
-    caption: 'Ejemplo de carta digital: toca las pestañas.',
+    caption: 'Ejemplo de carta digital: toca las pestañas. El QR abre nuestro WhatsApp.',
+    // El QR del expositor es real: abre WhatsApp con este mensaje ya escrito.
+    qrWhatsappText: 'Hola, quiero mi mesa digital',
+    qrCaption: 'Escanéame',
+    qrLabel: 'Código QR: escríbenos por WhatsApp',
     sections: [
       {
         name: 'Cafés',

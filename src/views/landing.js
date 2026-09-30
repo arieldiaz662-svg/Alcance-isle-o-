@@ -1,27 +1,19 @@
+import QRCode from 'qrcode';
+
 import { contact, esc, layout, links, whatsappUrl } from './html.js';
 
-// Código QR decorativo (no escaneable) para el expositor de la portada: 21×21 módulos con los
-// tres marcadores de posición y un relleno pseudoaleatorio fijo, para que siempre salga igual.
-function decorativeQr() {
-  const size = 21;
-  const finder = (x, y) => (x < 7 && y < 7) || (x >= size - 7 && y < 7) || (x < 7 && y >= size - 7);
-  const finderOn = (x, y) => {
-    const fx = x >= size - 7 ? x - (size - 7) : x;
-    const fy = y >= size - 7 ? y - (size - 7) : y;
-    const edge = fx === 0 || fx === 6 || fy === 0 || fy === 6;
-    const core = fx >= 2 && fx <= 4 && fy >= 2 && fy <= 4;
-    return edge || core;
-  };
-  let seed = 7;
-  const random = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
-  const cells = [];
+// Código QR real en SVG, generado al construir la página (sin JavaScript en el navegador).
+// Nivel de corrección M: aguanta bien la rotación y el brillo de una pantalla.
+function qrSvg(text) {
+  const { modules } = QRCode.create(text, { errorCorrectionLevel: 'M' });
+  const { size, data } = modules;
+  let path = '';
   for (let y = 0; y < size; y += 1) {
     for (let x = 0; x < size; x += 1) {
-      const on = finder(x, y) ? finderOn(x, y) : (x === 7 || y === 7 || x === size - 8 || y === size - 8) ? false : random() > 0.52;
-      if (on) cells.push(`M${x} ${y}h1v1h-1z`);
+      if (data[y * size + x]) path += `M${x} ${y}h1v1h-1z`;
     }
   }
-  return `<svg class="qr" viewBox="-1 -1 23 23" aria-hidden="true"><path d="${cells.join('')}"/></svg>`;
+  return `<svg class="qr" viewBox="-1 -1 ${size + 2} ${size + 2}" shape-rendering="crispEdges" aria-hidden="true"><path d="${path}"/></svg>`;
 }
 
 export function renderLanding({ site, config }) {
@@ -46,6 +38,7 @@ export function renderLanding({ site, config }) {
     .map((service) => `<option value="${esc(service.id)}">${esc(service.name)}</option>`).join('');
 
   // ---------- Portada: la mesa ----------
+  const qrUrl = whatsappUrl(whatsapp, demoMenu.qrWhatsappText);
   const menuTabs = demoMenu.sections.map((section, i) => `
             <button type="button" role="tab" id="carta-tab-${i}" aria-controls="carta-panel-${i}" aria-selected="${i === 0}"${i === 0 ? '' : ' tabindex="-1"'}>${esc(section.name)}</button>`).join('');
   const menuPanels = demoMenu.sections.map((section, i) => `
@@ -81,10 +74,10 @@ export function renderLanding({ site, config }) {
           </div>
         </div>
       </div>
-      <div class="expositor" aria-hidden="true">
-        ${decorativeQr()}
-        <span>${esc(demoMenu.table)}</span>
-      </div>
+      <a class="expositor" href="${esc(qrUrl)}" rel="noopener" target="_blank" aria-label="${esc(demoMenu.qrLabel)}">
+        ${qrSvg(qrUrl)}
+        <span>${esc(demoMenu.qrCaption)}</span>
+      </a>
       <div class="barraquito" aria-hidden="true"><div class="vaso"><i></i><i></i><i></i><i></i><i></i></div></div>
       <figcaption>${esc(demoMenu.caption)}</figcaption>
     </figure>

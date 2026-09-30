@@ -21,6 +21,8 @@ Público: dueños de cafeterías y bares de Tenerife, poco técnicos, que la ven
 
 Tipografía: **Familjen Grotesk** (una sola familia, OFL, alojada en `public/fonts/`). Escala 1.25 sobre 17 px. El titular de portada usa el tipo como elemento gráfico: muy grande, interlineado 0,88 y tracking negativo.
 
+El **QR del expositor es real**: se genera al construir la web (librería `qrcode`) y abre WhatsApp con el mensaje de `demoMenu.qrWhatsappText`. También es un enlace, porque desde el móvil no se puede escanear la propia pantalla. Si cambia el número o el mensaje, basta con volver a construir.
+
 ## Recursos propios del sector
 
 - **Precios como una carta**: puntos guía entre concepto e importe, doble filete de carta impresa, y el pack destacado como un "menú del día".

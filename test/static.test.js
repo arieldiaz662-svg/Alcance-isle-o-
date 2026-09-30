@@ -44,6 +44,9 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /role="tablist"/);
   assert.match(index, /id="carta-panel-1"[^>]*hidden/);
   assert.match(index, /Cafetería Marisol/);
+  // El QR del expositor es real y, además, un enlace (en el móvil no se puede escanear la propia pantalla).
+  assert.match(index, /<a class="expositor" href="https:\/\/wa\.me\/34623243294\?text=Hola%2C%20quiero%20mi%20mesa%20digital"/);
+  assert.match(index, /<svg class="qr" viewBox="-1 -1 39 39"/);
   assert.match(index, /Así llega un cliente a tu mesa/);
   // Portada con el eslogan y contenido de la propuesta.
   assert.match(index, /<h1>Tu mesa digital<\/h1>/);
