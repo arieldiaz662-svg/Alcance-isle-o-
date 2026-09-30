@@ -1,9 +1,9 @@
-// Cloudflare Workers (proyecto "alcance-isle-o"): pasa los tests, construye la web estática y publica
+// Cloudflare Workers (Worker "alcance-isleno"): pasa los tests, construye la web estática y publica
 // dist/ en alcanceisleno.com. Si falla un test, no se publica.
 // worker/index.js redirige www y workers.dev al dominio principal; las cabeceras de seguridad salen
 // del _headers que genera la construcción.
 {
-  "name": "alcance-isle-o",
+  "name": "alcance-isleno",
   "main": "worker/index.js",
   "compatibility_date": "2025-09-01",
   "build": {
