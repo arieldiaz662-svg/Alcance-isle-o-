@@ -1,319 +1,363 @@
 /* =========================================================
-   0. TIPOGRAFÍAS alojadas en la propia web (sin Google Fonts: más rápido y sin enviar la IP a terceros)
+   ALCANCE ISLEÑO · Tu mesa digital
+   Concepto: la portada es una mesa de cafetería canaria (terrazo) con la carta digital
+   funcionando en un móvil. Es el único elemento llamativo; el resto es sobrio y legible.
    ========================================================= */
+
+/* ---------- 0. Tipografía alojada en la propia web (OFL) ---------- */
 @font-face {
-  font-family: "Bricolage Grotesque";
-  src: url("../fonts/bricolage-grotesque.woff2") format("woff2-variations"), url("../fonts/bricolage-grotesque.woff2") format("woff2");
-  font-weight: 200 800; font-style: normal; font-display: swap;
+  font-family: "Familjen Grotesk";
+  src: url("../fonts/familjen-grotesk.woff2") format("woff2-variations"), url("../fonts/familjen-grotesk.woff2") format("woff2");
+  font-weight: 400 700; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: "Figtree";
-  src: url("../fonts/figtree.woff2") format("woff2-variations"), url("../fonts/figtree.woff2") format("woff2");
-  font-weight: 300 900; font-style: normal; font-display: swap;
+  font-family: "Familjen Grotesk";
+  src: url("../fonts/familjen-grotesk-italic.woff2") format("woff2-variations"), url("../fonts/familjen-grotesk-italic.woff2") format("woff2");
+  font-weight: 400 700; font-style: italic; font-display: swap;
 }
 
-/* =========================================================
-   1. VARIABLES: cambia aquí colores y tipografías
-   ========================================================= */
+/* ---------- 1. Tokens: cambia aquí colores y medidas ---------- */
 :root {
-  --marino:   #0E2A47;  /* texto y fondos oscuros */
-  --atlantico:#1B62C9;  /* azul de marca (logo) */
-  --cielo:    #DCE9FA;  /* azul claro de apoyo */
-  --sol:      #FFC93C;  /* acento para botones */
-  --blanco:   #FFFFFF;
-  --niebla:   #F4F7FB;  /* fondo alterno de secciones */
-  --gris:     #51617A;  /* texto secundario */
+  --tinta: #0E2A47;      /* marino de la marca: texto y fondos oscuros */
+  --atlantico: #1B62C9;  /* azul del logo: enlaces y detalles */
+  --sol: #FFC93C;        /* solo para la acción principal */
+  --terrazo: #E3E7EB;    /* piedra de la mesa */
+  --niebla: #F3F5F7;     /* fondo alterno de secciones */
+  --papel: #FFFFFF;
+  --gris: #4F5D70;       /* texto secundario (contraste AA sobre blanco y niebla) */
+  --linea: #C9D2DC;
 
-  --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
-  --texto:   "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fuente: "Familjen Grotesk", "Helvetica Neue", Arial, system-ui, sans-serif;
 
-  --ancho: 1120px;
+  /* Escala tipográfica 1.25 sobre 17 px */
+  --t-s: .875rem;
+  --t-m: 1.0625rem;
+  --t-l: 1.33rem;
+  --t-xl: 1.66rem;
+  --t-2xl: clamp(1.9rem, 4.2vw, 2.6rem);
+
+  --ancho: 1140px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 76px; }
 body {
   margin: 0;
-  font-family: var(--texto);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: var(--marino);
-  background: var(--blanco);
+  font-family: var(--fuente);
+  font-size: var(--t-m);
+  line-height: 1.55;
+  color: var(--tinta);
+  background: var(--papel);
+  -webkit-font-smoothing: antialiased;
 }
 img, svg { max-width: 100%; display: block; }
 a { color: inherit; }
 :focus-visible { outline: 3px solid var(--sol); outline-offset: 3px; border-radius: 4px; }
+[hidden] { display: none !important; }
 
 .wrap { width: min(100% - 2.5rem, var(--ancho)); margin-inline: auto; }
-section { padding: 5rem 0; }
-h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0 0 1rem; letter-spacing: -0.01em; }
-h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 800; }
-h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; }
-h3 { font-size: 1.3rem; font-weight: 700; }
+section { padding: 5.5rem 0; }
+h1, h2, h3 { line-height: 1.1; margin: 0 0 1rem; font-weight: 700; }
+h2 { font-size: var(--t-2xl); letter-spacing: -0.02em; max-width: 22ch; }
+h3 { font-size: var(--t-l); letter-spacing: -0.01em; }
 p { margin: 0 0 1rem; max-width: 62ch; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
 .suave { color: var(--gris); }
 
-/* Botones */
+/* ---------- 2. Botones ---------- */
 .btn {
   display: inline-block;
-  padding: .85rem 1.5rem;
+  padding: .85rem 1.45rem;
   border-radius: 999px;
-  font-weight: 600;
+  font: 600 1rem/1.2 var(--fuente);
   text-decoration: none;
   border: 2px solid transparent;
   cursor: pointer;
-  font-family: var(--texto);
-  font-size: 1rem;
-  transition: transform .15s ease, background .15s ease;
+  transition: background-color .15s ease, color .15s ease;
 }
-.btn:hover { transform: translateY(-2px); }
-.btn-sol { background: var(--sol); color: var(--marino); }
-.btn-sol:hover { background: #ffd35f; }
-.btn-linea { border-color: var(--marino); color: var(--marino); background: transparent; }
-.btn-linea:hover { background: var(--marino); color: var(--blanco); }
+.btn-sol { background: var(--sol); color: var(--tinta); }
+.btn-sol:hover { background: #FFD766; }
+.btn-linea { border-color: var(--tinta); color: var(--tinta); background: transparent; }
+.btn-linea:hover { background: var(--tinta); color: var(--papel); }
+.btn-full { width: 100%; text-align: center; }
+.btn[disabled] { opacity: .6; cursor: wait; }
 
-/* =========================================================
-   2. NAVEGACIÓN
-   ========================================================= */
+/* ---------- 3. Navegación ---------- */
 .nav {
   position: sticky; top: 0; z-index: 20;
-  background: rgba(255,255,255,.94);
+  background: rgba(255, 255, 255, .95);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--cielo);
+  border-bottom: 1px solid var(--linea);
 }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; }
-.marca { display: flex; align-items: center; gap: .6rem; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.25rem; }
-.marca svg { width: 26px; height: 32px; }
-.nav ul { display: flex; gap: 1.6rem; list-style: none; margin: 0; padding: 0; }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 66px; }
+.marca { display: flex; align-items: center; gap: .55rem; text-decoration: none; font-weight: 700; font-size: 1.3rem; letter-spacing: -0.02em; }
+.marca svg { width: 24px; height: 30px; }
+.nav ul { display: flex; gap: 1.8rem; }
 .nav ul a { text-decoration: none; font-weight: 500; }
 .nav ul a:hover { color: var(--atlantico); }
 .nav .btn { padding: .55rem 1.1rem; }
 @media (max-width: 820px) { .nav ul { display: none; } }
 
-/* =========================================================
-   3. HERO: el toldo y la ventana del escaparate
-   ========================================================= */
-.hero { padding: 0 0 5rem; background: var(--niebla); }
-.hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 3rem; align-items: center; padding-top: 4rem; }
-.lema {
-  display: inline-block;
-  background: var(--marino); color: var(--blanco);
-  padding: .35rem 1rem; border-radius: 999px;
-  font-weight: 600; font-size: .95rem; margin-bottom: 1.2rem;
+/* ---------- 4. Portada: la mesa ---------- */
+.mesa {
+  background-color: var(--terrazo);
+  /* Terrazo: lascas de piedra irregulares (public/img/terrazo.svg) */
+  background-image: url("../img/terrazo.svg");
+  background-size: 320px 320px;
+  overflow: hidden;
 }
-.hero p.lead { font-size: 1.2rem; color: var(--gris); }
-.hero .acciones { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.6rem; }
+.mesa-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem; align-items: center;
+  padding: 4.5rem 0 5rem;
+}
+.mesa h1 {
+  font-size: clamp(3.6rem, 10.5vw, 7.8rem);
+  line-height: .88;
+  letter-spacing: -0.045em;
+  max-width: 7.2ch;
+  margin-bottom: 1.6rem;
+}
+.mesa .lead { font-size: var(--t-l); line-height: 1.45; max-width: 30ch; }
+.acciones { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.8rem; }
+.mesa-nota { margin-top: 1.4rem; font-size: var(--t-s); color: var(--gris); }
 
-/* Ficha de ejemplo tipo Google */
-.ventana {
-  background: var(--blanco);
-  border: 3px solid var(--marino);
-  border-radius: 20px;
-  padding: 1.4rem;
-  box-shadow: 10px 10px 0 var(--cielo);
+/* Bodegón: móvil + expositor + barraquito sobre la mesa */
+.bodegon { position: relative; margin: 0; min-height: 560px; }
+.bodegon figcaption {
+  position: absolute; right: 0; bottom: -2.2rem;
+  font-size: var(--t-s); color: var(--gris);
 }
-.ventana .etiqueta { font-size: .8rem; color: var(--gris); margin-bottom: .6rem; }
-.ficha-cab { display: flex; gap: .9rem; align-items: center; margin-bottom: .9rem; }
-.ficha-icono {
-  width: 52px; height: 52px; border-radius: 14px;
-  background: var(--cielo); display: grid; place-items: center;
-  font-family: var(--display); font-weight: 800; color: var(--atlantico); font-size: 1.4rem;
-}
-.ficha-cab strong { display: block; font-size: 1.1rem; }
-.estrellas { color: #E6A700; letter-spacing: 2px; }
-.ficha-datos { font-size: .92rem; color: var(--gris); margin-bottom: 1rem; }
-.ficha-datos b { color: #1E8E4E; }
-.ficha-botones { display: flex; gap: .5rem; flex-wrap: wrap; }
-.ficha-botones span {
-  border: 1.5px solid var(--cielo); border-radius: 999px;
-  padding: .3rem .85rem; font-size: .88rem; font-weight: 500; color: var(--atlantico);
-}
-.resena {
-  margin-top: 1.1rem; padding-top: 1rem; border-top: 1px dashed var(--cielo);
-  font-size: .92rem;
-}
-@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
 
-/* =========================================================
-   4. PROBLEMA
-   ========================================================= */
-.problema .items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-top: 2rem; }
-.problema .item { border-left: 4px solid var(--atlantico); padding: .3rem 0 .3rem 1.1rem; font-weight: 500; }
-@media (max-width: 760px) { .problema .items { grid-template-columns: 1fr; } }
-
-/* =========================================================
-   5. SERVICIOS
-   ========================================================= */
-.servicios { background: var(--marino); color: var(--blanco); }
-.servicios .suave { color: #B9C7DC; }
-.serv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-top: 2.2rem; }
-.serv-grid-2 { grid-template-columns: repeat(2, 1fr); }
-.serv {
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 18px; padding: 1.8rem;
+.movil {
+  position: absolute; left: 50%; top: 50%;
+  width: 280px; aspect-ratio: 9 / 18.5;
+  transform: translate(-40%, -50%) rotate(-4deg);
+  background: var(--papel);
+  border: 11px solid var(--tinta);
+  border-radius: 42px;
+  box-shadow: -18px 28px 30px -14px rgba(14, 42, 71, .35);
+  overflow: hidden;
 }
-.serv h3 { color: var(--sol); }
-.serv .beneficio { font-weight: 600; color: var(--blanco); margin-top: 1rem; }
-@media (max-width: 860px) { .serv-grid { grid-template-columns: 1fr; } }
+.carta { display: flex; flex-direction: column; height: 100%; padding: 1.4rem 1rem 1rem; font-size: .92rem; }
+.carta-cab { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; padding-bottom: .8rem; border-bottom: 2px solid var(--tinta); }
+.carta-cab strong { font-size: 1.12rem; letter-spacing: -0.01em; line-height: 1.15; }
+.carta-cab span { font-size: .78rem; color: var(--gris); white-space: nowrap; }
+.carta-tabs { display: flex; gap: .2rem; margin: .7rem 0 .4rem; }
+.carta-tabs button {
+  flex: 1; padding: .45rem .2rem; border: 0; border-radius: 8px;
+  background: transparent; color: var(--gris);
+  font: 600 .82rem/1 var(--fuente); cursor: pointer;
+}
+.carta-tabs button[aria-selected="true"] { background: var(--tinta); color: var(--papel); }
+.carta-lista { flex: 1; min-height: 0; overflow: hidden; }
+.carta-lista li > span:last-child { white-space: nowrap; }
+.carta-lista li, .carta-precios li { display: flex; align-items: baseline; }
+.carta-lista li { padding: .55rem 0; }
+.guia { flex: 1; min-width: 1rem; margin: 0 .4rem; border-bottom: 2px dotted #9AA5B1; transform: translateY(-.25em); }
+.carta-pie { display: grid; gap: .45rem; }
+.carta-boton {
+  display: block; text-align: center; padding: .55rem; border-radius: 10px;
+  border: 1.5px solid var(--tinta); font-weight: 600; font-size: .82rem;
+}
+.carta-boton-wa { background: #1FA855; border-color: #1FA855; color: var(--papel); }
 
-/* =========================================================
-   6. CÓMO TRABAJAMOS (aquí sí es una secuencia real)
-   ========================================================= */
-.pasos { list-style: none; padding: 0; margin: 2.2rem 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; counter-reset: paso; }
-.pasos li { counter-increment: paso; padding-top: 3.2rem; position: relative; }
-.pasos li::before {
+.expositor {
+  position: absolute; left: 2%; bottom: 3%;
+  width: 150px; padding: 1rem 1rem .8rem;
+  background: var(--papel); border-radius: 10px 10px 4px 4px;
+  transform: rotate(5deg);
+  box-shadow: -10px 16px 18px -10px rgba(14, 42, 71, .4);
+  text-align: center;
+}
+.expositor::before { /* cara trasera del expositor */
+  content: ""; position: absolute; inset: 6px auto 0 -14px; width: 16px;
+  background: var(--tinta); border-radius: 6px 0 0 4px;
+  transform: skewY(-12deg); transform-origin: right;
+  z-index: -1;
+}
+.expositor .qr { width: 100%; fill: var(--tinta); }
+.expositor span { display: block; margin-top: .5rem; font-weight: 700; font-size: .95rem; }
+
+.barraquito { /* vaso de barraquito sobre su plato */
+  position: absolute; right: 3%; top: 5%;
+  width: 96px; height: 150px;
+}
+.barraquito::before { /* plato */
+  content: ""; position: absolute; left: -14px; right: -14px; bottom: -4px; height: 34px;
+  border-radius: 50%; background: var(--papel);
+  box-shadow: -8px 12px 14px -8px rgba(14, 42, 71, .35), inset 0 -3px 0 #DCE2E8;
+}
+.vaso {
+  position: absolute; left: 12px; right: 12px; top: 0; bottom: 14px;
+  display: flex; flex-direction: column;
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+  border-top: 5px solid rgba(255, 255, 255, .95); /* borde del vaso */
+}
+.vaso::after { /* reflejo del cristal */
+  content: ""; position: absolute; top: 6px; bottom: 6px; left: 16%; width: 5px;
+  background: rgba(255, 255, 255, .45); border-radius: 3px;
+}
+.barraquito i { display: block; }
+.barraquito i:nth-child(1) { flex: 1.2; background: #FBF5EA radial-gradient(circle at 35% 60%, #A0612F 0 1.5px, transparent 2px) 0 0 / 9px 7px; } /* espuma con canela */
+.barraquito i:nth-child(2) { flex: 2; background: #E7D2B4; }  /* leche */
+.barraquito i:nth-child(3) { flex: 2.6; background: #4A2A1A; } /* café */
+.barraquito i:nth-child(4) { flex: 1.2; background: #D39A3A; } /* licor */
+.barraquito i:nth-child(5) { flex: 1.5; background: #F1E4C6; } /* leche condensada */
+
+@media (max-width: 900px) {
+  .mesa-grid { grid-template-columns: 1fr; padding: 3rem 0 4.5rem; }
+  .bodegon { min-height: 520px; }
+  .movil { width: 250px; transform: translate(-50%, -50%) rotate(-3deg); }
+  .expositor { width: 124px; left: 0; }
+  .barraquito { right: 2%; transform: scale(.8); transform-origin: top right; }
+}
+@media (max-width: 420px) {
+  .bodegon { min-height: 540px; }
+  .carta { font-size: .84rem; padding: 1.2rem .8rem .8rem; }
+  .carta-lista li { padding: .45rem 0; }
+  .movil { width: 236px; transform: translate(-58%, -50%) rotate(-3deg); }
+  .expositor { width: 96px; left: -6px; bottom: -3%; padding: .6rem .6rem .5rem; }
+  .barraquito { top: 1%; right: 2%; transform: scale(.62); }
+}
+
+/* ---------- 5. Recorrido del cliente (servicios) ---------- */
+.recorrido-pasos {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem;
+  margin-top: 3rem; counter-reset: paso; position: relative;
+}
+.recorrido-pasos::before { /* línea que une los pasos */
+  content: ""; position: absolute; top: 1.2rem; left: 1.2rem; right: 1.2rem;
+  border-top: 2px dashed var(--linea);
+}
+.recorrido-pasos li { position: relative; counter-increment: paso; padding-top: 3.8rem; }
+.recorrido-pasos li::before {
   content: counter(paso);
   position: absolute; top: 0; left: 0;
-  width: 2.5rem; height: 2.5rem; border-radius: 50%;
-  background: var(--atlantico); color: var(--blanco);
-  display: grid; place-items: center; font-family: var(--display); font-weight: 800;
-}
-.pasos strong { display: block; font-family: var(--display); font-size: 1.2rem; margin-bottom: .3rem; }
-.cierre { margin-top: 2rem; font-weight: 600; color: var(--atlantico); }
-@media (max-width: 760px) { .pasos { grid-template-columns: 1fr; } }
-
-/* =========================================================
-   7. POR QUÉ NOSOTROS
-   ========================================================= */
-.porque { background: var(--niebla); }
-.porque .cols { display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: start; }
-.porque ul { list-style: none; padding: 0; margin: 0; }
-.porque li { padding: 1rem 0; border-bottom: 1px solid var(--cielo); font-weight: 500; }
-.porque li:first-child { padding-top: 0; }
-@media (max-width: 860px) { .porque .cols { grid-template-columns: 1fr; gap: 1.5rem; } }
-
-/* =========================================================
-   8. PRECIOS
-   ========================================================= */
-.precios-lista { margin-top: 2rem; border-top: 2px solid var(--marino); }
-.precio-fila { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--cielo); }
-.precio-fila span:first-child { font-weight: 600; }
-.precio-fila .importe { font-family: var(--display); font-weight: 800; font-size: 1.3rem; color: var(--atlantico); white-space: nowrap; }
-
-/* =========================================================
-   9. EQUIPO
-   ========================================================= */
-.equipo { background: var(--niebla); }
-.equipo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-top: 2rem; }
-.persona { text-align: left; }
-.foto {
-  aspect-ratio: 1; border-radius: 18px; background: var(--cielo);
+  width: 2.4rem; height: 2.4rem; border-radius: 50%;
   display: grid; place-items: center;
-  font-family: var(--display); font-weight: 800; font-size: 2.6rem; color: var(--atlantico);
+  background: var(--tinta); color: var(--papel); font-weight: 700;
+}
+.recorrido-pasos h3 { font-size: var(--t-xl); letter-spacing: -0.02em; }
+.recorrido-servicio { font-weight: 600; color: var(--atlantico); }
+.recorrido-servicio span { color: var(--gris); font-weight: 500; margin-left: .35rem; }
+.recorrido-pasos p:last-child { color: var(--gris); }
+.recorrido-nota { margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid var(--linea); }
+@media (max-width: 820px) {
+  .recorrido-pasos { grid-template-columns: 1fr; gap: 2rem; }
+  .recorrido-pasos::before { top: 1.2rem; bottom: 1.2rem; left: 1.2rem; right: auto; border-top: 0; border-left: 2px dashed var(--linea); }
+  .recorrido-pasos li { padding: 0 0 0 3.8rem; }
+}
+
+/* ---------- 6. Para tu local ---------- */
+.local { background: var(--niebla); }
+.local-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 4rem; align-items: center; }
+.local-foto { margin: 0; }
+.local-foto img { width: 100%; height: auto; border-radius: 6px; }
+.local-foto figcaption { font-size: var(--t-s); color: var(--gris); margin-top: .7rem; }
+.local-lista { margin: 1.8rem 0 2rem; border-top: 2px solid var(--tinta); }
+.local-lista li {
+  display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
+  padding: 1rem 0; border-bottom: 1px solid var(--linea);
+}
+.local-lista h3 { font-size: var(--t-m); margin: 0 0 .2rem; }
+.local-lista p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
+.local-precio { grid-column: 2; grid-row: 1 / span 2; font-weight: 700; white-space: nowrap; }
+@media (max-width: 860px) {
+  .local-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .local-foto { max-width: 360px; }
+}
+
+/* ---------- 7. Por qué elegirnos ---------- */
+.porque-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 4rem; align-items: start; }
+.porque-intro { font-size: var(--t-l); line-height: 1.45; }
+.motivos { margin: 0; }
+.motivos div { padding: 1.1rem 0; border-top: 1px solid var(--linea); }
+.motivos div:last-child { border-bottom: 1px solid var(--linea); }
+.motivos dt { font-weight: 700; font-size: var(--t-l); letter-spacing: -0.01em; margin-bottom: .2rem; }
+.motivos dd { margin: 0; color: var(--gris); }
+@media (max-width: 860px) { .porque-grid { grid-template-columns: 1fr; gap: 2rem; } }
+
+/* ---------- 8. Así trabajamos ---------- */
+.como { background: var(--niebla); }
+.pasos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem; margin: 2.5rem 0 1.5rem; counter-reset: paso; }
+.pasos li { counter-increment: paso; border-top: 2px solid var(--tinta); padding-top: 1rem; }
+.pasos li::before { content: counter(paso); display: block; font-size: var(--t-xl); font-weight: 700; color: var(--atlantico); margin-bottom: .4rem; }
+.pasos p { color: var(--gris); }
+@media (max-width: 760px) { .pasos { grid-template-columns: 1fr; gap: 1.8rem; } }
+
+/* ---------- 9. Precios: la carta ---------- */
+.carta-precios {
+  max-width: 780px; margin-top: 2.2rem;
+  padding: 2.4rem clamp(1.2rem, 4vw, 3rem);
+  border: 2px solid var(--tinta);
+  outline: 1px solid var(--tinta); outline-offset: -9px; /* doble filete de carta impresa */
+}
+.pack { background: var(--tinta); color: var(--papel); padding: 1.6rem 1.8rem; margin-bottom: 2.4rem; }
+.pack h3 { font-size: var(--t-xl); margin-bottom: .5rem; }
+.pack p { color: #D5E1F0; margin: 0; }
+.pack .pack-precio { margin-top: 1rem; color: var(--papel); }
+.pack-precio s { color: #9FB2C8; margin-right: .4rem; }
+.pack-precio strong { font-size: 2.4rem; color: var(--sol); letter-spacing: -0.02em; }
+.carta-grupo + .carta-grupo { margin-top: 2.2rem; }
+.carta-grupo h3 { font-size: var(--t-m); color: var(--gris); font-weight: 600; margin-bottom: .6rem; }
+.carta-precios li { padding: .6rem 0; }
+.carta-precios li > span:first-child { font-weight: 500; }
+.importe { font-weight: 700; white-space: nowrap; }
+.precios-nota { margin: 2rem 0 0; font-size: var(--t-s); color: var(--gris); }
+@media (max-width: 520px) {
+  .carta-precios li { flex-wrap: wrap; }
+  .carta-precios .guia { display: none; }
+  .carta-precios li > span:first-child { flex: 1 1 100%; }
+}
+
+/* ---------- 10. Equipo ---------- */
+.equipo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-top: 2rem; }
+.foto {
+  aspect-ratio: 1; border-radius: 6px; background: var(--niebla);
+  display: grid; place-items: center; font-weight: 700; font-size: 2.4rem; color: var(--atlantico);
   margin-bottom: .8rem; overflow: hidden;
 }
 .foto img { width: 100%; height: 100%; object-fit: cover; }
-.persona strong { display: block; }
-@media (max-width: 760px) { .equipo-grid { grid-template-columns: 1fr; } .foto { aspect-ratio: 16/10; } }
+.persona strong, .persona .suave { display: block; }
+@media (max-width: 760px) { .equipo-grid { grid-template-columns: 1fr; } }
 
-/* =========================================================
-   10. CONTACTO
-   ========================================================= */
-.contacto { background: var(--atlantico); color: var(--blanco); }
-.contacto .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
-.contacto .suave { color: #D5E4FA; }
-form { background: var(--blanco); color: var(--marino); border-radius: 18px; padding: 1.6rem; }
+/* ---------- 11. Contacto ---------- */
+.contacto { background: var(--tinta); color: var(--papel); }
+.contacto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: start; }
+.contacto-datos { color: #C7D4E4; }
+form { background: var(--papel); color: var(--tinta); border-radius: 14px; padding: 1.6rem; }
 label { display: block; font-weight: 600; margin-bottom: .9rem; font-size: .95rem; }
-input, textarea {
+input, textarea, select {
   width: 100%; margin-top: .3rem;
-  font: inherit; padding: .7rem .85rem;
-  border: 1.5px solid #C4D3E8; border-radius: 10px; background: var(--blanco); color: var(--marino);
-  font-weight: 400;
+  font: 400 1rem/1.4 var(--fuente); padding: .7rem .85rem;
+  border: 1.5px solid #B9C6D5; border-radius: 10px; background: var(--papel); color: var(--tinta);
 }
-input:focus, textarea:focus { outline: 3px solid var(--sol); border-color: var(--marino); }
+input:focus, textarea:focus, select:focus { outline: 3px solid var(--sol); border-color: var(--tinta); }
 textarea { min-height: 100px; resize: vertical; }
 .legal-form { font-size: .82rem; color: var(--gris); margin: .2rem 0 1rem; }
-@media (max-width: 860px) { .contacto .cols { grid-template-columns: 1fr; gap: 2rem; } }
-
-/* =========================================================
-   11. PIE
-   ========================================================= */
-footer { background: var(--marino); color: #B9C7DC; padding: 2.5rem 0; font-size: .92rem; }
-footer .wrap { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
-footer nav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
-footer a { text-decoration: none; }
-footer a:hover { color: var(--blanco); text-decoration: underline; }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .btn { transition: none; }
-}
-
-/* =========================================================
-   12. FORMULARIO: campos extra, estados y consentimiento
-   ========================================================= */
-select {
-  width: 100%; margin-top: .3rem;
-  font: inherit; font-weight: 400; padding: .7rem .85rem;
-  border: 1.5px solid #C4D3E8; border-radius: 10px; background: var(--blanco); color: var(--marino);
-}
-select:focus { outline: 3px solid var(--sol); border-color: var(--marino); }
-.btn-full { width: 100%; text-align: center; }
-.btn[disabled] { opacity: .6; cursor: wait; transform: none; }
 .trampa { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .consentimiento { display: flex; gap: .6rem; align-items: flex-start; font-weight: 500; font-size: .9rem; }
 .consentimiento input { width: auto; margin-top: .25rem; flex-shrink: 0; }
 .form-error { background: #FDECEC; color: #9B1C1C; border-radius: 10px; padding: .6rem .85rem; font-size: .92rem; }
 .form-ok h3 { color: var(--atlantico); }
 .form-ok:focus { outline: none; }
-.persona .suave { display: block; font-size: .95rem; }
+@media (max-width: 860px) { .contacto-grid { grid-template-columns: 1fr; gap: 2rem; } }
 
-/* =========================================================
-   13. PÁGINAS SIMPLES (legales, 404, tarjeta desactivada)
-   ========================================================= */
+/* ---------- 12. Pie ---------- */
+footer { background: #0A1F36; color: #B9C7DC; padding: 2.2rem 0; font-size: .92rem; }
+footer .wrap { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+footer nav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+footer a { text-decoration: none; }
+footer a:hover { color: var(--papel); text-decoration: underline; }
+
+/* ---------- 13. Páginas simples (legales, 404) ---------- */
 .pagina-simple { padding: 4rem 0 5rem; min-height: 60vh; }
+.pagina-simple h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); letter-spacing: -0.03em; }
 .legal h2 { font-size: 1.4rem; margin-top: 2.2rem; }
 .legal p { max-width: 72ch; }
 
-/* =========================================================
-   14. COMPLEMENTOS PARA EL LOCAL (expositores, pegatinas, NFC)
-   ========================================================= */
-.local-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 3.5rem; align-items: center; }
-.local-foto { margin: 0; }
-.local-foto img {
-  width: 100%; height: auto; border-radius: 20px;
-  border: 3px solid var(--marino); box-shadow: 10px 10px 0 var(--cielo);
-}
-.local-foto figcaption { font-size: .85rem; color: var(--gris); margin-top: .9rem; }
-.opciones { display: grid; gap: .6rem; margin: 1.4rem 0 1.6rem; }
-.opcion {
-  display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
-  background: var(--niebla); border-radius: 12px; padding: .85rem 1rem;
-}
-.opcion .opcion-nombre { display: block; font-weight: 600; }
-.opcion .suave { display: block; font-size: .92rem; line-height: 1.45; }
-.opcion-precio { font-family: var(--display); font-weight: 800; color: var(--atlantico); white-space: nowrap; font-size: 1.1rem; }
-@media (max-width: 860px) {
-  .local-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .local-foto { max-width: 380px; }
-}
-@media (max-width: 420px) { .opcion { flex-direction: column; gap: .3rem; } }
-
-/* Precios agrupados */
-.precios-grupo { margin: 2.2rem 0 0; font-size: 1.1rem; color: var(--gris); }
-.precios-grupo + .precios-lista { margin-top: .8rem; }
-
-/* =========================================================
-   15. POR QUÉ ELEGIRNOS y PACK COMPLETO
-   ========================================================= */
-.porque-intro { font-size: 1.15rem; font-weight: 500; }
-.porque li strong { display: block; font-family: var(--display); font-size: 1.1rem; margin-bottom: .15rem; }
-.porque li { font-weight: 400; }
-
-.pack {
-  display: flex; justify-content: space-between; align-items: center; gap: 2rem;
-  margin-top: 2rem; padding: 1.6rem 1.8rem; border-radius: 18px;
-  background: var(--marino); color: var(--blanco);
-}
-.pack .lema { background: var(--sol); color: var(--marino); margin-bottom: .8rem; }
-.pack h3 { margin-bottom: .4rem; }
-.pack p { color: #D5E4FA; margin: 0; }
-.pack-precio { text-align: right; white-space: nowrap; }
-.pack-precio s { display: block; color: #B9C7DC; font-size: 1rem; }
-.pack-precio strong { font-family: var(--display); font-weight: 800; font-size: 2.4rem; color: var(--sol); line-height: 1; }
-.precios-nota { margin-top: 1.2rem; font-size: .92rem; }
-@media (max-width: 700px) {
-  .pack { flex-direction: column; align-items: flex-start; gap: 1rem; }
-  .pack-precio { text-align: left; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn { transition: none; }
 }

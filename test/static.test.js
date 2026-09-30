@@ -7,6 +7,9 @@ import { after, test } from 'node:test';
 import { buildStatic } from '../scripts/build-static.js';
 
 const outDir = mkdtempSync(join(tmpdir(), 'alcance-static-'));
+// Fila de la carta de precios: concepto, puntos guía e importe.
+const escapeRe = (text) => text.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
+const priceRow = (label, price) => new RegExp(`<span>${escapeRe(label)}</span><span class="guia" aria-hidden="true"></span><span class="importe">${escapeRe(price)}</span>`);
 after(() => rmSync(outDir, { recursive: true, force: true }));
 
 test('genera la web estática con rutas relativas y el contacto de site.js', () => {
@@ -14,7 +17,7 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
 
   for (const file of ['index.html', 'privacidad.html', 'cookies.html', '404.html',
     'robots.txt', 'sitemap.xml', '_headers', '.nojekyll', 'assets/css/site.css', 'assets/js/site.js',
-    'assets/fonts/figtree.woff2', 'assets/fonts/bricolage-grotesque.woff2', 'assets/img/favicon.svg']) {
+    'assets/fonts/familjen-grotesk.woff2', 'assets/img/terrazo.svg', 'assets/img/favicon.svg']) {
     assert.ok(existsSync(join(outDir, file)), file);
   }
   assert.ok(!existsSync(join(outDir, 'assets/admin')), 'el panel no se publica');
@@ -34,20 +37,25 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /Impreso en 3D en Tenerife/);
   const precios = index.slice(index.indexOf('id="precios"'));
   assert.ok(precios.indexOf('Servicios digitales') < precios.indexOf('Para tu local'));
-  assert.match(precios, /Creación u optimización de la ficha de Google Business<\/span><span class="importe">100 €/);
-  assert.match(precios, /Expositor de mesa personalizado<\/span><span class="importe">10 € \/ unidad/);
-  assert.match(precios, /Pegatinas QR para mesa<\/span><span class="importe">50 € \/ 10 uds\./);
+  assert.match(precios, priceRow('Creación u optimización de la ficha de Google Business', '100 €'));
+  assert.match(precios, priceRow('Expositor de mesa personalizado', '10 € / unidad'));
+  assert.match(precios, priceRow('Pegatinas QR para mesa', '50 € / 10 uds.'));
+  // Portada: la mesa con la carta de demostración (pestañas accesibles) y el recorrido del cliente.
+  assert.match(index, /role="tablist"/);
+  assert.match(index, /id="carta-panel-1"[^>]*hidden/);
+  assert.match(index, /Cafetería Marisol/);
+  assert.match(index, /Así llega un cliente a tu mesa/);
   // Portada con el eslogan y contenido de la propuesta.
   assert.match(index, /<h1>Tu mesa digital<\/h1>/);
   assert.match(index, /Pide tu diagnóstico gratuito/);
   assert.match(index, /id="por-que"/);
   assert.match(index, /Todo conectado, no piezas sueltas/);
   assert.match(index, /Listo en 10 días laborables/);
-  assert.match(precios, /Hosting y dominio \(12 meses\)<\/span><span class="importe">90 € \/ año/);
-  assert.match(precios, /Cambio puntual de contenido[^<]*<\/span><span class="importe">15 € \/ cambio/);
-  assert.match(precios, /Actualización completa de la carta<\/span><span class="importe">40 €/);
-  assert.match(precios, /class="pack"[\s\S]*<s>415 €<\/s><strong>390 €<\/strong>/);
-  assert.match(precios, /Placa de reseñas QR \+ NFC<\/span><span class="importe">25 €</);
+  assert.match(precios, priceRow('Hosting y dominio (12 meses)', '90 € / año'));
+  assert.match(precios, priceRow('Cambio puntual de contenido (precios, horarios, fotos, un plato…)', '15 € / cambio'));
+  assert.match(precios, priceRow('Actualización completa de la carta', '40 €'));
+  assert.match(precios, /class="pack"[\s\S]*<s>415 €<\/s> <strong>390 €<\/strong>/);
+  assert.match(precios, priceRow('Placa de reseñas QR + NFC', '25 €'));
   assert.doesNotMatch(index, /Tarjeta NFC|300 €/);
   assert.match(precios, /Precios sin IGIC/);
   // Sin datos del titular no se publica el aviso legal ni su enlace.

@@ -1,88 +1,206 @@
 import { contact, esc, layout, links, whatsappUrl } from './html.js';
 
+// Código QR decorativo (no escaneable) para el expositor de la portada: 21×21 módulos con los
+// tres marcadores de posición y un relleno pseudoaleatorio fijo, para que siempre salga igual.
+function decorativeQr() {
+  const size = 21;
+  const finder = (x, y) => (x < 7 && y < 7) || (x >= size - 7 && y < 7) || (x < 7 && y >= size - 7);
+  const finderOn = (x, y) => {
+    const fx = x >= size - 7 ? x - (size - 7) : x;
+    const fy = y >= size - 7 ? y - (size - 7) : y;
+    const edge = fx === 0 || fx === 6 || fy === 0 || fy === 6;
+    const core = fx >= 2 && fx <= 4 && fy >= 2 && fy <= 4;
+    return edge || core;
+  };
+  let seed = 7;
+  const random = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+  const cells = [];
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      const on = finder(x, y) ? finderOn(x, y) : (x === 7 || y === 7 || x === size - 8 || y === size - 8) ? false : random() > 0.52;
+      if (on) cells.push(`M${x} ${y}h1v1h-1z`);
+    }
+  }
+  return `<svg class="qr" viewBox="-1 -1 23 23" aria-hidden="true"><path d="${cells.join('')}"/></svg>`;
+}
+
 export function renderLanding({ site, config }) {
   const { whatsapp, phoneDisplay, email } = contact(site, config);
   const to = links(config);
   const wa = whatsappUrl(whatsapp, site.whatsappGreeting);
   const team = site.team.filter((person) => person.name && person.name.trim());
+  const { extras, pack, demoMenu, journey, hero } = site;
 
-  const { extras } = site;
   const nav = [
     { id: 'servicios', label: 'Servicios' },
     { id: 'por-que', label: 'Por qué elegirnos' },
-    { id: 'como', label: 'Cómo trabajamos' },
     { id: 'precios', label: 'Precios' },
     ...(team.length ? [{ id: 'equipo', label: 'Equipo' }] : []),
   ];
 
-  const services = site.services.map((service) => `
-      <article class="serv">
-        <h3>${esc(service.name)}</h3>
-        <p>${esc(service.text)}</p>
-        <p class="beneficio">${esc(service.benefit)}</p>
-      </article>`).join('');
+  const allServices = [...site.services, ...(extras ? extras.items : [])];
+  const serviceById = Object.fromEntries(allServices.map((service) => [service.id, service]));
+  const priceOf = (service) => service.price || (service.prices && service.prices[0].price) || '';
 
-  const priceRows = (rows) => rows.map((row) => `
-      <div class="precio-fila"><span>${esc(row.label)}</span><span class="importe">${esc(row.price)}</span></div>`).join('');
-  const priceGroups = [
-    { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
-    ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
-  ];
-  const { pack } = site;
-  const packBox = pack ? `
-    <div class="pack">
-      <div>
-        <span class="lema">Recomendado</span>
-        <h3>${esc(pack.name)}</h3>
-        <p>${esc(pack.text)}</p>
-      </div>
-      <div class="pack-precio">${pack.was ? `<s>${esc(pack.was)}</s>` : ''}<strong>${esc(pack.price)}</strong></div>
-    </div>` : '';
-  const prices = priceGroups.map((group) => `
-    <h3 class="precios-grupo">${esc(group.title)}</h3>
-    <div class="precios-lista">${priceRows(group.rows)}
-    </div>`).join('');
-
-  const count = site.services.length;
-  // Con 2 o 4 servicios, rejilla de 2 columnas para que no quede una tarjeta suelta.
-  const gridClass = count % 3 !== 0 && count % 2 === 0 ? 'serv-grid serv-grid-2' : 'serv-grid';
-
-  const serviceOptions = [...site.services, ...(extras ? extras.items : [])]
+  const serviceOptions = allServices
     .map((service) => `<option value="${esc(service.id)}">${esc(service.name)}</option>`).join('');
 
+  // ---------- Portada: la mesa ----------
+  const menuTabs = demoMenu.sections.map((section, i) => `
+            <button type="button" role="tab" id="carta-tab-${i}" aria-controls="carta-panel-${i}" aria-selected="${i === 0}"${i === 0 ? '' : ' tabindex="-1"'}>${esc(section.name)}</button>`).join('');
+  const menuPanels = demoMenu.sections.map((section, i) => `
+          <ul class="carta-lista" role="tabpanel" id="carta-panel-${i}" aria-labelledby="carta-tab-${i}"${i === 0 ? '' : ' hidden'}>${section.items.map(([name, price]) => `
+            <li><span>${esc(name)}</span><span class="guia" aria-hidden="true"></span><span>${esc(price)}</span></li>`).join('')}
+          </ul>`).join('');
+
+  const heroSection = `
+<div class="mesa" id="inicio">
+  <div class="wrap mesa-grid">
+    <div class="mesa-texto">
+      <h1>${esc(hero.title)}</h1>
+      <p class="lead">${esc(hero.lead)}</p>
+      <div class="acciones">
+        <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, hero.ctaWhatsappText))}" rel="noopener" target="_blank">${esc(hero.cta)}</a>
+        <a class="btn btn-linea" href="#precios">Ver precios</a>
+      </div>
+      <p class="mesa-nota">${esc(hero.note)}</p>
+    </div>
+
+    <figure class="bodegon">
+      <div class="movil">
+        <div class="carta" role="group" aria-label="Ejemplo de carta digital de ${esc(demoMenu.business)}">
+          <div class="carta-cab">
+            <strong>${esc(demoMenu.business)}</strong>
+            <span>${esc(demoMenu.table)}</span>
+          </div>
+          <div class="carta-tabs" role="tablist" aria-label="Secciones de la carta">${menuTabs}
+          </div>${menuPanels}
+          <div class="carta-pie">
+            <span class="carta-boton">Dejar una reseña</span>
+            <span class="carta-boton carta-boton-wa">Pedir por WhatsApp</span>
+          </div>
+        </div>
+      </div>
+      <div class="expositor" aria-hidden="true">
+        ${decorativeQr()}
+        <span>${esc(demoMenu.table)}</span>
+      </div>
+      <div class="barraquito" aria-hidden="true"><div class="vaso"><i></i><i></i><i></i><i></i><i></i></div></div>
+      <figcaption>${esc(demoMenu.caption)}</figcaption>
+    </figure>
+  </div>
+</div>`;
+
+  // ---------- Recorrido del cliente (servicios) ----------
+  const journeySection = `
+<section class="recorrido" id="servicios">
+  <div class="wrap">
+    <h2>${esc(journey.title)}</h2>
+    <ol class="recorrido-pasos">${journey.steps.map((step) => {
+      const service = serviceById[step.service];
+      return `
+      <li>
+        <h3>${esc(step.moment)}</h3>
+        <p class="recorrido-servicio">${esc(service.name)} <span>${esc(priceOf(service))}</span></p>
+        <p>${esc(service.text)}</p>
+      </li>`;
+    }).join('')}
+    </ol>
+    <p class="recorrido-nota">${esc(journey.note)}</p>
+  </div>
+</section>`;
+
+  // ---------- Para tu local ----------
   const img = extras && extras.image;
   const extrasSection = extras ? `
 <section class="local" id="local">
   <div class="wrap local-grid">
     <figure class="local-foto">
       <picture>
-        <source type="image/webp" srcset="${esc(to.asset(`${img.small}.webp`))} 480w, ${esc(to.asset(`${img.src}.webp`))} 800w" sizes="(max-width: 860px) 100vw, 440px">
-        <img src="${esc(to.asset(`${img.src}.jpg`))}" srcset="${esc(to.asset(`${img.small}.jpg`))} 480w, ${esc(to.asset(`${img.src}.jpg`))} 800w" sizes="(max-width: 860px) 100vw, 440px" alt="${esc(img.alt)}" width="800" height="800" loading="lazy" decoding="async">
+        <source type="image/webp" srcset="${esc(to.asset(`${img.small}.webp`))} 480w, ${esc(to.asset(`${img.src}.webp`))} 800w" sizes="(max-width: 860px) 100vw, 420px">
+        <img src="${esc(to.asset(`${img.src}.jpg`))}" srcset="${esc(to.asset(`${img.small}.jpg`))} 480w, ${esc(to.asset(`${img.src}.jpg`))} 800w" sizes="(max-width: 860px) 100vw, 420px" alt="${esc(img.alt)}" width="800" height="800" loading="lazy" decoding="async">
       </picture>
       ${img.caption ? `<figcaption>${esc(img.caption)}</figcaption>` : ''}
     </figure>
     <div>
-      <span class="lema">Complementos</span>
       <h2>${esc(extras.title)}</h2>
       <p>${esc(extras.text)}</p>
-      <div class="opciones">${extras.items.map((item) => `
-        <div class="opcion">
-          <div><strong class="opcion-nombre">${esc(item.name)}</strong><span class="suave">${esc(item.text)}</span></div>
-          <strong class="opcion-precio">${esc(item.price)}</strong>
-        </div>`).join('')}
-      </div>
-      <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, extras.whatsappText))}" rel="noopener" target="_blank">Pregúntanos por WhatsApp</a>
+      <ul class="local-lista">${extras.items.map((item) => `
+        <li>
+          <h3>${esc(item.name)}</h3>
+          <p>${esc(item.text)}</p>
+          <span class="local-precio">${esc(item.price)}</span>
+        </li>`).join('')}
+      </ul>
+      <a class="btn btn-linea" href="${esc(whatsappUrl(whatsapp, extras.whatsappText))}" rel="noopener" target="_blank">Pregúntanos por WhatsApp</a>
     </div>
   </div>
-</section>
-` : '';
+</section>` : '';
 
+  // ---------- Por qué elegirnos ----------
+  const whySection = `
+<section class="porque" id="por-que">
+  <div class="wrap porque-grid">
+    <div>
+      <h2>${esc(site.whyUs.title)}</h2>
+      <p class="porque-intro">${esc(site.whyUs.intro)}</p>
+      <p class="suave">${esc(site.whyUs.team)}</p>
+    </div>
+    <dl class="motivos">${site.whyUs.reasons.map((reason) => `
+      <div>
+        <dt>${esc(reason.title)}</dt>
+        <dd>${esc(reason.text)}</dd>
+      </div>`).join('')}
+    </dl>
+  </div>
+</section>`;
+
+  // ---------- Cómo trabajamos ----------
+  const stepsSection = `
+<section class="como" id="como">
+  <div class="wrap">
+    <h2>Así trabajamos</h2>
+    <ol class="pasos">${site.steps.map((step) => `
+      <li><h3>${esc(step.title)}</h3><p>${esc(step.text)}</p></li>`).join('')}
+    </ol>
+    <p class="suave">${esc(site.stepsNote)}</p>
+  </div>
+</section>`;
+
+  // ---------- Precios: como la carta de una cafetería ----------
+  const priceRow = (label, price) => `
+          <li><span>${esc(label)}</span><span class="guia" aria-hidden="true"></span><span class="importe">${esc(price)}</span></li>`;
+  const priceGroups = [
+    { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
+    ...(extras ? [{ title: 'Para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
+  ];
+  const pricesSection = `
+<section class="precios" id="precios">
+  <div class="wrap">
+    <h2>Precios</h2>
+    <p class="suave">Contrata cada servicio por separado o todo junto.</p>
+    <div class="carta-precios">${pack ? `
+      <div class="pack">
+        <h3>${esc(pack.name)}</h3>
+        <p>${esc(pack.text)}</p>
+        <p class="pack-precio">${pack.was ? `<s>${esc(pack.was)}</s> ` : ''}<strong>${esc(pack.price)}</strong></p>
+      </div>` : ''}${priceGroups.map((group) => `
+      <div class="carta-grupo">
+        <h3>${esc(group.title)}</h3>
+        <ul>${group.rows.map((row) => priceRow(row.label, row.price)).join('')}
+        </ul>
+      </div>`).join('')}
+      <p class="precios-nota">${esc(site.pricesNote)}</p>
+    </div>
+  </div>
+</section>`;
+
+  // ---------- Equipo ----------
   const initials = (name) => name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase();
   const teamSection = team.length ? `
 <section class="equipo" id="equipo">
   <div class="wrap">
     <h2>Quiénes somos</h2>
-    <p>Tres personas, dos miradas: entender a las personas y hacer que el negocio funcione.</p>
     <div class="equipo-grid">${team.map((person) => `
       <div class="persona">
         <div class="foto">${person.photo
@@ -95,97 +213,21 @@ export function renderLanding({ site, config }) {
   </div>
 </section>` : '';
 
-  const body = `<main id="inicio">
-
-<div class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="lema">${esc(site.hero.badge)}</span>
-      <h1>${esc(site.hero.title)}</h1>
-      <p class="lead">${esc(site.hero.lead)}</p>
-      <div class="acciones">
-        <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, site.hero.ctaWhatsappText))}" rel="noopener" target="_blank">${esc(site.hero.cta)}</a>
-        <a class="btn btn-linea" href="#servicios">Ver servicios</a>
-      </div>
-    </div>
-
-    <div class="ventana" role="img" aria-label="Ejemplo de ficha de un negocio en Google con reseñas">
-      <div class="etiqueta">Así puede verse tu negocio en Google (ejemplo)</div>
-      <div class="ficha-cab">
-        <div class="ficha-icono">M</div>
-        <div>
-          <strong>Cafetería Marisol</strong>
-          <span class="estrellas">★★★★★</span> <span class="suave">4,9 · 128 reseñas</span>
-        </div>
-      </div>
-      <div class="ficha-datos"><b>Abierto ahora</b> · Cierra a las 20:00 · La Laguna</div>
-      <div class="ficha-botones"><span>Llamar</span><span>Cómo llegar</span><span>Carta</span><span>Web</span></div>
-      <div class="resena">“Buen café y la carta, a un toque desde la mesa.”</div>
-    </div>
-  </div>
-</div>
-
-<section class="problema">
-  <div class="wrap">
-    <h2>Tu negocio es bueno, pero ¿te encuentran?</h2>
-    <p>Hoy, antes de entrar a un local, casi todo el mundo lo busca en Google. Si tu ficha está incompleta, tienes pocas reseñas o no tienes web, los clientes acaban en otro sitio, aunque tu negocio sea mejor.</p>
-    <div class="items">
-      <div class="item">Ficha de Google sin reclamar o desactualizada</div>
-      <div class="item">Pocas reseñas, o ninguna</div>
-      <div class="item">Sin una web ni una carta digital a la que dirigir a los clientes</div>
-    </div>
-  </div>
-</section>
-
-<section class="servicios" id="servicios">
-  <div class="wrap">
-    <h2>${esc(site.servicesTitle)}</h2>
-    <p class="suave">Puedes contratar cada servicio por separado o combinarlos.</p>
-    <div class="${gridClass}">${services}
-    </div>
-  </div>
-</section>
+  const body = `<main>
+${heroSection}
+${journeySection}
 ${extrasSection}
-<section class="porque" id="por-que">
-  <div class="wrap cols">
-    <div>
-      <h2>${esc(site.whyUs.title)}</h2>
-      <p class="porque-intro">${esc(site.whyUs.intro)}</p>
-      <p class="suave">${esc(site.whyUs.team)}</p>
-    </div>
-    <ul>${site.whyUs.reasons.map((reason) => `
-      <li><strong>${esc(reason.title)}</strong>${esc(reason.text)}</li>`).join('')}
-    </ul>
-  </div>
-</section>
-
-<section id="como">
-  <div class="wrap">
-    <h2>Así de fácil</h2>
-    <ol class="pasos">${site.steps.map((step) => `
-      <li><strong>${esc(step.title)}</strong>${esc(step.text)}</li>`).join('')}
-    </ol>
-    <p class="cierre">Sin tecnicismos. ${esc(site.stepsNote)}</p>
-  </div>
-</section>
-
-<section id="precios">
-  <div class="wrap">
-    <h2>Precios claros</h2>
-    <p class="suave">Contrata cada servicio por separado o todo junto. Pídenos un presupuesto sin compromiso.</p>
-${packBox}
-${prices}
-    <p class="suave precios-nota">${esc(site.pricesNote)}</p>
-  </div>
-</section>
+${whySection}
+${stepsSection}
+${pricesSection}
 ${teamSection}
 <section class="contacto" id="contacto">
-  <div class="wrap cols">
+  <div class="wrap contacto-grid">
     <div>
       <h2>¿Hablamos?</h2>
       <p>Cuéntanos qué necesitas y te respondemos en menos de 24 horas.</p>
       <p><a class="btn btn-sol" href="${esc(wa)}" rel="noopener" target="_blank">Escribir por WhatsApp</a></p>
-      <p class="suave">Trabajamos en ${esc(site.region)}.${phoneDisplay ? `<br>
+      <p class="contacto-datos">Trabajamos en ${esc(site.region)}.${phoneDisplay ? `<br>
       Teléfono: <a href="tel:+${esc(whatsapp)}">${esc(phoneDisplay)}</a>` : ''}${email ? `<br>
       Email: <a href="mailto:${esc(email)}">${esc(email)}</a>` : ''}</p>
     </div>

@@ -1,0 +1,40 @@
+# Diseño: Tu mesa digital
+
+Notas de diseño para mantener la web coherente en futuros cambios.
+
+## Idea
+
+La portada es una **mesa de cafetería canaria** (terrazo) con los tres objetos que vende Alcance Isleño: el móvil con la **carta digital funcionando** (pestañas reales), el expositor con QR y un barraquito. Es el único elemento llamativo de la página; todo lo demás es sobrio y legible.
+
+Público: dueños de cafeterías y bares de Tenerife, poco técnicos, que la ven en el móvil. Objetivo: que pidan el diagnóstico gratuito por WhatsApp.
+
+## Tokens (`public/css/site.css` → `:root`)
+
+| Token | Valor | Uso |
+|---|---|---|
+| `--tinta` | `#0E2A47` | Marino de la marca: texto, móvil, fondos oscuros |
+| `--atlantico` | `#1B62C9` | Azul del logo: enlaces y detalles |
+| `--sol` | `#FFC93C` | Solo la acción principal (botones de WhatsApp/diagnóstico) |
+| `--terrazo` | `#E3E7EB` + `img/terrazo.svg` | Superficie de la mesa |
+| `--niebla` | `#F3F5F7` | Fondo alterno de secciones |
+| `--gris` | `#4F5D70` | Texto secundario (contraste AA) |
+
+Tipografía: **Familjen Grotesk** (una sola familia, OFL, alojada en `public/fonts/`). Escala 1.25 sobre 17 px. El titular de portada usa el tipo como elemento gráfico: muy grande, interlineado 0,88 y tracking negativo.
+
+## Recursos propios del sector
+
+- **Precios como una carta**: puntos guía entre concepto e importe, doble filete de carta impresa, y el pack destacado como un "menú del día".
+- **Servicios como recorrido del cliente**: te busca en Google → mira tu carta → te deja una reseña. La numeración existe porque es una secuencia real.
+
+## Qué evitar (lo que hace que una web parezca plantilla)
+
+- Etiquetas en mayúsculas o "píldoras" encima de cada título.
+- Tarjetas idénticas con la misma sombra; la sombra solo se usa en los objetos físicos de la mesa.
+- Separadores con punto medio ("A · B · C"), flechas "→" en botones.
+- Animaciones al hacer scroll o efectos al pasar el ratón por cada tarjeta.
+- Fondo crema con acento terracota.
+
+## Pendiente
+
+- Sustituir la maqueta del expositor por la foto real (`public/img/productos/`) y quitar `caption` en `site.js`.
+- Unificar el logotipo con el de la maqueta cuando exista en SVG.

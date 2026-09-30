@@ -16,11 +16,64 @@ export const site = {
 
   // PORTADA
   hero: {
-    badge: 'Presencia digital para negocios de Tenerife',
     title: 'Tu mesa digital',
     lead: 'Que quien te busque en internet, te encuentre. Tu ficha de Google, tus reseñas, tu web y tu carta, conectadas entre sí y listas en 10 días laborables. Sin tecnicismos ni presupuestos de agencia.',
     cta: 'Pide tu diagnóstico gratuito',
     ctaWhatsappText: 'Hola, me gustaría pedir el diagnóstico gratuito para mi negocio',
+    note: 'Equipo local de Tenerife. Diagnóstico gratuito y sin compromiso.',
+  },
+
+  // CARTA DE DEMOSTRACIÓN que aparece en el móvil de la portada (negocio ficticio).
+  demoMenu: {
+    business: 'Cafetería Marisol',
+    table: 'Mesa 4',
+    caption: 'Ejemplo de carta digital: toca las pestañas.',
+    sections: [
+      {
+        name: 'Cafés',
+        items: [
+          ['Barraquito', '1,80 €'],
+          ['Cortado leche y leche', '1,40 €'],
+          ['Café con leche', '1,50 €'],
+          ['Zumo de naranja natural', '2,50 €'],
+          ['Leche y leche', '1,40 €'],
+          ['Infusión', '1,30 €'],
+        ],
+      },
+      {
+        name: 'Desayunos',
+        items: [
+          ['Tostada con tomate y aceite', '2,20 €'],
+          ['Bocadillo de pata asada', '4,50 €'],
+          ['Sándwich mixto', '3,00 €'],
+          ['Zumo + café + tostada', '5,50 €'],
+          ['Tortilla española', '3,50 €'],
+          ['Huevos con papas', '5,00 €'],
+        ],
+      },
+      {
+        name: 'Dulces',
+        items: [
+          ['Quesadilla herreña', '2,50 €'],
+          ['Bizcochón', '2,00 €'],
+          ['Tarta de gofio', '3,20 €'],
+          ['Rapadura', '1,50 €'],
+          ['Bienmesabe', '3,00 €'],
+          ['Príncipe Alberto', '3,20 €'],
+        ],
+      },
+    ],
+  },
+
+  // RECORRIDO DEL CLIENTE: cada paso muestra el servicio que lo resuelve (por su "id").
+  journey: {
+    title: 'Así llega un cliente a tu mesa',
+    steps: [
+      { moment: 'Te busca en Google', service: 'gbp' },
+      { moment: 'Mira tu carta', service: 'landing' },
+      { moment: 'Te deja una reseña', service: 'nfc' },
+    ],
+    note: 'Y para que todo siga funcionando, alojamos tu web con tu dominio por 90 € al año. Los cambios de la carta solo los pagas cuando los necesitas.',
   },
 
   // POR QUÉ ELEGIRNOS
@@ -44,9 +97,6 @@ export const site = {
     { title: 'Entrega y formación', text: 'Revisamos el diseño contigo (2 rondas de cambios), lo publicamos y te enseñamos a usarlo.' },
   ],
   stepsNote: 'Pagas el 50% al empezar y el 50% restante a la entrega.',
-
-  // Título de la sección de servicios
-  servicesTitle: 'Todo lo que necesita tu mesa digital',
 
 
   // SERVICIOS PRINCIPALES: lo que hacemos nosotros (software).

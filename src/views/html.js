@@ -67,7 +67,7 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">
 <meta property="og:locale" content="es_ES">
 <meta name="theme-color" content="#0E2A47">
 <link rel="icon" href="${to.asset('img/favicon.svg')}" type="image/svg+xml">
-<link rel="preload" href="${to.asset('fonts/bricolage-grotesque.woff2')}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${to.asset('fonts/familjen-grotesk.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${to.asset('css/site.css')}">
 </head>
 <body>
@@ -76,7 +76,7 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">
   <div class="wrap">
     <a class="marca" href="${home}#inicio" aria-label="${esc(site.name)}, inicio">
       ${LOGO}
-      ${esc(site.name)}
+      <span aria-hidden="true">${esc(site.name.toLowerCase())}</span>
     </a>
     <ul>
       ${nav.map((item) => `<li><a href="${home}#${esc(item.id)}">${esc(item.label)}</a></li>`).join('\n      ')}
