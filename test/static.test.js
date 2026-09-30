@@ -11,7 +11,7 @@ import { buildStatic } from '../scripts/build-static.js';
 import { site } from '../src/content/site.js';
 import { STATIC_CSP } from '../src/views/html.js';
 import worker from '../worker/index.js';
-import { DOMINIO, redireccion } from '../worker/redireccion.js';
+import { DOMINIO, redireccion, sinExtension } from '../worker/redireccion.js';
 
 const BASE = 'https://ejemplo.github.io/alcance-isleno';
 const outDir = mkdtempSync(join(tmpdir(), 'alcance-static-'));
@@ -69,6 +69,21 @@ describe('construcción y publicación', () => {
     assert.equal(redirigida.status, 301);
     assert.equal(redirigida.headers.get('location'), `https://${DOMINIO}/`);
     assert.equal(await (await worker.fetch(new Request(`https://${DOMINIO}/`), env)).text(), 'web');
+  });
+
+  test('las páginas .html se sirven sin redirección y la verificación de Google está en la raíz', async () => {
+    assert.equal(sinExtension(new URL(`https://${DOMINIO}/privacidad.html?a=1`)).href, `https://${DOMINIO}/privacidad?a=1`);
+    assert.equal(sinExtension(new URL(`https://${DOMINIO}/`)), null);
+    assert.equal(sinExtension(new URL(`https://${DOMINIO}/index.html`)), null);
+    assert.equal(sinExtension(new URL(`https://${DOMINIO}/assets/css/site.css`)), null);
+
+    const pedidas = [];
+    const env = { ASSETS: { fetch: async (req) => { pedidas.push(new URL(req.url).pathname); return new Response('ok'); } } };
+    await worker.fetch(new Request(`https://${DOMINIO}/cookies.html`), env);
+    assert.deepEqual(pedidas, ['/cookies']);
+
+    const verificacion = readFileSync(join(outDir, 'googlef960d0c81659e9c5.html'), 'utf8');
+    assert.equal(verificacion, 'google-site-verification: googlef960d0c81659e9c5.html');
   });
 
   test('sitio 100 % estático: una sola dependencia y sin restos del servidor archivado', () => {

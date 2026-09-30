@@ -53,6 +53,8 @@ export function buildStatic({
   for (const folder of ['css', 'js', 'img', 'fonts']) {
     cpSync(join(ROOT, 'public', folder), join(outDir, 'assets', folder), { recursive: true });
   }
+  // Archivos que deben estar en la raíz del dominio, tal cual (p. ej. la verificación de Google Search Console).
+  cpSync(join(ROOT, 'public', 'raiz'), outDir, { recursive: true });
 
   const sitemapUrls = Object.keys(pages)
     .filter((file) => file !== '404.html')
