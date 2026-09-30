@@ -10,6 +10,8 @@ import { after, before, describe, test } from 'node:test';
 import { buildStatic } from '../scripts/build-static.js';
 import { site } from '../src/content/site.js';
 import { STATIC_CSP } from '../src/views/html.js';
+import worker from '../worker/index.js';
+import { DOMINIO, redireccion } from '../worker/redireccion.js';
 
 const BASE = 'https://ejemplo.github.io/alcance-isleno';
 const outDir = mkdtempSync(join(tmpdir(), 'alcance-static-'));
@@ -46,12 +48,27 @@ describe('construcción y publicación', () => {
     }
   });
 
-  test('wrangler.jsonc pasa los tests, construye con la URL pública y publica dist/ con la página 404', () => {
+  test('wrangler.jsonc pasa los tests, construye con el dominio propio y publica dist/ con la página 404', () => {
     const raw = readFileSync(new URL('../wrangler.jsonc', import.meta.url), 'utf8');
     const config = JSON.parse(raw.replace(/^\s*\/\/.*$/gm, ''));
     assert.equal(config.assets.directory, './dist');
     assert.equal(config.assets.not_found_handling, '404-page');
-    assert.match(config.build.command, /^npm test && PUBLIC_BASE_URL=https:\/\/[^ ]+\.workers\.dev npm run build$/);
+    assert.equal(config.build.command, `npm test && PUBLIC_BASE_URL=https://${DOMINIO} npm run build`);
+    assert.deepEqual(config.routes.map((r) => r.pattern), [DOMINIO, `www.${DOMINIO}`]);
+    assert.ok(config.routes.every((r) => r.custom_domain));
+  });
+
+  test('una sola dirección: www y workers.dev redirigen al dominio principal', async () => {
+    assert.equal(redireccion(new URL(`https://www.${DOMINIO}/privacidad.html?a=1`)), `https://${DOMINIO}/privacidad.html?a=1`);
+    assert.equal(redireccion(new URL('https://alcance-isle-o.ariel-diaz662.workers.dev/')), `https://${DOMINIO}/`);
+    assert.equal(redireccion(new URL(`https://${DOMINIO}/`)), null);
+    assert.equal(redireccion(new URL('http://localhost:8787/')), null);
+
+    const env = { ASSETS: { fetch: async () => new Response('web') } };
+    const redirigida = await worker.fetch(new Request(`https://www.${DOMINIO}/`), env);
+    assert.equal(redirigida.status, 301);
+    assert.equal(redirigida.headers.get('location'), `https://${DOMINIO}/`);
+    assert.equal(await (await worker.fetch(new Request(`https://${DOMINIO}/`), env)).text(), 'web');
   });
 
   test('sitio 100 % estático: una sola dependencia y sin restos del servidor archivado', () => {

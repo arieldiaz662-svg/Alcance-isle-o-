@@ -21,7 +21,7 @@ npm run og-image     # regenera la imagen para compartir (tras cambiar la portad
 
 ## Publicación
 
-**Cloudflare Workers**: el Worker `alcance-isle-o` está conectado a este repositorio y publica cada cambio de `main` en https://alcance-isle-o.ariel-diaz662.workers.dev. Toda la configuración está en `wrangler.jsonc`: pasa los tests (si alguno falla, no se publica), construye con `PUBLIC_BASE_URL` apuntando a esa dirección (canonical, sitemap y og:image), publica `dist/`, sirve `404.html` en rutas inexistentes y aplica las cabeceras de `_headers`. Node 22 queda fijado en `.node-version`. Si se conecta un dominio propio, hay que cambiar la URL en `wrangler.jsonc`.
+**Cloudflare Workers**: el Worker `alcance-isle-o` está conectado a este repositorio y publica cada cambio de `main` en https://alcanceisleno.com. Toda la configuración está en `wrangler.jsonc`: pasa los tests (si alguno falla, no se publica), construye con `PUBLIC_BASE_URL` apuntando al dominio (canonical, sitemap y og:image), conecta `alcanceisleno.com` y `www.alcanceisleno.com`, publica `dist/`, sirve `404.html` en rutas inexistentes y aplica las cabeceras de `_headers`. `worker/index.js` redirige (301) `www` y la dirección de `workers.dev` al dominio principal, para que la web tenga una sola dirección. Node 22 queda fijado en `.node-version`. Si cambia el dominio, hay que cambiarlo en `wrangler.jsonc` y en `worker/redireccion.js` (un test comprueba que coinciden).
 
 Además, GitHub Actions (`.github/workflows/ci.yml`) pasa los tests en cada push y pull request.
 

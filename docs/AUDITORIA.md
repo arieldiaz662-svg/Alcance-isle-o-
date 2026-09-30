@@ -23,7 +23,7 @@ flowchart LR
   V --> B[scripts/build-static.js]
   B --> D[dist/<br/>HTML + assets + sitemap + _headers]
   D --> W[Cloudflare Workers<br/>tests → build → dist/]
-  W --> P[alcance-isle-o.ariel-diaz662.workers.dev]
+  W --> P[alcanceisleno.com]
   P --> JS[public/js/site.js en el navegador<br/>pestañas + formulario → WhatsApp]
 ```
 
@@ -112,7 +112,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 
 ## 4. Desglose de la web lista para publicar
 
-**URL:** `https://alcance-isle-o.ariel-diaz662.workers.dev` · **Páginas:** inicio, privacidad, cookies, 404.
+**URL:** `https://alcanceisleno.com` · **Páginas:** inicio, privacidad, cookies, 404.
 
 ### 4.1 Estructura de la portada (en orden)
 
