@@ -5,7 +5,7 @@ export const site = {
   name: 'Alcance Isleño',
   title: 'Alcance Isleño | Tu escaparate digital: presencia digital para negocios de Tenerife',
   description:
-    'Ficha de Google Business, reseñas, web con carta digital y hosting para cafeterías, bares, restaurantes, barberías y salones de belleza de Tenerife. Todo conectado y listo en 10 días laborables.',
+    'Ficha de Google Business, reseñas, web con carta digital y hosting para cafeterías, bares, restaurantes, barberías y salones de belleza de Tenerife. Todo conectado y sin tecnicismos.',
   region: 'Tenerife',
 
   // Contacto. Las variables de entorno WHATSAPP_NUMBER y CONTACT_EMAIL, si existen, tienen prioridad.
@@ -125,11 +125,11 @@ export const site = {
   // POR QUÉ ELEGIRNOS
   whyUs: {
     title: 'Por qué elegirnos',
-    intro: 'Google Business, reseñas, landing y hosting, coordinados entre sí y listos en menos de dos semanas. Sin depender de una agencia grande ni de presupuestos complicados.',
+    intro: 'Google Business, reseñas, landing y hosting, coordinados entre sí. Sin depender de una agencia grande ni de presupuestos complicados.',
     team: 'Somos un equipo joven e interdisciplinar de antropología social y administración de empresas: observamos cómo funciona cada negocio local y cómo se relaciona con sus clientes, y a partir de ahí diseñamos soluciones a medida.',
     reasons: [
       { title: 'Equipo local', text: 'Especializados en proyectos digitales personalizados para negocios de la isla. Trato cercano y en persona.' },
-      { title: 'Listo en 10 días laborables', text: 'Estudio, diagnóstico y puesta en marcha rápidos desde que recibimos tu material.' },
+      { title: 'Puesta en marcha ágil', text: 'Estudio, diagnóstico y puesta en marcha rápidos desde que recibimos tu material.' },
       { title: 'Todo conectado, no piezas sueltas', text: 'Tu ficha de Google, tu web, tus reseñas y tus redes se enlazan entre sí para que tu cliente pase de una a otra con un solo toque.' },
       { title: 'Te enseñamos a manejarlo', text: 'Formación básica para que puedas hacerlo tú mismo, sin depender de nosotros.' },
       { title: 'Diagnóstico gratuito', text: 'Analizamos tu presencia en internet sin coste y sin compromiso.' },
@@ -139,7 +139,7 @@ export const site = {
   // CÓMO TRABAJAMOS
   steps: [
     { title: 'Diagnóstico gratuito', text: 'Vemos cómo aparece hoy tu negocio en internet y qué necesitas, sin compromiso.' },
-    { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta, placa de reseñas y hosting, en 10 días laborables desde que recibimos tu material.' },
+    { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta, placa de reseñas y hosting, a partir del material que nos envíes.' },
     { title: 'Entrega y formación', text: 'Revisamos el diseño contigo (2 rondas de cambios), lo publicamos y te enseñamos a usarlo.' },
   ],
   stepsNote: 'Pagas el 50% al empezar y el 50% restante a la entrega.',

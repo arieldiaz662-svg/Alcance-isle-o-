@@ -67,7 +67,7 @@ test('genera la web estática con rutas relativas y el contacto de site.js', () 
   assert.match(index, /Pide tu diagnóstico gratuito/);
   assert.match(index, /id="por-que"/);
   assert.match(index, /Todo conectado, no piezas sueltas/);
-  assert.match(index, /Listo en 10 días laborables/);
+  assert.doesNotMatch(index, /10 días|dos semanas/, 'no se publica ningún plazo de entrega');
   assert.match(precios, priceRow('Hosting y dominio (12 meses)', '90 € / año'));
   assert.match(precios, priceRow('Cambio puntual de contenido (precios, horarios, fotos, un plato…)', '15 € / cambio'));
   assert.match(precios, priceRow('Actualización completa de la carta', '40 €'));
