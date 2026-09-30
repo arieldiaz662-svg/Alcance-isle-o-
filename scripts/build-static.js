@@ -1,5 +1,5 @@
 // Genera la web en dist/ (o en la carpeta indicada). Es 100 % estática: se puede subir tal cual a
-// Vercel, GitHub Pages, Netlify o Cloudflare Pages.
+// Cloudflare Pages, GitHub Pages o Netlify.
 //
 // Uso:  npm run build
 //       PUBLIC_BASE_URL=https://alcance-isleno.netlify.app npm run build   (añade canonical y sitemap)
@@ -15,16 +15,17 @@ import { renderCookies, renderLegalNotice, renderPrivacy } from '../src/views/le
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-// En Vercel, si no se indica PUBLIC_BASE_URL, se usa el dominio de producción del proyecto
-// (también en las vistas previas, para que canonical y og:image apunten siempre a la web real).
-function vercelProductionUrl() {
-  const host = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  return host ? `https://${host}` : '';
+// En Cloudflare Pages, si no se indica PUBLIC_BASE_URL, se deduce el dominio del proyecto a partir de
+// la URL de cada despliegue (https://<id>.<proyecto>.pages.dev → https://<proyecto>.pages.dev), también
+// en las vistas previas, para que canonical y og:image apunten siempre a la web real.
+function cloudflarePagesUrl() {
+  const match = /^https:\/\/[^./]+\.([^./]+\.pages\.dev)\/?$/.exec(process.env.CF_PAGES_URL || '');
+  return match ? `https://${match[1]}` : '';
 }
 
 export function buildStatic({
   outDir = join(ROOT, 'dist'),
-  publicBaseUrl = process.env.PUBLIC_BASE_URL || vercelProductionUrl(),
+  publicBaseUrl = process.env.PUBLIC_BASE_URL || cloudflarePagesUrl(),
   whatsappNumber = process.env.WHATSAPP_NUMBER || '',
   contactEmail = process.env.CONTACT_EMAIL || '',
 } = {}) {
@@ -74,8 +75,7 @@ ${sitemapUrls.map((path) => `  <url><loc>${config.publicBaseUrl}/${path}</loc></
 `);
   }
 
-  // Cabeceras de seguridad para Netlify y Cloudflare Pages (GitHub Pages las ignora; Vercel las
-  // toma de vercel.json).
+  // Cabeceras de seguridad para Cloudflare Pages y Netlify (GitHub Pages las ignora).
   writeFileSync(join(outDir, '_headers'), `/*
   Content-Security-Policy: ${STATIC_CSP}; frame-ancestors 'none'
   X-Content-Type-Options: nosniff

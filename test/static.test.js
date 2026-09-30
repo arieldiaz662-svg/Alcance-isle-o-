@@ -33,28 +33,32 @@ before(() => {
 after(() => rmSync(outDir, { recursive: true, force: true }));
 
 describe('construcción y publicación', () => {
-  test('vercel.json publica dist/ con las mismas cabeceras de seguridad que el HTML', () => {
-    const vercel = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
-    assert.equal(vercel.buildCommand, 'npm run build');
-    assert.equal(vercel.outputDirectory, 'dist');
-    const headers = Object.fromEntries(vercel.headers.find((h) => h.source === '/(.*)').headers.map((h) => [h.key, h.value]));
-    assert.equal(headers['Content-Security-Policy'], `${STATIC_CSP}; frame-ancestors 'none'`);
-    assert.equal(headers['X-Content-Type-Options'], 'nosniff');
+  test('_headers da a Cloudflare Pages la misma CSP que el HTML y las cabeceras de seguridad', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'alcance-headers-'));
+    try {
+      buildStatic({ outDir: dir, publicBaseUrl: '' });
+      const headers = readFileSync(join(dir, '_headers'), 'utf8');
+      assert.ok(headers.includes(`Content-Security-Policy: ${STATIC_CSP}; frame-ancestors 'none'`));
+      assert.match(headers, /X-Content-Type-Options: nosniff/);
+      assert.match(headers, /\/assets\/\*\n\s+Cache-Control:/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
-  test('en Vercel, sin PUBLIC_BASE_URL, canonical y og:image usan el dominio de producción', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'alcance-vercel-'));
-    const saved = { base: process.env.PUBLIC_BASE_URL, host: process.env.VERCEL_PROJECT_PRODUCTION_URL };
+  test('en Cloudflare Pages, sin PUBLIC_BASE_URL, canonical y og:image usan el dominio del proyecto', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'alcance-cf-'));
+    const saved = { base: process.env.PUBLIC_BASE_URL, host: process.env.CF_PAGES_URL };
     try {
       delete process.env.PUBLIC_BASE_URL;
-      process.env.VERCEL_PROJECT_PRODUCTION_URL = 'alcance-isleno.vercel.app';
+      process.env.CF_PAGES_URL = 'https://3f2a9c1b.alcance-isleno.pages.dev';
       buildStatic({ outDir: dir });
       const html = readFileSync(join(dir, 'index.html'), 'utf8');
-      assert.match(html, /<link rel="canonical" href="https:\/\/alcance-isleno\.vercel\.app\/"/);
-      assert.match(html, /og:image" content="https:\/\/alcance-isleno\.vercel\.app\/assets\//);
+      assert.match(html, /<link rel="canonical" href="https:\/\/alcance-isleno\.pages\.dev\/"/);
+      assert.match(html, /og:image" content="https:\/\/alcance-isleno\.pages\.dev\/assets\//);
       assert.ok(existsSync(join(dir, 'sitemap.xml')));
     } finally {
-      for (const [key, value] of [['PUBLIC_BASE_URL', saved.base], ['VERCEL_PROJECT_PRODUCTION_URL', saved.host]]) {
+      for (const [key, value] of [['PUBLIC_BASE_URL', saved.base], ['CF_PAGES_URL', saved.host]]) {
         if (value === undefined) delete process.env[key]; else process.env[key] = value;
       }
       rmSync(dir, { recursive: true, force: true });
