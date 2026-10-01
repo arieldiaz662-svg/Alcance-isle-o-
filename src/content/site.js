@@ -15,7 +15,7 @@ export const site = {
   // Contacto. Las variables de entorno WHATSAPP_NUMBER y CONTACT_EMAIL, si existen, tienen prioridad.
   whatsappNumber: '34623243294', // con prefijo de país, solo dígitos
   phoneDisplay: '+34 623 24 32 94',
-  email: '', // p. ej. 'hola@alcanceisleno.es' cuando tengáis dominio propio
+  email: 'info@alcanceisleno.com',
   whatsappGreeting: 'Hola, quiero información sobre Alcance Isleño',
 
   // Datos de negocio local para Google (datos estructurados de la portada). Deben coincidir con la
