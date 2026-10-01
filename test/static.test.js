@@ -12,7 +12,8 @@ import QRCode from 'qrcode';
 import { buildStatic } from '../scripts/build-static.js';
 import { site } from '../src/content/site.js';
 import { STATIC_CSP } from '../src/views/html.js';
-import { QR_SOLAPE, qrSvg } from '../src/views/landing.js';
+import { QR_SOLAPE, priceList, qrSvg } from '../src/views/landing.js';
+import { parsePrice } from '../src/views/schema.js';
 import worker from '../worker/index.js';
 import { DOMINIO, redireccion, sinExtension } from '../worker/redireccion.js';
 
@@ -282,5 +283,52 @@ describe('textos legales', () => {
     assert.doesNotMatch(index, /name="consent"|name="phone"|\/api\//);
     assert.match(read('privacidad.html'), /no guarda ningún dato/);
     assert.doesNotMatch(read('privacidad.html'), /Tarjetas NFC/);
+  });
+});
+
+describe('datos estructurados para Google', () => {
+  const leer = (file) => {
+    const match = /<script type="application\/ld\+json">\n([\s\S]*?)\n<\/script>/.exec(readFileSync(join(outDir, file), 'utf8'));
+    return match && JSON.parse(match[1]);
+  };
+
+  test('la portada describe el negocio local: nombre, web, teléfono, zona y horario', () => {
+    const [negocio, web] = leer('index.html')['@graph'];
+    assert.equal(negocio['@type'], 'ProfessionalService');
+    assert.equal(negocio.name, site.name);
+    assert.equal(negocio.url, `${BASE}/`);
+    assert.equal(negocio.telephone, `+${site.whatsappNumber}`);
+    assert.equal(negocio.areaServed.name, site.region);
+    assert.deepEqual(negocio.openingHoursSpecification[0].dayOfWeek, site.business.hours.days);
+    assert.equal(negocio.openingHoursSpecification[0].opens, site.business.hours.opens);
+    assert.equal(negocio.openingHoursSpecification[0].closes, site.business.hours.closes);
+    assert.equal(web['@type'], 'WebSite');
+    assert.equal(web.publisher['@id'], negocio['@id']);
+  });
+
+  test('los servicios y precios son los mismos que se ven en la web, sin IGIC', () => {
+    const [negocio] = leer('index.html')['@graph'];
+    const ofertas = negocio.hasOfferCatalog.itemListElement.flatMap((g) => g.itemListElement);
+    const filas = [{ label: site.pack.name, price: site.pack.price }, ...priceList(site).flatMap((g) => g.rows)];
+    assert.deepEqual(ofertas.map((o) => o.itemOffered.name), filas.map((f) => f.label));
+    assert.deepEqual(ofertas.map((o) => o.priceSpecification), filas.map((f) => parsePrice(f.price)));
+    assert.ok(ofertas.every((o) => o.priceSpecification.valueAddedTaxIncluded === false));
+  });
+
+  test('interpreta los formatos de precio de site.js y rechaza los desconocidos', () => {
+    assert.equal(parsePrice('desde 200 €').minPrice, 200);
+    assert.deepEqual([parsePrice('50 € / 10 uds.').price, parsePrice('50 € / 10 uds.').unitText], [50, '10 uds.']);
+    assert.throws(() => parsePrice('consultar'), /Precio no reconocido/);
+  });
+
+  test('solo en la portada y solo si se conoce la dirección pública', () => {
+    for (const file of ['privacidad.html', 'cookies.html', '404.html']) assert.equal(leer(file), null, file);
+    const dir = mkdtempSync(join(tmpdir(), 'alcance-sin-url-'));
+    try {
+      buildStatic({ outDir: dir, publicBaseUrl: '' });
+      assert.doesNotMatch(readFileSync(join(dir, 'index.html'), 'utf8'), /ld\+json/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

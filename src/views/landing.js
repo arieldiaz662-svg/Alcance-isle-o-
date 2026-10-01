@@ -1,6 +1,7 @@
 import QRCode from 'qrcode';
 
 import { contact, esc, layout, links, whatsappUrl } from './html.js';
+import { structuredData } from './schema.js';
 
 // Código QR real en SVG, generado al construir la página (sin JavaScript en el navegador).
 // Nivel de corrección M: aguanta bien la rotación y el brillo de una pantalla.
@@ -23,6 +24,24 @@ export function qrSvg(text) {
     }
   }
   return `<svg class="qr" viewBox="-1 -1 ${size + 2} ${size + 2}" aria-hidden="true"><path d="${path}"/></svg>`;
+}
+
+// Lista de precios por grupos (sin el pack principal, que se muestra destacado). La usan la sección de
+// precios y los datos estructurados para Google, así que siempre coinciden.
+export function priceList(site) {
+  const { extras, sectors } = site;
+  return [
+    { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
+    ...(extras ? [{ title: 'Material para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
+    // Packs propios de cada tipo de negocio (el de hostelería ya aparece destacado arriba).
+    ...(sectors || []).filter((sector) => sector.pack !== 'main').map((sector) => ({
+      title: sector.title,
+      rows: [
+        { label: `${sector.pack.name} (${sector.pack.label.charAt(0).toLowerCase()}${sector.pack.label.slice(1)}${sector.hostingNote ? '; hosting aparte' : ''})`, price: sector.pack.price },
+        ...(sector.option ? [{ label: `${sector.option.name} (opcional)`, price: sector.option.price }] : []),
+      ],
+    })),
+  ];
 }
 
 export function renderLanding({ site, config }) {
@@ -246,18 +265,7 @@ export function renderLanding({ site, config }) {
   // ---------- Precios: como la carta de una cafetería ----------
   const priceRow = (label, price) => `
           <li><span>${esc(label)}</span><span class="guia" aria-hidden="true"></span><span class="importe">${esc(price)}</span></li>`;
-  const priceGroups = [
-    { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
-    ...(extras ? [{ title: 'Material para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
-    // Packs propios de cada tipo de negocio (el de hostelería ya aparece destacado arriba).
-    ...(sectors || []).filter((sector) => sector.pack !== 'main').map((sector) => ({
-      title: sector.title,
-      rows: [
-        { label: `${sector.pack.name} (${sector.pack.label.charAt(0).toLowerCase()}${sector.pack.label.slice(1)}${sector.hostingNote ? '; hosting aparte' : ''})`, price: sector.pack.price },
-        ...(sector.option ? [{ label: `${sector.option.name} (opcional)`, price: sector.option.price }] : []),
-      ],
-    })),
-  ];
+  const priceGroups = priceList(site);
   const pricesSection = `
 <section class="precios" id="precios">
   <div class="wrap">
@@ -327,7 +335,7 @@ ${teamSection}
 
   return layout({
     site, config, title: site.title, description: site.description, path: '/', nav, body,
-    scripts: ['js/site.js'],
+    scripts: ['js/site.js'], head: structuredData({ site, config, priceGroups }),
   });
 }
 

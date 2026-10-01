@@ -18,6 +18,14 @@ export const site = {
   email: '', // p. ej. 'hola@alcanceisleno.es' cuando tengáis dominio propio
   whatsappGreeting: 'Hola, quiero información sobre Alcance Isleño',
 
+  // Datos de negocio local para Google (datos estructurados de la portada). Deben coincidir con la
+  // ficha de Google Business: zona de servicio (site.region), horario y enlace a la ficha.
+  business: {
+    address: { region: 'Canarias', country: 'ES' }, // sin calle: trabajamos en toda la isla, sin local
+    hours: { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:00', closes: '18:00' },
+    googleBusinessUrl: '', // enlace a la ficha en Google Maps, cuando esté verificada
+  },
+
   // PORTADA
   hero: {
     title: 'Tu escaparate digital',

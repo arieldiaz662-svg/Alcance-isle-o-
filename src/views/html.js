@@ -45,8 +45,8 @@ export function links(config) {
 }
 
 // baseHref: para páginas que se sirven desde cualquier ruta (la página 404), fija la base de los
-// enlaces relativos en la raíz de la web.
-export function layout({ site, config, title, description, path = '/', nav = [], body, scripts = [], baseHref = '' }) {
+// enlaces relativos en la raíz de la web. head: HTML extra para <head> (p. ej. datos estructurados).
+export function layout({ site, config, title, description, path = '/', nav = [], body, scripts = [], baseHref = '', head = '' }) {
   const to = links(config);
   // og:image necesita URL absoluta: solo se añade cuando se conoce la dirección pública.
   const ogImage = config.publicBaseUrl && site.ogImage ? `${config.publicBaseUrl}/assets/${site.ogImage}` : '';
@@ -80,7 +80,7 @@ ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">
 <link rel="icon" href="${to.asset('img/favicon.svg')}" type="image/svg+xml">
 <link rel="preload" href="${to.asset('fonts/familjen-grotesk.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${to.asset('css/site.css')}">
-</head>
+${head}</head>
 <body>
 
 <header class="nav">
