@@ -154,7 +154,7 @@ describe('coherencia del contenido', () => {
     // Pack completo hostelería = ficha + landing + primer año del plan de mantenimiento (pago anual) + tarjeta de reseñas.
     const planAnual = amount(service('hosting').prices[1].price);
     const suelto = amount(service('gbp').price) + amount(service('landing').price) + planAnual + amount(extra('nfc').price);
-    assert.ok(amount(site.pack.price) < suelto, 'el pack debe ser más barato que los servicios sueltos');
+    assert.equal(suelto - amount(site.pack.price), 25, 'el pack de hostelería ahorra 25 € frente a los servicios sueltos');
     // Pack negocios con cita previa = landing + tarjeta de reseñas + primer año del plan, más barato que por separado.
     const cita = site.sectors.find((s) => s.id === 'cita-previa');
     assert.ok(amount(cita.pack.price) < amount(service('landing').price) + amount(extra('nfc').price) + planAnual);
@@ -289,7 +289,7 @@ describe('precios', () => {
       for (const row of s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) assert.match(precios, priceRow(row.label, row.price));
     }
     for (const item of site.extras.items) assert.match(precios, priceRow(item.name, item.price));
-    assert.match(precios, /class="pack"[\s\S]*?<p class="pack-precio"><strong>525 €<\/strong>/);
+    assert.match(precios, /class="pack"[\s\S]*?<p class="pack-precio"><strong>520 €<\/strong>/);
     assert.doesNotMatch(index, /<s>|ahorr|antes \d/i, 'sin precio tachado ni ahorro');
     assert.match(precios, /Pack negocios con cita previa \(web, tarjeta de reseñas QR \+ NFC y primer año de mantenimiento\)/);
     assert.match(precios, /Precios sin IGIC/);

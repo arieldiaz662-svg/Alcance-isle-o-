@@ -238,7 +238,7 @@ export const site = {
   // comprueba que el pack sigue siendo más barato que sus servicios sueltos. Pon "pack: null" para ocultarlo.
   pack: {
     name: 'Pack completo para hostelería',
-    price: '525 €',
+    price: '520 €',
   },
   pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
 
