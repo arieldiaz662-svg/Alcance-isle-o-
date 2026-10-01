@@ -411,7 +411,6 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
 .pack-total h4 { margin: 0; font-size: var(--t-l); }
 .pack-total .local-precio { grid-row: 1; font-size: var(--t-xl); color: var(--atlantico); }
 .pack-total s { font-size: var(--t-m); color: var(--gris); font-weight: 500; margin-right: .3rem; }
-.pack-hosting h4 { color: var(--gris); }
 .pack-opcion {
   display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
   margin: -1rem 0 2rem; padding: 1rem; background: var(--niebla); border-radius: 6px;

@@ -37,7 +37,7 @@ export function priceList(site) {
     ...(sectors || []).filter((sector) => sector.pack !== 'main').map((sector) => ({
       title: sector.title,
       rows: [
-        { label: `${sector.pack.name} (${sector.pack.label.charAt(0).toLowerCase()}${sector.pack.label.slice(1)}${sector.hostingNote ? '; hosting aparte' : ''})`, price: sector.pack.price },
+        { label: `${sector.pack.name} (${sector.pack.label.charAt(0).toLowerCase()}${sector.pack.label.slice(1)})`, price: sector.pack.price },
         ...(sector.option ? [{ label: `${sector.option.name} (opcional)`, price: sector.option.price }] : []),
       ],
     })),
@@ -63,8 +63,9 @@ export function renderLanding({ site, config }) {
   const serviceById = Object.fromEntries(allServices.map((service) => [service.id, service]));
   const priceOf = (service) => service.price || (service.prices && service.prices[0].price) || '';
 
-  // Tarifa anual de hosting (primera fila de precios del servicio "hosting").
-  const hostingRow = serviceById.hosting && serviceById.hosting.prices ? serviceById.hosting.prices[0] : null;
+  // Precios del plan de mantenimiento (filas mensual y anual del servicio "hosting"): "12 € al mes o 120 € al año".
+  const planRows = serviceById.hosting && serviceById.hosting.prices ? serviceById.hosting.prices.slice(0, 2) : [];
+  const planText = planRows.map((row) => row.price.replace(' / mes', ' al mes').replace(' / año', ' al año')).join(' o ');
   // Lo que incluye el pack completo se describe a partir de la pestaña que lo usa (sin repetir textos).
   const mainSector = (sectors || []).find((sector) => sector.pack === 'main');
   const packText = mainSector
@@ -134,7 +135,7 @@ export function renderLanding({ site, config }) {
       </li>`;
     }).join('')}
     </ol>
-    <p class="recorrido-nota">${esc(journey.note.replace('{hosting}', hostingRow ? hostingRow.price.replace(' / año', ' al año') : ''))}</p>
+    <p class="recorrido-nota">${esc(journey.note.replace('{plan}', planText))}</p>
   </div>
 </section>`;
 
@@ -184,12 +185,7 @@ export function renderLanding({ site, config }) {
           <li class="pack-total">
             <h4>${esc(sectorPack.label || sectorPack.name)}</h4>
             <span class="local-precio">${sectorPack.was ? `<s>${esc(sectorPack.was)}</s> ` : ''}${esc(sectorPack.price)}</span>
-          </li>${sector.hostingNote && hostingRow ? `
-          <li class="pack-hosting">
-            <h4>${esc(hostingRow.label)}</h4>
-            <p>${esc(sector.hostingNote)}</p>
-            <span class="local-precio">${esc(hostingRow.price)}</span>
-          </li>` : ''}
+          </li>
         </ul>${sector.option && sector.option.items ? `
         <div class="pack-opcion pack-opcion-lista">
           ${img ? `<figure class="opcion-foto">

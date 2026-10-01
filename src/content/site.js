@@ -93,7 +93,7 @@ export const site = {
       includes: [
         { name: 'Landing page con carta digital', text: 'Tu carta con precios, horario, ubicación y contacto por WhatsApp. Se abre desde el QR de la mesa, sin descargar nada.' },
         { name: 'Ficha de Google Business', text: 'La creamos o optimizamos: horarios, fotos, enlace a tu carta y acceso directo a tus reseñas.' },
-        { name: 'Hosting y dominio el primer año', text: 'Tu web online desde el primer día.' },
+        { name: 'Plan de mantenimiento el primer año', text: 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).' },
         { name: 'Tarjeta de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.', badge: 'De regalo' },
       ],
       pack: 'main',
@@ -128,10 +128,9 @@ export const site = {
       includes: [
         { name: 'Landing page con tus servicios', text: 'Servicios y precios, fotos de tus trabajos, horarios, ubicación y un botón para pedir cita por WhatsApp.' },
         { name: 'Tarjeta de reseñas QR + NFC', text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.' },
+        { name: 'Plan de mantenimiento el primer año', text: 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).' },
       ],
-      pack: { name: 'Pack negocios con cita previa', label: 'Web + tarjeta de reseñas QR + NFC', price: '225 €' },
-      // El pack no incluye el hosting: se muestra aparte con la tarifa anual de "Hosting y dominio".
-      hostingNote: 'El hosting y dominio de tu web se paga aparte, cada año.',
+      pack: { name: 'Pack negocios con cita previa', label: 'Web, tarjeta de reseñas QR + NFC y primer año de mantenimiento', price: '225 €' },
       option: {
         name: 'Tarjetas de visita personalizadas',
         text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas QR + NFC.',
@@ -164,8 +163,8 @@ export const site = {
       { moment: 'Mira tu carta o tus servicios', service: 'landing' },
       { moment: 'Te deja una reseña', service: 'nfc' },
     ],
-    // {hosting} se sustituye por el precio de "Hosting y dominio (12 meses)".
-    note: 'Y para que todo siga funcionando, alojamos tu web con tu dominio por {hosting}. Los cambios (carta, servicios o precios) solo los pagas cuando los necesitas.',
+    // {plan} se sustituye por los precios del plan de mantenimiento ("12 € al mes o 120 € al año").
+    note: 'Y para que todo siga al día, nuestro plan de mantenimiento incluye hosting, dominio y hasta 2 cambios al mes (carta, servicios, precios, horarios o fotos) por {plan}. El primer año va incluido en los packs.',
   },
 
   // POR QUÉ ELEGIRNOS
@@ -210,11 +209,13 @@ export const site = {
     },
     {
       id: 'hosting',
-      name: 'Hosting y mantenimiento',
-      // Varias filas de precio para un mismo servicio.
+      name: 'Plan de mantenimiento',
+      // Varias filas de precio para un mismo servicio. Las dos primeras son el plan (mensual y anual):
+      // la anual cuenta en el valor de los packs, que incluyen el primer año.
       prices: [
-        { label: 'Hosting y dominio (12 meses)', price: '90 € / año' },
-        { label: 'Cambio puntual de contenido (precios, horarios, fotos, un plato…)', price: '15 € / cambio' },
+        { label: 'Plan de mantenimiento: hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos)', price: '12 € / mes' },
+        { label: 'Plan de mantenimiento, pago anual', price: '120 € / año' },
+        { label: 'Cambio puntual de contenido sin plan, o a partir del 3.º cambio del mes', price: '15 € / cambio' },
         { label: 'Actualización completa de la carta', price: '40 €' },
       ],
     },
@@ -226,7 +227,7 @@ export const site = {
   pack: {
     name: 'Pack completo para hostelería',
     price: '390 €',
-    was: '415 €',
+    was: '445 €',
   },
   pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
 
