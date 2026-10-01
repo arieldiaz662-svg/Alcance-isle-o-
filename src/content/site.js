@@ -142,7 +142,7 @@ export const site = {
         { name: 'Tarjeta de reseñas QR + NFC', text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.' },
         { name: 'Plan de mantenimiento el primer año', text: 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).' },
       ],
-      pack: { name: 'Pack negocios con cita previa', label: 'Web, tarjeta de reseñas QR + NFC y primer año de mantenimiento', price: '250 €' },
+      pack: { name: 'Pack negocios con cita previa', label: 'Web, tarjeta de reseñas QR + NFC y primer año de mantenimiento', price: '350 €' },
       option: {
         name: 'Tarjetas de visita personalizadas',
         text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas QR + NFC.',
@@ -210,7 +210,7 @@ export const site = {
       name: 'Landing page',
       priceLabel: 'Landing page con carta digital o servicios',
       text: 'Una página rápida y adaptada a móvil con tu carta o tus servicios y precios, tu ubicación y un botón de WhatsApp para reservar mesa o pedir cita.',
-      price: '200 €',
+      price: '300 €',
     },
     {
       id: 'gbp',
@@ -238,7 +238,7 @@ export const site = {
   // comprueba que el pack sigue siendo más barato que sus servicios sueltos. Pon "pack: null" para ocultarlo.
   pack: {
     name: 'Pack completo para hostelería',
-    price: '425 €',
+    price: '525 €',
   },
   pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
 

@@ -1,4 +1,4 @@
-import { contact, esc, layout } from './html.js';
+import { contact, esc, escPhone, layout } from './html.js';
 
 // PLANTILLAS ORIENTATIVAS. Deben revisarse con un profesional antes de publicar la web.
 
@@ -6,7 +6,7 @@ import { contact, esc, layout } from './html.js';
 function contactLine(site, config) {
   const { email, phoneDisplay, whatsapp } = contact(site, config);
   if (email) return `<a href="mailto:${esc(email)}">${esc(email)}</a>`;
-  if (phoneDisplay) return `<a href="tel:+${esc(whatsapp)}">${esc(phoneDisplay)}</a> (teléfono y WhatsApp)`;
+  if (phoneDisplay) return `<a href="tel:+${esc(whatsapp)}">${escPhone(phoneDisplay)}</a> (teléfono y WhatsApp)`;
   return '[EMAIL DE CONTACTO]';
 }
 

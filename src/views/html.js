@@ -4,6 +4,11 @@ export function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, (char) => ESCAPES[char]);
 }
 
+// Teléfono para mostrar: espacios de no separación para que el número no se parta entre dos líneas.
+export function escPhone(phone) {
+  return esc(phone).replace(/ /g, '&nbsp;');
+}
+
 export function whatsappUrl(number, text) {
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
 }

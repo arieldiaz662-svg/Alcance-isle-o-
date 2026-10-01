@@ -113,7 +113,7 @@ describe('construcción y publicación', () => {
     assert.doesNotMatch(index, /fonts\.googleapis|fonts\.gstatic/);
     assert.match(index, new RegExp(`<link rel="canonical" href="${escapeRe(BASE)}/">`));
     assert.match(read('sitemap.xml'), new RegExp(`${escapeRe(BASE)}/privacidad\\.html`));
-    assert.match(read('404.html'), new RegExp(`<base href="${escapeRe(BASE)}/">`), 'la 404 carga estilos en cualquier ruta');
+    assert.match(read("404.html"), /<base href="\/">/, "la 404 carga estilos en cualquier ruta y dominio");
   });
 
   test('seguridad y caché: CSP en <meta>, versión en CSS/JS', () => {
@@ -200,7 +200,12 @@ describe('coherencia del contenido', () => {
 
   test('no se publica ningún plazo de entrega ni datos de ejemplo antiguos', () => {
     assert.doesNotMatch(index, /10 días|dos semanas|laborables/);
-    assert.doesNotMatch(index, /Marisol|mesa digital|300 €/i);
+    assert.doesNotMatch(index, /Marisol|mesa digital/i);
+    // La ficha de Google cuesta 100 € (la maqueta original decía 300 €); 300 € es solo la landing.
+    assert.equal(service('gbp').price, '100 €');
+    for (const [, label] of precios.matchAll(/<li><span>([^<]*)<\/span><span class="guia" aria-hidden="true"><\/span><span class="importe">300 €</g)) {
+      assert.equal(label, service('landing').priceLabel);
+    }
   });
 });
 
@@ -234,7 +239,7 @@ describe('portada', () => {
     assert.match(index, new RegExp(`<p class="lead">${escapeRe(site.hero.lead)}`));
     assert.match(index, new RegExp(escapeRe(site.hero.cta)));
     assert.match(index, /wa\.me\/34623243294/);
-    assert.match(index, /\+34 623 24 32 94/);
+    assert.match(index, />\+34&nbsp;623&nbsp;24&nbsp;32&nbsp;94</, "el teléfono no se parte entre líneas");
   });
 
   test('carta de demostración con pestañas y QR real que abre WhatsApp', () => {
@@ -284,7 +289,7 @@ describe('precios', () => {
       for (const row of s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) assert.match(precios, priceRow(row.label, row.price));
     }
     for (const item of site.extras.items) assert.match(precios, priceRow(item.name, item.price));
-    assert.match(precios, /class="pack"[\s\S]*?<p class="pack-precio"><strong>425 €<\/strong>/);
+    assert.match(precios, /class="pack"[\s\S]*?<p class="pack-precio"><strong>525 €<\/strong>/);
     assert.doesNotMatch(index, /<s>|ahorr|antes \d/i, 'sin precio tachado ni ahorro');
     assert.match(precios, /Pack negocios con cita previa \(web, tarjeta de reseñas QR \+ NFC y primer año de mantenimiento\)/);
     assert.match(precios, /Precios sin IGIC/);

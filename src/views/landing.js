@@ -1,6 +1,6 @@
 import QRCode from 'qrcode';
 
-import { contact, esc, layout, links, whatsappUrl } from './html.js';
+import { contact, esc, escPhone, layout, links, whatsappUrl } from './html.js';
 import { structuredData } from './schema.js';
 
 // Código QR real en SVG, generado al construir la página (sin JavaScript en el navegador).
@@ -86,9 +86,9 @@ export function renderLanding({ site, config }) {
   const menuTabs = demoMenu.sections.map((section, i) => `
             <button type="button" role="tab" id="carta-tab-${i}" aria-controls="carta-panel-${i}" aria-selected="${i === 0}"${i === 0 ? '' : ' tabindex="-1"'}>${esc(section.name)}</button>`).join('');
   const menuPanels = demoMenu.sections.map((section, i) => `
-          <ul class="carta-lista" role="tabpanel" id="carta-panel-${i}" aria-labelledby="carta-tab-${i}"${i === 0 ? '' : ' hidden'}>${section.items.map(([name, price]) => `
+          <div class="carta-panel" role="tabpanel" id="carta-panel-${i}" aria-labelledby="carta-tab-${i}"${i === 0 ? '' : ' hidden'}><ul class="carta-lista">${section.items.map(([name, price]) => `
             <li><span>${esc(name)}</span><span class="guia" aria-hidden="true"></span><span>${esc(price)}</span></li>`).join('')}
-          </ul>`).join('');
+          </ul></div>`).join('');
 
   const heroSection = `
 <div class="mesa" id="inicio">
@@ -337,7 +337,7 @@ ${teamSection}
       <p>Cuéntanos qué necesitas y te respondemos en menos de 24 horas.</p>
       <p><a class="btn btn-sol" href="${esc(wa)}" rel="noopener" target="_blank">Escribir por WhatsApp</a></p>
       <p class="contacto-datos">Trabajamos en ${esc(site.region)}.${phoneDisplay ? `<br>
-      Teléfono: <a href="tel:+${esc(whatsapp)}">${esc(phoneDisplay)}</a>` : ''}${email ? `<br>
+      Teléfono: <a href="tel:+${esc(whatsapp)}">${escPhone(phoneDisplay)}</a>` : ''}${email ? `<br>
       Email: <a href="mailto:${esc(email)}">${esc(email)}</a>` : ''}</p>
     </div>
 

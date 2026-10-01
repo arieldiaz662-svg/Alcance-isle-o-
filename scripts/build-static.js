@@ -39,12 +39,12 @@ export function buildStatic({
     ...(hasLegalNotice(site) ? { 'aviso-legal.html': renderLegalNotice({ site, config }) } : {}),
     'privacidad.html': renderPrivacy({ site, config }),
     'cookies.html': renderCookies({ site, config }),
-    // Cloudflare sirve 404.html en cualquier ruta inexistente: <base> hace que estilos y enlaces funcionen
-    // también en rutas con subcarpetas.
+    // Cloudflare sirve 404.html en cualquier ruta inexistente: <base href="/"> hace que estilos y enlaces
+    // funcionen también en rutas con subcarpetas, en cualquier dominio (producción, vistas previas o local).
     '404.html': messagePage({
       site, config, title: 'Página no encontrada', heading: 'Esta página no existe',
       text: 'Puede que el enlace esté mal escrito o que la página se haya movido.',
-      baseHref: config.publicBaseUrl ? `${config.publicBaseUrl}/` : '',
+      baseHref: '/',
     }),
   };
   for (const [file, html] of Object.entries(pages)) writeFileSync(join(outDir, file), html);
