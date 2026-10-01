@@ -46,6 +46,8 @@
   }
 
   Array.prototype.forEach.call(document.querySelectorAll('[role="tablist"]'), initTabs);
+  // A partir de aquí, cambiar de pestaña lleva un fundido corto (ver .tabs-listas en site.css).
+  requestAnimationFrame(function () { document.documentElement.classList.add('tabs-listas'); });
 })();
 
 // Formulario de contacto: compone el mensaje y abre WhatsApp (la web no guarda ningún dato).

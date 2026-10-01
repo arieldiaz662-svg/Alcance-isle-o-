@@ -211,6 +211,17 @@ describe('coherencia del contenido', () => {
 });
 
 describe('portada', () => {
+  test('se siente nativa en el móvil: hover solo con ratón, sin destello al tocar y respuesta al pulsar', () => {
+    const css = readFileSync(new URL('../public/css/site.css', import.meta.url), 'utf8');
+    const bloqueHover = css.match(/@media \(hover: hover\) and \(pointer: fine\) \{([^}]*\}\s*)*?\}/)[0];
+    const hoversFuera = css.replace(bloqueHover, '').split('\n').filter((l) => l.includes(':hover'));
+    assert.deepEqual(hoversFuera, [], 'todos los :hover dentro de @media (hover: hover) and (pointer: fine)');
+    assert.match(css, /-webkit-tap-highlight-color: transparent/);
+    assert.match(css, /\.btn:active[^{]*\{ transform: scale\(0\.97\); \}/);
+    assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*transform: none/);
+    assert.match(index, /<meta name="theme-color" content="#FFFFFF">/, 'la barra del móvil del color de la cabecera');
+  });
+
   test('la carta del móvil oculta las filas que no caben en vez de mostrarlas cortadas', () => {
     const css = readFileSync(new URL('../public/css/site.css', import.meta.url), 'utf8');
     const regla = css.match(/\.carta-lista \{[^}]*\}/)[0];

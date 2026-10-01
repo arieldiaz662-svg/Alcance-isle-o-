@@ -81,7 +81,7 @@ ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">
 <meta property="og:image:alt" content="${esc(site.ogImageAlt || title)}">
 <meta name="twitter:card" content="summary_large_image">
 ` : ''}
-<meta name="theme-color" content="#0E2A47">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="${to.asset('img/favicon.svg')}" type="image/svg+xml">
 <link rel="preload" href="${to.asset('fonts/familjen-grotesk.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${to.asset('css/site.css')}">
