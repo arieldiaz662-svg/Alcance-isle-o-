@@ -7,9 +7,12 @@ import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import { after, before, describe, test } from 'node:test';
 
+import QRCode from 'qrcode';
+
 import { buildStatic } from '../scripts/build-static.js';
 import { site } from '../src/content/site.js';
 import { STATIC_CSP } from '../src/views/html.js';
+import { QR_SOLAPE, qrSvg } from '../src/views/landing.js';
 import worker from '../worker/index.js';
 import { DOMINIO, redireccion, sinExtension } from '../worker/redireccion.js';
 
@@ -190,6 +193,15 @@ describe('coherencia del contenido', () => {
 });
 
 describe('portada', () => {
+  test('el QR se dibuja suavizado, por tramos y solapado, para que no salga escalonado en el móvil', () => {
+    const svg = qrSvg('https://wa.me/34623243294');
+    assert.doesNotMatch(svg, /crispEdges/);
+    const tramos = svg.match(/M/g).length;
+    const modulos = QRCode.create('https://wa.me/34623243294', { errorCorrectionLevel: 'M' }).modules.data.filter(Boolean).length;
+    assert.ok(tramos < modulos, 'los módulos seguidos de una fila forman un solo rectángulo');
+    assert.match(svg, new RegExp(`M${-QR_SOLAPE} ${-QR_SOLAPE}h`), 'cada tramo se solapa un poco con sus vecinos');
+  });
+
   test('eslogan, texto y llamada principal', () => {
     assert.match(index, new RegExp(`<h1>${escapeRe(site.hero.title)}</h1>`));
     assert.match(index, new RegExp(`<p class="lead">${escapeRe(site.hero.lead)}`));

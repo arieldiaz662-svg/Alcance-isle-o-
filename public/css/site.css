@@ -216,11 +216,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .barraquito { right: 2%; transform: scale(.8); transform-origin: top right; }
 }
 @media (max-width: 420px) {
-  .bodegon { min-height: 540px; }
+  .bodegon { min-height: 660px; }
   .carta { font-size: .84rem; padding: 1.2rem .8rem .8rem; }
   .carta-lista li { padding: .45rem 0; }
-  .movil { width: 236px; transform: translate(-58%, -50%) rotate(-3deg); }
-  .expositor { width: 96px; left: -6px; bottom: -3%; padding: .6rem .6rem .5rem; }
+  .movil { width: 236px; top: 41%; transform: translate(-52%, -50%) rotate(-3deg); }
+  /* QR de al menos ~110 px: con módulos de ~3 px se escanea bien desde otro móvil. Queda dentro de la
+     figura (bottom positivo) para no tapar el pie de foto. */
+  .expositor { width: 128px; left: -4px; bottom: 1.5%; padding: .55rem .55rem .45rem; transform: rotate(3deg); }
+  .expositor span { margin-top: .3rem; font-size: .85rem; }
   .barraquito { top: 1%; right: 2%; transform: scale(.62); }
 }
 

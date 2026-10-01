@@ -4,16 +4,25 @@ import { contact, esc, layout, links, whatsappUrl } from './html.js';
 
 // Código QR real en SVG, generado al construir la página (sin JavaScript en el navegador).
 // Nivel de corrección M: aguanta bien la rotación y el brillo de una pantalla.
-function qrSvg(text) {
+// Cada tramo de módulos seguidos de una fila es un solo rectángulo, un poco solapado con sus vecinos
+// (QR_SOLAPE): así, aunque el expositor esté girado y cada módulo mida 2-3 px, el navegador lo dibuja
+// suavizado, con módulos iguales y sin rayas claras entre filas. Con shape-rendering="crispEdges" cada
+// módulo se redondeaba a píxeles enteros por separado y el QR salía escalonado en el móvil.
+export const QR_SOLAPE = 0.04;
+export function qrSvg(text) {
   const { modules } = QRCode.create(text, { errorCorrectionLevel: 'M' });
   const { size, data } = modules;
   let path = '';
   for (let y = 0; y < size; y += 1) {
     for (let x = 0; x < size; x += 1) {
-      if (data[y * size + x]) path += `M${x} ${y}h1v1h-1z`;
+      if (!data[y * size + x]) continue;
+      let run = 1;
+      while (x + run < size && data[y * size + x + run]) run += 1;
+      path += `M${x - QR_SOLAPE} ${y - QR_SOLAPE}h${run + 2 * QR_SOLAPE}v${1 + 2 * QR_SOLAPE}h${-(run + 2 * QR_SOLAPE)}z`;
+      x += run - 1;
     }
   }
-  return `<svg class="qr" viewBox="-1 -1 ${size + 2} ${size + 2}" shape-rendering="crispEdges" aria-hidden="true"><path d="${path}"/></svg>`;
+  return `<svg class="qr" viewBox="-1 -1 ${size + 2} ${size + 2}" aria-hidden="true"><path d="${path}"/></svg>`;
 }
 
 export function renderLanding({ site, config }) {
