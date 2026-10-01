@@ -193,6 +193,12 @@ describe('coherencia del contenido', () => {
 });
 
 describe('portada', () => {
+  test('la carta del móvil oculta las filas que no caben en vez de mostrarlas cortadas', () => {
+    const css = readFileSync(new URL('../public/css/site.css', import.meta.url), 'utf8');
+    const regla = css.match(/\.carta-lista \{[^}]*\}/)[0];
+    for (const decl of ['overflow: hidden', 'flex-direction: column', 'flex-wrap: wrap']) assert.ok(regla.includes(decl), decl);
+  });
+
   test('el QR se dibuja suavizado, por tramos y solapado, para que no salga escalonado en el móvil', () => {
     const svg = qrSvg('https://wa.me/34623243294');
     assert.doesNotMatch(svg, /crispEdges/);

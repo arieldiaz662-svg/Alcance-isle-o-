@@ -152,7 +152,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   font: 600 .82rem/1 var(--fuente); cursor: pointer;
 }
 .carta-tabs button[aria-selected="true"] { background: var(--tinta); color: var(--papel); }
-.carta-lista { flex: 1; min-height: 0; overflow: hidden; }
+/* Las filas que no caben enteras pasan a una segunda columna, fuera de la vista (overflow: hidden), en
+   vez de verse cortadas por la mitad al final de la pantalla del móvil. */
+.carta-lista {
+  flex: 1; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column; flex-wrap: wrap; column-gap: 2rem;
+}
+.carta-lista li { width: 100%; }
 .carta-lista li > span:last-child { white-space: nowrap; }
 .carta-lista li, .carta-precios li { display: flex; align-items: baseline; }
 .carta-lista li { padding: .55rem 0; }
@@ -212,6 +218,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .mesa-grid { grid-template-columns: 1fr; padding: 3rem 0 4.5rem; }
   .bodegon { min-height: 520px; }
   .movil { width: 250px; transform: translate(-50%, -50%) rotate(-3deg); }
+  .carta { font-size: .86rem; }
+  .carta-lista li { padding: .45rem 0; }
   .expositor { width: 124px; left: 0; }
   .barraquito { right: 2%; transform: scale(.8); transform-origin: top right; }
 }
