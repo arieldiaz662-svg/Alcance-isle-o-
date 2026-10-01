@@ -142,7 +142,7 @@ export const site = {
         { name: 'Tarjeta de reseñas QR + NFC', text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.' },
         { name: 'Plan de mantenimiento el primer año', text: 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).' },
       ],
-      pack: { name: 'Pack negocios con cita previa', label: 'Web, tarjeta de reseñas QR + NFC y primer año de mantenimiento', price: '350 €' },
+      pack: { name: 'Pack negocios con cita previa', label: 'Web, tarjeta de reseñas QR + NFC y primer año de mantenimiento', price: '420 €' },
       option: {
         name: 'Tarjetas de visita personalizadas',
         text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas QR + NFC.',

@@ -157,7 +157,8 @@ describe('coherencia del contenido', () => {
     assert.equal(suelto - amount(site.pack.price), 25, 'el pack de hostelería ahorra 25 € frente a los servicios sueltos');
     // Pack negocios con cita previa = landing + tarjeta de reseñas + primer año del plan, más barato que por separado.
     const cita = site.sectors.find((s) => s.id === 'cita-previa');
-    assert.ok(amount(cita.pack.price) < amount(service('landing').price) + amount(extra('nfc').price) + planAnual);
+    assert.equal(amount(service('landing').price) + amount(extra('nfc').price) + planAnual - amount(cita.pack.price), 25,
+      'el pack de cita previa ahorra 25 € frente a los servicios sueltos');
   });
 
   test('un solo nombre para la tarjeta de reseñas en toda la web', () => {
