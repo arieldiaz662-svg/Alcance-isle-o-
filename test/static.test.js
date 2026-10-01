@@ -247,9 +247,10 @@ describe('packs por tipo de negocio', () => {
     assert.match(index, /class="sector-tabs" role="tablist"[^>]*hidden/, 'sin JavaScript se ven los dos paneles');
   });
 
-  test('hostelería: pack completo con regalo y material para mesas', () => {
+  test('hostelería: pack completo, todo "Incluido" (sin "De regalo") y material para mesas', () => {
     const panel = between(index, 'id="hosteleria"', 'id="cita-previa"');
-    assert.match(panel, /De regalo/);
+    assert.doesNotMatch(index, /[Dd]e regalo/);
+    assert.equal((panel.match(/class="local-precio incluido">Incluido</g) || []).length, site.sectors[0].includes.length);
     assert.match(panel, new RegExp(`class="pack-total">[\\s\\S]*?<span class="local-precio">${site.pack.price}</span>`));
     for (const id of ['mesa', 'pegatinas']) {
       assert.match(panel, new RegExp(`${escapeRe(extra(id).name)}</h5>[\\s\\S]*?${escapeRe(extra(id).price)}`));

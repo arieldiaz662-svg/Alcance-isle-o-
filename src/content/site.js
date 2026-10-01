@@ -94,7 +94,7 @@ export const site = {
         { name: 'Landing page con carta digital', text: 'Tu carta con precios, horario, ubicación y contacto por WhatsApp. Se abre desde el QR de la mesa, sin descargar nada.' },
         { name: 'Ficha de Google Business', text: 'La creamos o optimizamos: horarios, fotos, enlace a tu carta y acceso directo a tus reseñas.' },
         { name: 'Plan de mantenimiento el primer año', text: 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).' },
-        { name: 'Tarjeta de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.', badge: 'De regalo' },
+        { name: 'Tarjeta de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.' },
       ],
       pack: 'main',
       // Opción: material para las mesas. "items" son ids de extras.items; se muestran con la imagen de extras.

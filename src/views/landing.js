@@ -69,8 +69,7 @@ export function renderLanding({ site, config }) {
   // Lo que incluye el pack completo se describe a partir de la pestaña que lo usa (sin repetir textos).
   const mainSector = (sectors || []).find((sector) => sector.pack === 'main');
   const packText = mainSector
-    ? `${mainSector.includes.filter((i) => !i.badge).map((i, n) => (n ? i.name.charAt(0).toLowerCase() + i.name.slice(1) : i.name)).join(' + ')}.${mainSector.includes.filter((i) => i.badge)
-      .map((i) => ` ${i.name}: ${i.badge.toLowerCase()}.`).join('')}`
+    ? `${mainSector.includes.map((i, n) => (n ? i.name.charAt(0).toLowerCase() + i.name.slice(1) : i.name)).join(' + ')}.`
     : '';
 
   // ---------- Portada: la mesa ----------
@@ -180,7 +179,7 @@ export function renderLanding({ site, config }) {
           <li>
             <h4>${esc(item.name)}</h4>
             <p>${esc(item.text)}</p>
-            <span class="local-precio incluido">${esc(item.badge || 'Incluido')}</span>
+            <span class="local-precio incluido">Incluido</span>
           </li>`).join('')}
           <li class="pack-total">
             <h4>${esc(sectorPack.label || sectorPack.name)}</h4>
