@@ -41,4 +41,4 @@ El **QR del expositor es real**: se genera al construir la web (librería `qrcod
 ## Pendiente
 
 - Sustituir la maqueta del expositor por la foto real (`public/img/productos/`) y quitar `caption` en `site.js`.
-- El logotipo (Teide marino con la cima nevada en blanco, ondas amarillas y círculo azul: los colores de la bandera de Canarias) está en `src/views/html.js` (`LOGO`) y en `docs/logo/`. El icono de la pestaña (`public/img/favicon.svg`) sigue siendo el anterior.
+- Unificar el logotipo con el de la maqueta cuando exista en SVG.
