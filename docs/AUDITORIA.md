@@ -141,7 +141,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 | Actualización completa de la carta | 40 € |
 | Expositor de mesa personalizado (3D, Tenerife) | 10 € / unidad |
 | Pegatinas QR para mesa | 50 € / 10 uds. |
-| Tarjeta de reseñas QR + NFC | 25 € |
+| Tarjeta de reseñas QR + NFC | 25 € / unidad |
 | Tarjetas de visita personalizadas (opcional, cita previa) | 50 € / 100 uds. |
 
 ### 4.3 Mensajes de WhatsApp que recibiréis (+34 623 24 32 94)

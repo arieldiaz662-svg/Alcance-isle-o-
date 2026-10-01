@@ -255,7 +255,7 @@ export const site = {
         id: 'nfc',
         name: 'Tarjeta de reseñas QR + NFC',
         text: 'Tus clientes escanean el QR o acercan el móvil y dejan su reseña en Google o Tripadvisor en segundos, sin buscar nada.',
-        price: '25 €',
+        price: '25 € / unidad',
       },
     ],
   },
