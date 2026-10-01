@@ -275,7 +275,7 @@ describe('precios', () => {
       for (const row of s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) assert.match(precios, priceRow(row.label, row.price));
     }
     for (const item of site.extras.items) assert.match(precios, priceRow(item.name, item.price));
-    assert.match(precios, /class="pack"[\s\S]*?<p class="pack-precio"><strong>390 €<\/strong>/);
+    assert.match(precios, /class="pack"[\s\S]*?<p class="pack-precio"><strong>425 €<\/strong>/);
     assert.doesNotMatch(index, /<s>|ahorr|antes \d/i, 'sin precio tachado ni ahorro');
     assert.match(precios, /Pack negocios con cita previa \(web, tarjeta de reseñas QR \+ NFC y primer año de mantenimiento\)/);
     assert.match(precios, /Precios sin IGIC/);
