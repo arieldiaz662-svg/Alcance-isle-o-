@@ -8,11 +8,21 @@ export function whatsappUrl(number, text) {
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
 }
 
-const LOGO = `<svg viewBox="0 0 48 60" aria-hidden="true">
-        <path d="M24 2C12.4 2 3 11.2 3 22.6 3 38 24 58 24 58s21-20 21-35.4C45 11.2 35.6 2 24 2z" fill="#1B62C9"/>
-        <polygon points="24,11 35,22 24,42 13,22" fill="#FFFFFF"/>
-        <polygon points="24,11 35,22 24,22" fill="#DCE9FA"/>
-        <polygon points="13,22 24,22 24,42" fill="#9EC1F2"/>
+// Logo: el Teide en blanco saliendo del mar, con ondas amarillas de señal sobre un círculo azul
+// (blanco, azul y amarillo, como la bandera de Canarias). Original en docs/logo/.
+const LOGO = `<svg viewBox="0 0 48 48" aria-hidden="true">
+        <defs><clipPath id="logo-circulo"><circle cx="24" cy="24" r="23"/></clipPath></defs>
+        <circle cx="24" cy="24" r="23" fill="#1B62C9"/>
+        <g clip-path="url(#logo-circulo)">
+          <path d="M5 41 9.1 38.3 12.8 35.8 15.4 33.9 17 32.9 18.4 32.4 19.6 32.6 20.7 31.4 21.9 27.9 23 24.5 23.6 22.8 24.1 22.1H26.4L26.9 22.8 27.7 24.7 29.2 28.3 31 31 33.9 33.5 38 36.8 42.7 41Z" fill="#FFFFFF"/>
+          <rect y="39.2" width="48" height="9" fill="#1B62C9"/>
+          <path d="M6 42.4H42" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round" opacity=".45"/>
+        </g>
+        <g fill="none" stroke="#FFC93C" stroke-width="2.4" stroke-linecap="round">
+          <path d="M22.16 17.42A3.8 3.8 0 0 1 28.39 17.42"/>
+          <path d="M19.05 15.24A7.6 7.6 0 0 1 31.5 15.24"/>
+          <path d="M15.94 13.06A11.4 11.4 0 0 1 34.61 13.06"/>
+        </g>
       </svg>`;
 
 // El aviso legal solo se publica cuando están los datos del titular (site.legal.owner).
