@@ -222,12 +222,11 @@ export const site = {
   ],
 
   // PACK COMPLETO (se muestra destacado en precios y en la pestaña de hostelería).
-  // Lo que incluye se toma de sectors[0].includes. "was" debe ser la suma de los precios sueltos:
-  // un test lo comprueba. Pon "pack: null" para ocultarlo.
+  // Lo que incluye se toma de sectors[0].includes. No se muestra precio "antes" ni ahorro; un test
+  // comprueba que el pack sigue siendo más barato que sus servicios sueltos. Pon "pack: null" para ocultarlo.
   pack: {
     name: 'Pack completo para hostelería',
     price: '390 €',
-    was: '445 €',
   },
   pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
 

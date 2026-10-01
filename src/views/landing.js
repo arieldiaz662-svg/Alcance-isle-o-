@@ -184,7 +184,7 @@ export function renderLanding({ site, config }) {
           </li>`).join('')}
           <li class="pack-total">
             <h4>${esc(sectorPack.label || sectorPack.name)}</h4>
-            <span class="local-precio">${sectorPack.was ? `<s>${esc(sectorPack.was)}</s> ` : ''}${esc(sectorPack.price)}</span>
+            <span class="local-precio">${esc(sectorPack.price)}</span>
           </li>
         </ul>${sector.option && sector.option.items ? `
         <div class="pack-opcion pack-opcion-lista">
@@ -271,7 +271,7 @@ export function renderLanding({ site, config }) {
       <div class="pack">
         <h3>${esc(pack.name)}</h3>
         <p>${esc(packText)}</p>
-        <p class="pack-precio">${pack.was ? `<s>${esc(pack.was)}</s> ` : ''}<strong>${esc(pack.price)}</strong></p>
+        <p class="pack-precio"><strong>${esc(pack.price)}</strong></p>
       </div>` : ''}${priceGroups.map((group) => `
       <div class="carta-grupo">
         <h3>${esc(group.title)}</h3>

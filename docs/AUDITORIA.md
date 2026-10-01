@@ -132,7 +132,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 
 | Concepto | Precio |
 |---|---|
-| **Pack completo para hostelería** (landing con carta + ficha de Google + plan de mantenimiento 1.er año + tarjeta de reseñas de regalo) | ~~445 €~~ **390 €** |
+| **Pack completo para hostelería** (landing con carta + ficha de Google + plan de mantenimiento 1.er año + tarjeta de reseñas de regalo) | **390 €** |
 | **Pack negocios con cita previa** (web + tarjeta de reseñas + plan de mantenimiento 1.er año) | **250 €** |
 | Landing page con carta digital o servicios | 200 € |
 | Creación u optimización de la ficha de Google Business | 100 € |

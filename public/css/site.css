@@ -301,7 +301,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .pack h3 { font-size: var(--t-xl); margin-bottom: .5rem; }
 .pack p { color: #D5E1F0; margin: 0; }
 .pack .pack-precio { margin-top: 1rem; color: var(--papel); }
-.pack-precio s { color: #9FB2C8; margin-right: .4rem; }
 .pack-precio strong { font-size: 2.4rem; color: var(--sol); letter-spacing: -0.02em; }
 .carta-grupo + .carta-grupo { margin-top: 2.2rem; }
 .carta-grupo h3 { font-size: var(--t-m); color: var(--gris); font-weight: 600; margin-bottom: .6rem; }
@@ -410,7 +409,6 @@ footer a:hover { color: var(--papel); text-decoration: underline; }
 .pack-total { border-bottom: 2px solid var(--tinta) !important; }
 .pack-total h4 { margin: 0; font-size: var(--t-l); }
 .pack-total .local-precio { grid-row: 1; font-size: var(--t-xl); color: var(--atlantico); }
-.pack-total s { font-size: var(--t-m); color: var(--gris); font-weight: 500; margin-right: .3rem; }
 .pack-opcion {
   display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
   margin: -1rem 0 2rem; padding: 1rem; background: var(--niebla); border-radius: 6px;
