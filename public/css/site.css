@@ -235,6 +235,20 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .barraquito { top: 1%; right: 2%; transform: scale(.62); }
 }
 
+/* ---------- 4b. Franja de canales (bajo la portada) ---------- */
+.canales { padding: 1.7rem 0; background: var(--papel); border-bottom: 1px solid var(--linea); }
+.canales .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem 2.5rem; flex-wrap: wrap; }
+.canales-titulo { font-size: var(--t-m); font-weight: 700; max-width: none; margin: 0; }
+.canales-lista { display: flex; flex-wrap: wrap; gap: 1rem 2.2rem; }
+.canales-lista li { display: flex; align-items: center; gap: .55rem; font-weight: 600; font-size: var(--t-s); line-height: 1.25; }
+.canal-icono {
+  width: 26px; height: 26px; flex: none;
+  fill: none; stroke: var(--atlantico); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+@media (max-width: 640px) {
+  .canales-lista { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; width: 100%; }
+}
+
 /* ---------- 5. Recorrido del cliente (servicios) ---------- */
 .recorrido-pasos {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem;

@@ -81,6 +81,18 @@ export const site = {
     ],
   },
 
+  // FRANJA "DÓNDE TE ENCUENTRAN", bajo la portada. Los iconos son dibujos propios (src/views/landing.js →
+  // CHANNEL_ICONS), no logotipos oficiales: las marcas se nombran solo en el texto.
+  channels: {
+    title: 'Tu negocio, donde te buscan tus clientes',
+    items: [
+      { icon: 'buscar', label: 'Búsqueda de Google' },
+      { icon: 'mapa', label: 'Google Maps' },
+      { icon: 'chat', label: 'WhatsApp' },
+      { icon: 'resena', label: 'Reseñas en Google y Tripadvisor' },
+    ],
+  },
+
   // PACKS POR TIPO DE NEGOCIO: sección con pestañas justo después de la portada.
   // pack: 'main' usa el "Pack completo" definido más abajo (pack), para no repetir precios.
   sectorsTitle: '¿Qué tipo de negocio tienes?',

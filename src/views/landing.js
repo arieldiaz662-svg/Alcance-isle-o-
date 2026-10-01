@@ -26,6 +26,15 @@ export function qrSvg(text) {
   return `<svg class="qr" viewBox="-1 -1 ${size + 2} ${size + 2}" aria-hidden="true"><path d="${path}"/></svg>`;
 }
 
+// Iconos de la franja de canales (trazo de 24×24 en currentColor). Son dibujos genéricos propios,
+// no los logotipos de Google, WhatsApp o Tripadvisor.
+const CHANNEL_ICONS = {
+  buscar: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/>',
+  mapa: '<path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.4"/>',
+  chat: '<path d="M4 18.5 5.3 15A7.8 7.8 0 1 1 9 19.2z"/><path d="M9 11.5h6M9 8.5h4"/>',
+  resena: '<path d="m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>',
+};
+
 // Lista de precios por grupos (sin el pack principal, que se muestra destacado). La usan la sección de
 // precios y los datos estructurados para Google, así que siempre coinciden.
 export function priceList(site) {
@@ -216,6 +225,18 @@ export function renderLanding({ site, config }) {
     </div>`;
   };
 
+  // ---------- Franja: dónde te encuentran tus clientes ----------
+  const channels = site.channels;
+  const channelsSection = channels ? `
+<section class="canales" aria-labelledby="canales-titulo">
+  <div class="wrap">
+    <h2 class="canales-titulo" id="canales-titulo">${esc(channels.title)}</h2>
+    <ul class="canales-lista">${channels.items.map((item) => `
+      <li><svg class="canal-icono" viewBox="0 0 24 24" aria-hidden="true">${CHANNEL_ICONS[item.icon]}</svg><span>${esc(item.label)}</span></li>`).join('')}
+    </ul>
+  </div>
+</section>` : '';
+
   // Sin JavaScript se ven los dos paneles seguidos; site.js activa las pestañas.
   const sectorsSection = sectors ? `
 <section class="packs" id="packs">
@@ -302,6 +323,7 @@ export function renderLanding({ site, config }) {
 
   const body = `<main>
 ${heroSection}
+${channelsSection}
 ${sectorsSection}
 ${journeySection}
 ${whySection}

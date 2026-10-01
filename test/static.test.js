@@ -211,6 +211,15 @@ describe('portada', () => {
     for (const decl of ['overflow: hidden', 'flex-direction: column', 'flex-wrap: wrap']) assert.ok(regla.includes(decl), decl);
   });
 
+  test('franja de canales bajo la portada, con iconos propios y sin logotipos de marcas', () => {
+    const franja = between(index, 'class="canales"', 'id="packs"');
+    assert.ok(index.indexOf('id="inicio"') < index.indexOf('class="canales"'));
+    assert.ok(index.indexOf('class="canales"') < index.indexOf('id="packs"'));
+    for (const item of site.channels.items) assert.match(franja, new RegExp(`</svg><span>${escapeRe(item.label)}</span>`));
+    assert.equal((franja.match(/<svg class="canal-icono"/g) || []).length, site.channels.items.length);
+    assert.doesNotMatch(franja, /<img|logo/i, 'sin imágenes ni logotipos oficiales');
+  });
+
   test('el QR se dibuja suavizado, por tramos y solapado, para que no salga escalonado en el móvil', () => {
     const svg = qrSvg('https://wa.me/34623243294');
     assert.doesNotMatch(svg, /crispEdges/);
