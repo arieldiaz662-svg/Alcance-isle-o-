@@ -26,15 +26,6 @@ export function qrSvg(text) {
   return `<svg class="qr" viewBox="-1 -1 ${size + 2} ${size + 2}" aria-hidden="true"><path d="${path}"/></svg>`;
 }
 
-// Iconos de la franja de canales (trazo de 24×24 en currentColor). Son dibujos genéricos propios,
-// no los logotipos de Google, WhatsApp o Tripadvisor.
-const CHANNEL_ICONS = {
-  buscar: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/>',
-  mapa: '<path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.4"/>',
-  chat: '<path d="M4 18.5 5.3 15A7.8 7.8 0 1 1 9 19.2z"/><path d="M9 11.5h6M9 8.5h4"/>',
-  resena: '<path d="m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>',
-};
-
 // Lista de precios por grupos (sin el pack principal, que se muestra destacado). La usan la sección de
 // precios y los datos estructurados para Google, así que siempre coinciden.
 export function priceList(site) {
@@ -81,7 +72,7 @@ export function renderLanding({ site, config }) {
     ? `${mainSector.includes.map((i, n) => (n ? i.name.charAt(0).toLowerCase() + i.name.slice(1) : i.name)).join(' + ')}.`
     : '';
 
-  // ---------- Portada: la mesa ----------
+  // ---------- Portada: la carta de ejemplo, en plano ----------
   const qrUrl = whatsappUrl(whatsapp, demoMenu.qrWhatsappText);
   const menuTabs = demoMenu.sections.map((section, i) => `
             <button type="button" role="tab" id="carta-tab-${i}" aria-controls="carta-panel-${i}" aria-selected="${i === 0}"${i === 0 ? '' : ' tabindex="-1"'}>${esc(section.name)}</button>`).join('');
@@ -91,38 +82,35 @@ export function renderLanding({ site, config }) {
           </ul></div>`).join('');
 
   const heroSection = `
-<div class="mesa" id="inicio">
-  <div class="wrap mesa-grid">
-    <div class="mesa-texto">
+<div class="portada" id="inicio">
+  <div class="wrap portada-grid">
+    <div class="portada-texto">
       <h1>${esc(hero.title)}</h1>
       <p class="lead">${esc(hero.lead)}</p>
       <div class="acciones">
         <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, hero.ctaWhatsappText))}" rel="noopener" target="_blank">${esc(hero.cta)}</a>
-        <a class="btn btn-linea" href="#precios">Ver precios</a>
+        <a class="btn-texto" href="#precios">Ver precios</a>
       </div>
-      <p class="mesa-nota">${esc(hero.note)}</p>
+      <p class="portada-nota">${esc(hero.note)}</p>
     </div>
 
-    <figure class="bodegon">
-      <div class="movil">
-        <div class="carta" role="group" aria-label="Ejemplo de carta digital de ${esc(demoMenu.business)}">
-          <div class="carta-cab">
-            <strong>${esc(demoMenu.business)}</strong>
-            <span>${esc(demoMenu.table)}</span>
-          </div>
-          <div class="carta-tabs" role="tablist" aria-label="Secciones de la carta">${menuTabs}
-          </div>${menuPanels}
-          <div class="carta-pie">
-            <span class="carta-boton">Dejar una reseña</span>
-            <span class="carta-boton carta-boton-wa">Pedir por WhatsApp</span>
-          </div>
+    <figure class="muestra">
+      <div class="carta" role="group" aria-label="Ejemplo de carta digital de ${esc(demoMenu.business)}">
+        <div class="carta-cab">
+          <strong>${esc(demoMenu.business)}</strong>
+          <span>${esc(demoMenu.table)}</span>
+        </div>
+        <div class="carta-tabs" role="tablist" aria-label="Secciones de la carta">${menuTabs}
+        </div>${menuPanels}
+        <div class="carta-pie">
+          <span class="carta-boton">Dejar una reseña</span>
+          <span class="carta-boton carta-boton-wa">Pedir por WhatsApp</span>
         </div>
       </div>
       <a class="expositor" href="${esc(qrUrl)}" rel="noopener" target="_blank" aria-label="${esc(demoMenu.qrLabel)}">
         ${qrSvg(qrUrl)}
         <span>${esc(demoMenu.qrCaption)}</span>
       </a>
-      <div class="barraquito" aria-hidden="true"><div class="vaso"><i></i><i></i><i></i><i></i><i></i></div></div>
       <figcaption>${esc(demoMenu.caption)}</figcaption>
     </figure>
   </div>
@@ -147,42 +135,19 @@ export function renderLanding({ site, config }) {
   </div>
 </section>`;
 
-  // Imagen del material para mesas (se muestra en la opción de la pestaña de hostelería).
+  // Imagen del material para mesas (se muestra en la opción de hostelería).
   const img = extras && extras.image;
   const extraById = Object.fromEntries((extras ? extras.items : []).map((item) => [item.id, item]));
 
   // ---------- Packs por tipo de negocio (pestañas) ----------
   const packOf = (sector) => (sector.pack === 'main' ? pack : sector.pack);
-  const nfcIcon = `<svg class="nfc" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7.5a6 6 0 0 1 0 9M12 5a9.5 9.5 0 0 1 0 14M15.5 2.5a13 13 0 0 1 0 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="12" r="1.8" fill="currentColor"/></svg>`;
 
-  const sectorPanel = (sector, i) => {
+  const sectorPanel = (sector) => {
     const sectorPack = packOf(sector);
     return `
-    <div class="sector-panel" role="tabpanel" id="${esc(sector.id)}" aria-labelledby="tab-${esc(sector.id)}">
-      <figure class="mostrador">
-        <div class="movil movil-suelto" aria-hidden="true">
-          <div class="carta">
-            <div class="carta-cab">
-              <strong>${esc(sector.demo.business)}</strong>
-              <span>${esc(sector.demo.label)}</span>
-            </div>
-            <ul class="carta-lista">${sector.demo.items.map(([name, price]) => `
-              <li><span>${esc(name)}</span><span class="guia"></span><span>${esc(price)}</span></li>`).join('')}
-            </ul>
-            <div class="carta-pie">
-              <span class="carta-boton carta-boton-wa">${esc(sector.demo.button)}</span>
-            </div>
-          </div>
-        </div>
-        <div class="tarjeta-nfc" aria-hidden="true">
-          ${nfcIcon}
-          <span class="estrellas">★★★★★</span>
-          <strong>${esc(sector.demo.card)}</strong>
-        </div>
-        <figcaption>${esc(sector.demo.caption)}</figcaption>
-      </figure>
+    <article class="sector" id="${esc(sector.id)}">
       <div>
-        <h3 class="sector-titulo">${esc(sector.title)}</h3>
+        <h3>${esc(sector.title)}</h3>
         <p class="sector-intro">${esc(sector.intro)}</p>
         <ul class="local-lista">${sector.includes.map((item) => `
           <li>
@@ -222,7 +187,7 @@ export function renderLanding({ site, config }) {
         </div>` : ''}
         <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, sector.whatsappText))}" rel="noopener" target="_blank">${esc(sector.cta)}</a>
       </div>
-    </div>`;
+    </article>`;
   };
 
   // ---------- Franja: dónde te encuentran tus clientes ----------
@@ -232,19 +197,19 @@ export function renderLanding({ site, config }) {
   <div class="wrap">
     <h2 class="canales-titulo" id="canales-titulo">${esc(channels.title)}</h2>
     <ul class="canales-lista">${channels.items.map((item) => `
-      <li><svg class="canal-icono" viewBox="0 0 24 24" aria-hidden="true">${CHANNEL_ICONS[item.icon]}</svg><span>${esc(item.label)}</span></li>`).join('')}
+      <li>${esc(item.label)}</li>`).join('')}
     </ul>
   </div>
 </section>` : '';
 
-  // Sin JavaScript se ven los dos paneles seguidos; site.js activa las pestañas.
+  // Los dos tipos de negocio a la vista, uno junto al otro: el dueño ve el suyo sin tocar nada.
+  // Cada uno conserva su id (…/#hosteleria, …/#cita-previa) para enlazarlo directamente.
   const sectorsSection = sectors ? `
 <section class="packs" id="packs">
   <div class="wrap">
     <h2>${esc(site.sectorsTitle)}</h2>
-    <div class="sector-tabs" role="tablist" aria-label="${esc(site.sectorsTitle)}" hidden>${sectors.map((sector, i) => `
-      <button type="button" role="tab" id="tab-${esc(sector.id)}" aria-controls="${esc(sector.id)}" aria-selected="${i === 0}"${i === 0 ? '' : ' tabindex="-1"'}>${esc(sector.tab)}</button>`).join('')}
-    </div>${sectors.map(sectorPanel).join('')}
+    <div class="sectores">${sectors.map(sectorPanel).join('')}
+    </div>
   </div>
 </section>` : '';
 

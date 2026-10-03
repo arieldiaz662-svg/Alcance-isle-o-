@@ -102,7 +102,7 @@ describe('construcción y publicación', () => {
   test('genera las páginas y recursos, sin el panel de administración', () => {
     for (const file of ['index.html', 'privacidad.html', 'cookies.html', '404.html', 'robots.txt', 'sitemap.xml',
       '_headers', 'assets/css/site.css', 'assets/js/site.js', 'assets/fonts/familjen-grotesk.woff2',
-      'assets/img/terrazo.svg', 'assets/img/favicon.svg', 'assets/img/og.jpg']) {
+      'assets/img/favicon.svg', 'assets/img/og.jpg']) {
       assert.ok(existsSync(join(outDir, file)), file);
     }
     assert.ok(!existsSync(join(outDir, 'assets/admin')), 'el panel no se publica');
@@ -236,13 +236,12 @@ describe('portada', () => {
     for (const decl of ['overflow: hidden', 'flex-direction: column', 'flex-wrap: wrap']) assert.ok(regla.includes(decl), decl);
   });
 
-  test('franja de canales bajo la portada, con iconos propios y sin logotipos de marcas', () => {
+  test('franja de canales bajo la portada, solo con texto y sin logotipos de marcas', () => {
     const franja = between(index, 'class="canales"', 'id="packs"');
     assert.ok(index.indexOf('id="inicio"') < index.indexOf('class="canales"'));
     assert.ok(index.indexOf('class="canales"') < index.indexOf('id="packs"'));
-    for (const item of site.channels.items) assert.match(franja, new RegExp(`</svg><span>${escapeRe(item.label)}</span>`));
-    assert.equal((franja.match(/<svg class="canal-icono"/g) || []).length, site.channels.items.length);
-    assert.doesNotMatch(franja, /<img|logo/i, 'sin imágenes ni logotipos oficiales');
+    for (const item of site.channels.items) assert.match(franja, new RegExp(`<li>${escapeRe(item.label)}</li>`));
+    assert.doesNotMatch(franja, /<img|<svg|logo/i, 'sin iconos, imágenes ni logotipos oficiales');
   });
 
   test('el QR se dibuja suavizado, por tramos y solapado, para que no salga escalonado en el móvil', () => {
@@ -273,12 +272,19 @@ describe('portada', () => {
 });
 
 describe('packs por tipo de negocio', () => {
-  test('selector de dos pestañas justo después de la portada', () => {
+  test('los dos tipos de negocio a la vista, sin pestañas, justo después de la portada', () => {
     assert.ok(index.indexOf('id="packs"') < index.indexOf('id="servicios"'));
-    for (const [i, sector] of site.sectors.entries()) {
-      assert.match(index, new RegExp(`role="tab" id="tab-${sector.id}" aria-controls="${sector.id}" aria-selected="${i === 0}"`));
+    for (const sector of site.sectors) {
+      assert.match(index, new RegExp(`<article class="sector" id="${sector.id}">\\s*<div>\\s*<h3>${escapeRe(sector.title)}</h3>`));
     }
-    assert.match(index, /class="sector-tabs" role="tablist"[^>]*hidden/, 'sin JavaScript se ven los dos paneles');
+    assert.doesNotMatch(between(index, 'id="packs"', 'id="servicios"'), /role="tab"/, 'sin pestañas: el dueño ve el suyo sin tocar nada');
+  });
+
+  test('sin objetos dibujados: ni móvil, ni barraquito, ni tarjeta inclinada', () => {
+    assert.doesNotMatch(index, /class="(movil|barraquito|bodegon|mostrador|tarjeta-nfc)/);
+    const css = readFileSync(new URL('../public/css/site.css', import.meta.url), 'utf8');
+    assert.doesNotMatch(css, /rotate\(/, 'nada inclinado');
+    assert.doesNotMatch(css, /border-radius: 999px/, 'sin botones en forma de píldora');
   });
 
   test('hostelería: pack completo, todo "Incluido" (sin "De regalo") y material para mesas', () => {
