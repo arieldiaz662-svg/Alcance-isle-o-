@@ -14,7 +14,7 @@
 /* ---------- 1. Tokens: cambia aquí colores y medidas ---------- */
 :root {
   --tinta: #0E2A47;      /* marino de la marca: texto y fondos oscuros */
-  --atlantico: #1B62C9;  /* azul del logo: enlaces y detalles */
+  --atlantico: #1B62C9;  /* enlaces y detalles (ya no forma parte del logo) */
   --sol: #FFC93C;        /* solo para la acción principal */
   --terrazo: #E3E7EB;    /* piedra de la mesa */
   --niebla: #F3F5F7;     /* fondo alterno de secciones */
@@ -103,13 +103,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   border-bottom: 1px solid var(--linea);
 }
 .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 66px; }
-.marca { display: flex; align-items: center; gap: .55rem; text-decoration: none; font-weight: 700; font-size: 1.3rem; letter-spacing: -0.02em; }
-.marca svg { width: 24px; height: 30px; }
+.marca { display: flex; align-items: center; text-decoration: none; }
+.marca-logo { display: block; height: 28px; width: auto; }
 .nav ul { display: flex; gap: 1.8rem; }
 .nav ul a { text-decoration: none; font-weight: 500; }
 .nav .btn { padding: .55rem 1.1rem; }
 @media (max-width: 820px) { /* en móvil, los enlaces pasan a una segunda fila desplazable */
   html { scroll-padding-top: 112px; }
+  .marca-logo { height: 19px; } /* que quepa junto al botón en 360 px */
   .nav .wrap { flex-wrap: wrap; height: auto; padding: .6rem 0 .1rem; row-gap: .15rem; }
   .nav ul {
     order: 3; width: 100%; gap: 1.3rem; padding: .35rem 0 .55rem;

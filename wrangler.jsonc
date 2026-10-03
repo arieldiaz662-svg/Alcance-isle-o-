@@ -6,6 +6,9 @@
   "name": "alcance-isleno",
   "main": "worker/index.js",
   "compatibility_date": "2025-09-01",
+  // Vistas previas de las PR: Cloudflare ejecuta "wrangler preview" en las ramas que no son main,
+  // y ese comando exige este bloque (puede ir vacío; assets y demás se heredan de arriba).
+  "previews": {},
   "build": {
     "command": "npm test && PUBLIC_BASE_URL=https://alcanceisleno.com npm run build"
   },

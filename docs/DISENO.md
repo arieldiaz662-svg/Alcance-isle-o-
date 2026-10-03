@@ -15,8 +15,8 @@ Público: dueños de bares, restaurantes, cafeterías, barberías y salones de b
 | Token | Valor | Uso |
 |---|---|---|
 | `--tinta` | `#0E2A47` | Marino de la marca: texto, móvil, fondos oscuros |
-| `--atlantico` | `#1B62C9` | Azul del logo: enlaces y detalles |
-| `--sol` | `#FFC93C` | Solo la acción principal (botones de WhatsApp/diagnóstico) |
+| `--atlantico` | `#1B62C9` | Enlaces y detalles (no forma parte del logo) |
+| `--sol` | `#FFC93C` | Solo lo que está "encendido": la puerta del logo y la acción principal (botones de WhatsApp/diagnóstico) |
 | `--terrazo` | `#E3E7EB` + `img/terrazo.svg` | Superficie de la mesa |
 | `--niebla` | `#F3F5F7` | Fondo alterno de secciones |
 | `--gris` | `#4F5D70` | Texto secundario (contraste AA) |
@@ -24,6 +24,15 @@ Público: dueños de bares, restaurantes, cafeterías, barberías y salones de b
 Tipografía: **Familjen Grotesk** (una sola familia, OFL, alojada en `public/fonts/`). Escala 1.25 sobre 17 px. El titular de portada usa el tipo como elemento gráfico: muy grande, interlineado 0,88 y tracking negativo.
 
 El **QR del expositor es real**: se genera al construir la web (librería `qrcode`) y abre WhatsApp con el mensaje de `demoMenu.qrWhatsappText`. También es un enlace, porque desde el móvil no se puede escanear la propia pantalla. Si cambia el número o el mensaje, basta con volver a construir.
+
+## Logotipo
+
+Una fachada marino con una puerta en arco encendida en amarillo y una tilde encima: la puerta del local de nuestros clientes, que a la vez forma la **ñ** de *isleño*. El nombre va en minúsculas en Familjen Grotesk (peso 620), con la tilde de la ñ redibujada con la misma onda que la del símbolo.
+
+- Construcción sobre una retícula de 100: puerta de radio 23 (46 de ancho) que llega al borde inferior, tilde de 42 de ancho con trazo 7,5, esquinas con radio 5. Por debajo de 24 px se usa la versión pequeña (tilde con trazo 10, esquinas 12): `favicon.svg`.
+- Todas las versiones en `docs/marca/`: a color, invertida, una tinta, apilada, símbolo y sello (gris y blanco). En las versiones de una tinta la tilde va calada, para grabado láser o impresión 3D.
+- **Sello** "Web hecha por alcance isleño" en las webs y expositores de clientes: mínimo 14 px en pantalla, 12 mm en impresión 3D y 6 mm en papel. A color solo si la web del cliente es neutra; si no, en gris (`sello-gris.svg`).
+- No se usa nunca sin la tilde: sin ella el símbolo es un arco genérico.
 
 ## Recursos propios del sector
 
@@ -41,4 +50,4 @@ El **QR del expositor es real**: se genera al construir la web (librería `qrcod
 ## Pendiente
 
 - Sustituir la maqueta del expositor por la foto real (`public/img/productos/`) y quitar `caption` en `site.js`.
-- Unificar el logotipo con el de la maqueta cuando exista en SVG.
+- Buscar marcas parecidas en la OEPM y la EUIPO (clases 35 y 42) y registrar la marca antes de imprimir tarjetas o expositores.
