@@ -10,7 +10,7 @@ export const site = {
   // Imagen de vista previa al compartir el enlace (WhatsApp, redes). 1200×630, en public/img/.
   // Se regenera con: npm run og-image (tras cambios visibles en la portada).
   ogImage: 'img/og.jpg',
-  ogImageAlt: 'Alcance Isleño: tu escaparate digital. Carta digital en el móvil sobre una mesa de bar.',
+  ogImageAlt: 'Alcance Isleño: tu escaparate digital. Carta digital de ejemplo con su expositor QR.',
 
   // Contacto. Las variables de entorno WHATSAPP_NUMBER y CONTACT_EMAIL, si existen, tienen prioridad.
   whatsappNumber: '34623243294', // con prefijo de país, solo dígitos
@@ -81,19 +81,18 @@ export const site = {
     ],
   },
 
-  // FRANJA "DÓNDE TE ENCUENTRAN", bajo la portada. Los iconos son dibujos propios (src/views/landing.js →
-  // CHANNEL_ICONS), no logotipos oficiales: las marcas se nombran solo en el texto.
+  // FRANJA "DÓNDE TE ENCUENTRAN", bajo la portada. Solo texto: las marcas se nombran, sin sus logotipos.
   channels: {
     title: 'Tu negocio, donde te buscan tus clientes',
     items: [
-      { icon: 'buscar', label: 'Búsqueda de Google' },
-      { icon: 'mapa', label: 'Google Maps' },
-      { icon: 'chat', label: 'WhatsApp' },
-      { icon: 'resena', label: 'Reseñas en Google y Tripadvisor' },
+      { label: 'Búsqueda de Google' },
+      { label: 'Google Maps' },
+      { label: 'WhatsApp' },
+      { label: 'Reseñas en Google y Tripadvisor' },
     ],
   },
 
-  // PACKS POR TIPO DE NEGOCIO: sección con pestañas justo después de la portada.
+  // PACKS POR TIPO DE NEGOCIO: los dos a la vista, uno junto al otro, justo después de la portada.
   // pack: 'main' usa el "Pack completo" definido más abajo (pack), para no repetir precios.
   sectorsTitle: '¿Qué tipo de negocio tienes?',
   sectors: [

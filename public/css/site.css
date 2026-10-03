@@ -1,7 +1,8 @@
 /* =========================================================
-   ALCANCE ISLEÑO · Tu mesa digital
-   Concepto: la portada es una mesa de cafetería canaria (terrazo) con la carta digital
-   funcionando en un móvil. Es el único elemento llamativo; el resto es sobrio y legible.
+   ALCANCE ISLEÑO · Tu escaparate digital
+   Concepto: una carta de restaurante bien impresa. Titulares con serifa clásica, filetes finos,
+   precios con puntos guía y botones rectos. Nada dibujado: tipografía, líneas y (cuando las haya)
+   fotos reales. El amarillo solo marca la acción principal.
    ========================================================= */
 
 /* ---------- 0. Tipografía alojada en la propia web (OFL) ---------- */
@@ -10,26 +11,36 @@
   src: url("../fonts/familjen-grotesk.woff2") format("woff2-variations"), url("../fonts/familjen-grotesk.woff2") format("woff2");
   font-weight: 400 700; font-style: normal; font-display: swap;
 }
+@font-face { /* titulares */
+  font-family: "Libre Caslon Display";
+  src: url("../fonts/libre-caslon-display.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face { /* cursiva para los encabezados de la carta */
+  font-family: "Libre Caslon Text";
+  src: url("../fonts/libre-caslon-text-italic.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
 
 /* ---------- 1. Tokens: cambia aquí colores y medidas ---------- */
 :root {
-  --tinta: #0E2A47;      /* marino de la marca: texto y fondos oscuros */
-  --atlantico: #1B62C9;  /* enlaces y detalles (ya no forma parte del logo) */
+  --tinta: #0E2A47;      /* marino de la marca: texto, filetes y fondos oscuros */
   --sol: #FFC93C;        /* solo para la acción principal */
-  --terrazo: #E3E7EB;    /* piedra de la mesa */
   --niebla: #F3F5F7;     /* fondo alterno de secciones */
   --papel: #FFFFFF;
   --gris: #4F5D70;       /* texto secundario (contraste AA sobre blanco y niebla) */
-  --linea: #C9D2DC;
+  --linea: #C9D2DC;      /* filetes finos */
 
   --fuente: "Familjen Grotesk", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --titular: "Libre Caslon Display", Georgia, "Times New Roman", serif;
+  --cursiva: "Libre Caslon Text", Georgia, "Times New Roman", serif;
 
   /* Escala tipográfica 1.25 sobre 17 px */
   --t-s: .875rem;
   --t-m: 1.0625rem;
   --t-l: 1.33rem;
   --t-xl: 1.66rem;
-  --t-2xl: clamp(1.9rem, 4.2vw, 2.6rem);
+  --t-2xl: clamp(2rem, 4.4vw, 2.9rem);
 
   --ancho: 1140px;
 
@@ -47,71 +58,74 @@ body {
   margin: 0;
   font-family: var(--fuente);
   font-size: var(--t-m);
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--tinta);
   background: var(--papel);
   -webkit-font-smoothing: antialiased;
 }
 img, svg { max-width: 100%; display: block; }
 a { color: inherit; }
-:focus-visible { outline: 3px solid var(--sol); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 3px solid var(--sol); outline-offset: 3px; }
 [hidden] { display: none !important; }
 
 .wrap { width: min(100% - 2.5rem, var(--ancho)); margin-inline: auto; }
-section { padding: 5.5rem 0; }
-h1, h2, h3 { line-height: 1.1; margin: 0 0 1rem; font-weight: 700; }
-h2 { font-size: var(--t-2xl); letter-spacing: -0.02em; max-width: 22ch; }
-h3 { font-size: var(--t-l); letter-spacing: -0.01em; }
+section { padding: 6rem 0; }
+h1, h2, h3 { line-height: 1.1; margin: 0 0 1rem; text-wrap: balance; }
+h1, h2 { font-family: var(--titular); font-weight: 400; letter-spacing: -0.01em; }
+h2 { font-size: var(--t-2xl); line-height: 1.08; max-width: 22ch; }
+h3 { font-size: var(--t-l); font-weight: 700; letter-spacing: -0.01em; }
 p { margin: 0 0 1rem; max-width: 62ch; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 .suave { color: var(--gris); }
 
-/* ---------- 2. Botones ---------- */
+/* ---------- 2. Botones: rectos, sin sombras ---------- */
 .btn {
   display: inline-block;
-  padding: .85rem 1.45rem;
-  border-radius: 999px;
+  padding: .9rem 1.5rem;
+  border-radius: 2px;
   font: 600 1rem/1.2 var(--fuente);
   text-decoration: none;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   cursor: pointer;
   transition: background-color .15s ease, color .15s ease, transform 160ms var(--ease-out);
 }
 .btn-sol { background: var(--sol); color: var(--tinta); }
 .btn-linea { border-color: var(--tinta); color: var(--tinta); background: transparent; }
+.btn-texto { font-weight: 600; text-decoration: underline; text-underline-offset: .35em; text-decoration-thickness: 1px; }
 /* Respuesta al pulsar en botones y pestañas (también en táctil, que no tiene hover). */
-.btn, .sector-tabs button, .carta-tabs button {
+.btn, .carta-tabs button {
   touch-action: manipulation; /* el toque responde al instante, sin esperar al doble toque */
   user-select: none; -webkit-user-select: none;
 }
-.btn:active, .sector-tabs button:active, .carta-tabs button:active { transform: scale(0.97); }
+.btn:active, .carta-tabs button:active { transform: scale(0.97); }
 /* Los hover solo con ratón: en el móvil se quedarían "pegados" tras tocar. */
 @media (hover: hover) and (pointer: fine) {
   .btn-sol:hover { background: #FFD766; }
   .btn-linea:hover { background: var(--tinta); color: var(--papel); }
-  .nav ul a:hover { color: var(--atlantico); }
+  .btn-texto:hover { text-decoration-thickness: 2px; }
+  .nav ul a:hover { text-decoration: underline; text-underline-offset: .35em; }
   footer a:hover { color: var(--papel); text-decoration: underline; }
-  .sector-tabs button:hover { background: #E4E9EF; }
+  .carta-tabs button:hover { color: var(--tinta); }
 }
 .btn-full { width: 100%; text-align: center; }
 
 /* ---------- 3. Navegación ---------- */
 .nav {
   position: sticky; top: 0; z-index: 20;
-  background: rgba(255, 255, 255, .95);
+  background: rgba(255, 255, 255, .96);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--linea);
 }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 66px; }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 72px; }
 .marca { display: flex; align-items: center; text-decoration: none; }
-.marca-logo { display: block; height: 28px; width: auto; }
-.nav ul { display: flex; gap: 1.8rem; }
-.nav ul a { text-decoration: none; font-weight: 500; }
-.nav .btn { padding: .55rem 1.1rem; }
+.marca-logo { display: block; height: 26px; width: auto; }
+.nav ul { display: flex; gap: 2rem; }
+.nav ul a { text-decoration: none; font-size: .95rem; }
+.nav .btn { padding: .6rem 1.1rem; font-size: .92rem; border-color: var(--tinta); background: transparent; color: var(--tinta); }
 @media (max-width: 820px) { /* en móvil, los enlaces pasan a una segunda fila desplazable */
   html { scroll-padding-top: 112px; }
-  .marca-logo { height: 19px; } /* que quepa junto al botón en 360 px */
-  .nav .wrap { flex-wrap: wrap; height: auto; padding: .6rem 0 .1rem; row-gap: .15rem; }
+  .marca-logo { height: 18px; } /* que quepa junto al botón en 360 px */
+  .nav .wrap { flex-wrap: wrap; height: auto; padding: .7rem 0 .1rem; row-gap: .15rem; }
   .nav ul {
     order: 3; width: 100%; gap: 1.3rem; padding: .35rem 0 .55rem;
     overflow-x: auto; scrollbar-width: none; white-space: nowrap; font-size: .95rem;
@@ -119,232 +133,205 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .nav ul::-webkit-scrollbar { display: none; }
 }
 
-/* ---------- 4. Portada: la mesa ---------- */
-.mesa {
-  background-color: var(--terrazo);
-  /* Terrazo: lascas de piedra irregulares (public/img/terrazo.svg) */
-  background-image: url("../img/terrazo.svg");
-  background-size: 320px 320px;
-  overflow: hidden;
+/* ---------- 4. Portada ---------- */
+.portada-grid {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: 4rem; align-items: center;
+  padding: 5.5rem 0 5rem;
 }
-.mesa-grid {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 2rem; align-items: center;
-  padding: 4.5rem 0 5rem;
-}
-.mesa h1 {
-  font-size: clamp(3.1rem, 8.4vw, 6.4rem);
-  line-height: .9;
-  letter-spacing: -0.045em;
-  max-width: 9ch;
-  margin-bottom: 1.6rem;
-}
-.mesa .lead { font-size: var(--t-l); line-height: 1.45; max-width: 30ch; }
-.acciones { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.8rem; }
-.mesa-nota { margin-top: 1.4rem; font-size: var(--t-s); color: var(--gris); }
+.portada h1 { font-size: clamp(3rem, 7vw, 5.4rem); line-height: 1; max-width: 10ch; margin-bottom: 1.8rem; }
+.portada .lead { font-size: 1.2rem; line-height: 1.55; color: #33435A; max-width: 31em; }
+.acciones { display: flex; gap: 1.6rem; flex-wrap: wrap; align-items: center; margin-top: 2rem; }
+.portada-nota { margin-top: 1.6rem; font-size: var(--t-s); color: var(--gris); }
 
-/* Bodegón: móvil + expositor + barraquito sobre la mesa */
-.bodegon { position: relative; margin: 0; min-height: 560px; }
-.bodegon figcaption {
-  position: absolute; right: 0; bottom: -2.2rem;
-  font-size: var(--t-s); color: var(--gris);
+/* Muestra: la carta de ejemplo en plano, como una carta impresa sobre la mesa, y su expositor QR */
+.muestra {
+  margin: 0; padding: clamp(1.2rem, 3vw, 2.4rem);
+  background: var(--niebla);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: end;
 }
+.muestra figcaption { grid-column: 1 / -1; font-size: var(--t-s); color: var(--gris); }
 
-.movil {
-  position: absolute; left: 50%; top: 50%;
-  width: 280px; aspect-ratio: 9 / 18.5;
-  transform: translate(-40%, -50%) rotate(-4deg);
+.carta {
+  display: flex; flex-direction: column; height: 440px;
+  padding: 1.7rem 1.5rem 1.3rem; font-size: .95rem;
   background: var(--papel);
-  border: 11px solid var(--tinta);
-  border-radius: 42px;
-  box-shadow: -18px 28px 30px -14px rgba(14, 42, 71, .35);
-  overflow: hidden;
+  border: 1px solid var(--tinta);
+  outline: 1px solid var(--tinta); outline-offset: -7px; /* doble filete de carta impresa */
 }
-.carta { display: flex; flex-direction: column; height: 100%; padding: 1.4rem 1rem 1rem; font-size: .92rem; }
-.carta-cab { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; padding-bottom: .8rem; border-bottom: 2px solid var(--tinta); }
-.carta-cab strong { font-size: 1.12rem; letter-spacing: -0.01em; line-height: 1.15; }
-.carta-cab span { font-size: .78rem; color: var(--gris); white-space: nowrap; }
-.carta-tabs { display: flex; gap: .2rem; margin: .7rem 0 .4rem; }
+.carta-cab { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; padding-bottom: .7rem; border-bottom: 1px solid var(--tinta); }
+.carta-cab strong { font: 400 1.35rem/1.15 var(--titular); }
+.carta-cab span { font-size: .8rem; color: var(--gris); white-space: nowrap; }
+.carta-tabs { display: flex; gap: 1.2rem; margin: .6rem 0 .3rem; border-bottom: 1px solid var(--linea); }
 .carta-tabs button {
-  flex: 1; padding: .45rem .2rem; border: 0; border-radius: 8px;
+  padding: .5rem 0; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px;
   background: transparent; color: var(--gris);
-  font: 600 .82rem/1 var(--fuente); cursor: pointer;
-  transition: transform 160ms var(--ease-out);
+  font: 600 .85rem/1 var(--fuente); cursor: pointer;
+  transition: color .15s ease, transform 160ms var(--ease-out);
 }
-.carta-tabs button[aria-selected="true"] { background: var(--tinta); color: var(--papel); }
+.carta-tabs button[aria-selected="true"] { color: var(--tinta); border-bottom-color: var(--tinta); }
 /* Panel de cada pestaña de la carta de la portada: ocupa el alto libre para que la lista se reparta. */
 .carta-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
 /* Las filas que no caben enteras pasan a una segunda columna, fuera de la vista (overflow: hidden), en
-   vez de verse cortadas por la mitad al final de la pantalla del móvil. */
+   vez de verse cortadas por la mitad al final de la carta. */
 .carta-lista {
   flex: 1; min-height: 0; overflow: hidden;
   display: flex; flex-direction: column; flex-wrap: wrap; column-gap: 2rem;
 }
 .carta-lista li { width: 100%; }
-.carta-lista li > span:last-child { white-space: nowrap; }
+.carta-lista li > span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .carta-lista li, .carta-precios li { display: flex; align-items: baseline; }
-.carta-lista li { padding: .55rem 0; }
-.guia { flex: 1; min-width: 1rem; margin: 0 .4rem; border-bottom: 2px dotted #9AA5B1; transform: translateY(-.25em); }
-.carta-pie { display: grid; gap: .45rem; }
+.carta-lista li { padding: .5rem 0; }
+.guia { flex: 1; min-width: 1rem; margin: 0 .4rem; border-bottom: 1px dotted #8A99AA; transform: translateY(-.25em); }
+.carta-pie { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; padding-top: .8rem; }
 .carta-boton {
-  display: block; text-align: center; padding: .55rem; border-radius: 10px;
-  border: 1.5px solid var(--tinta); font-weight: 600; font-size: .82rem;
+  display: block; text-align: center; padding: .55rem .3rem; border-radius: 2px;
+  border: 1px solid var(--tinta); font-weight: 600; font-size: .8rem;
 }
-.carta-boton-wa { background: #15803D; border-color: #15803D; color: var(--papel); } /* verde con contraste AA para texto blanco */
+.carta-boton-wa { background: var(--tinta); color: var(--papel); }
 
 .expositor {
-  position: absolute; left: 2%; bottom: 3%;
-  width: 150px; padding: 1rem 1rem .8rem;
-  background: var(--papel); border-radius: 10px 10px 4px 4px;
-  transform: rotate(5deg);
-  box-shadow: -10px 16px 18px -10px rgba(14, 42, 71, .4);
-  text-align: center;
+  width: 140px; padding: .9rem .9rem .7rem;
+  background: var(--papel); border: 1px solid var(--linea);
+  color: var(--tinta); text-decoration: none; text-align: center;
 }
-.expositor::before { /* cara trasera del expositor */
-  content: ""; position: absolute; inset: 6px auto 0 -14px; width: 16px;
-  background: var(--tinta); border-radius: 6px 0 0 4px;
-  transform: skewY(-12deg); transform-origin: right;
-  z-index: -1;
-}
-.expositor { color: var(--tinta); text-decoration: none; }
 .expositor .qr { width: 100%; fill: var(--tinta); }
-.expositor span { display: block; margin-top: .5rem; font-weight: 700; font-size: .95rem; }
-
-.barraquito { /* vaso de barraquito sobre su plato */
-  position: absolute; right: 3%; top: 5%;
-  width: 96px; height: 150px;
-}
-.barraquito::before { /* plato */
-  content: ""; position: absolute; left: -14px; right: -14px; bottom: -4px; height: 34px;
-  border-radius: 50%; background: var(--papel);
-  box-shadow: -8px 12px 14px -8px rgba(14, 42, 71, .35), inset 0 -3px 0 #DCE2E8;
-}
-.vaso {
-  position: absolute; left: 12px; right: 12px; top: 0; bottom: 14px;
-  display: flex; flex-direction: column;
-  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
-  border-top: 5px solid rgba(255, 255, 255, .95); /* borde del vaso */
-}
-.vaso::after { /* reflejo del cristal */
-  content: ""; position: absolute; top: 6px; bottom: 6px; left: 16%; width: 5px;
-  background: rgba(255, 255, 255, .45); border-radius: 3px;
-}
-.barraquito i { display: block; }
-.barraquito i:nth-child(1) { flex: 1.2; background: #FBF5EA radial-gradient(circle at 35% 60%, #A0612F 0 1.5px, transparent 2px) 0 0 / 9px 7px; } /* espuma con canela */
-.barraquito i:nth-child(2) { flex: 2; background: #E7D2B4; }  /* leche */
-.barraquito i:nth-child(3) { flex: 2.6; background: #4A2A1A; } /* café */
-.barraquito i:nth-child(4) { flex: 1.2; background: #D39A3A; } /* licor */
-.barraquito i:nth-child(5) { flex: 1.5; background: #F1E4C6; } /* leche condensada */
+.expositor span { display: block; margin-top: .5rem; font: italic 400 .95rem/1.2 var(--cursiva); }
 
 @media (max-width: 900px) {
-  .mesa-grid { grid-template-columns: 1fr; padding: 3rem 0 4.5rem; }
-  .bodegon { min-height: 520px; }
-  .movil { width: 250px; transform: translate(-50%, -50%) rotate(-3deg); }
-  .carta { font-size: .86rem; }
-  .carta-lista li { padding: .45rem 0; }
-  .expositor { width: 124px; left: 0; }
-  .barraquito { right: 2%; transform: scale(.8); transform-origin: top right; }
+  .portada-grid { grid-template-columns: 1fr; gap: 3rem; padding: 3.5rem 0 4rem; }
 }
-@media (max-width: 420px) {
-  .bodegon { min-height: 660px; }
-  .carta { font-size: .84rem; padding: 1.2rem .8rem .8rem; }
-  .carta-lista li { padding: .45rem 0; }
-  .movil { width: 236px; top: 41%; transform: translate(-52%, -50%) rotate(-3deg); }
-  /* QR de al menos ~110 px: con módulos de ~3 px se escanea bien desde otro móvil. Queda dentro de la
-     figura (bottom positivo) para no tapar el pie de foto. */
-  .expositor { width: 128px; left: -4px; bottom: 1.5%; padding: .55rem .55rem .45rem; transform: rotate(3deg); }
-  .expositor span { margin-top: .3rem; font-size: .85rem; }
-  .barraquito { top: 1%; right: 2%; transform: scale(.62); }
+@media (max-width: 520px) {
+  .muestra { grid-template-columns: 1fr; }
+  .carta { height: 400px; padding: 1.4rem 1.1rem 1.1rem; font-size: .9rem; }
+  /* QR de al menos ~120 px: con módulos de ~3 px se escanea bien desde otro móvil. */
+  .expositor { width: 150px; justify-self: center; }
 }
 
-/* ---------- 4b. Franja de canales (bajo la portada) ---------- */
-.canales { padding: 1.7rem 0; background: var(--papel); border-bottom: 1px solid var(--linea); }
-.canales .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem 2.5rem; flex-wrap: wrap; }
-.canales-titulo { font-size: var(--t-m); font-weight: 700; max-width: none; margin: 0; }
-.canales-lista { display: flex; flex-wrap: wrap; gap: 1rem 2.2rem; }
-.canales-lista li { display: flex; align-items: center; gap: .55rem; font-weight: 600; font-size: var(--t-s); line-height: 1.25; }
-.canal-icono {
-  width: 26px; height: 26px; flex: none;
-  fill: none; stroke: var(--atlantico); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+/* ---------- 4b. Franja de canales (bajo la portada): solo texto, sin logotipos ---------- */
+.canales { padding: 0; }
+.canales .wrap {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 2rem;
+  border-top: 1px solid var(--tinta); border-bottom: 1px solid var(--tinta);
 }
-@media (max-width: 640px) {
-  .canales-lista { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; width: 100%; }
+.canales-titulo { font: italic 400 1.05rem/1.3 var(--cursiva); max-width: none; margin: 0; letter-spacing: 0; }
+.canales-lista { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.canales-lista li { padding: 1.15rem .8rem; text-align: center; font-size: var(--t-s); line-height: 1.3; border-left: 1px solid var(--linea); }
+@media (max-width: 900px) {
+  .canales .wrap { grid-template-columns: 1fr; gap: 0; }
+  .canales-titulo { padding: 1rem 0 .2rem; }
+  .canales-lista { grid-template-columns: 1fr 1fr; }
+  .canales-lista li { text-align: left; padding: .7rem 0; border-left: 0; border-top: 1px solid var(--linea); }
 }
 
 /* ---------- 5. Recorrido del cliente (servicios) ---------- */
 .recorrido-pasos {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem;
-  margin-top: 3rem; counter-reset: paso; position: relative;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem;
+  margin-top: 3rem; counter-reset: paso;
 }
-.recorrido-pasos::before { /* línea que une los pasos */
-  content: ""; position: absolute; top: 1.2rem; left: 1.2rem; right: 1.2rem;
-  border-top: 2px dashed var(--linea);
-}
-.recorrido-pasos li { position: relative; counter-increment: paso; padding-top: 3.8rem; }
+.recorrido-pasos li { counter-increment: paso; }
 .recorrido-pasos li::before {
   content: counter(paso);
-  position: absolute; top: 0; left: 0;
-  width: 2.4rem; height: 2.4rem; border-radius: 50%;
-  display: grid; place-items: center;
-  background: var(--tinta); color: var(--papel); font-weight: 700;
+  display: block; font: 400 3.4rem/1 var(--titular);
+  padding-bottom: 1rem; margin-bottom: 1.1rem; border-bottom: 1px solid var(--linea);
 }
-.recorrido-pasos h3 { font-size: var(--t-xl); letter-spacing: -0.02em; }
-.recorrido-servicio { font-weight: 600; color: var(--atlantico); }
-.recorrido-servicio span { color: var(--gris); font-weight: 500; margin-left: .35rem; }
-.recorrido-pasos p:last-child { color: var(--gris); }
-.recorrido-nota { margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid var(--linea); }
+.recorrido-pasos h3 { font-size: 1.25rem; margin-bottom: .5rem; }
+.recorrido-servicio { font-weight: 600; font-size: .95rem; margin-bottom: .5rem; }
+.recorrido-servicio span { color: var(--gris); font-weight: 400; margin-left: .35rem; }
+.recorrido-pasos p:last-child { color: var(--gris); font-size: .97rem; }
+.recorrido-nota { margin-top: 3.5rem; padding-top: 1.4rem; border-top: 1px solid var(--linea); }
 @media (max-width: 820px) {
-  .recorrido-pasos { grid-template-columns: 1fr; gap: 2rem; }
-  .recorrido-pasos::before { top: 1.2rem; bottom: 1.2rem; left: 1.2rem; right: auto; border-top: 0; border-left: 2px dashed var(--linea); }
-  .recorrido-pasos li { padding: 0 0 0 3.8rem; }
+  .recorrido-pasos { grid-template-columns: 1fr; gap: 2.4rem; }
 }
 
-/* ---------- 6. Listas de servicios con precio (packs) ---------- */
-.local-lista { margin: 1.8rem 0 2rem; border-top: 2px solid var(--tinta); }
+/* ---------- 6. Packs por tipo de negocio: los dos a la vista ---------- */
+.packs { padding-bottom: 5rem; }
+.sectores { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3.5rem; margin-top: 2.6rem; }
+.sector { border-top: 2px solid var(--tinta); padding-top: 1.6rem; scroll-margin-top: 6rem; display: flex; flex-direction: column; }
+.sector > div { display: flex; flex-direction: column; flex: 1; }
+.sector > div > .btn { align-self: flex-start; margin-top: auto; } /* los dos botones a la misma altura */
+.sector h3 { font: 400 1.9rem/1.12 var(--titular); letter-spacing: -0.01em; margin-bottom: .7rem; }
+.sector-intro { color: var(--gris); }
+.local-lista { margin: 1.4rem 0 2rem; border-top: 1px solid var(--linea); }
 .local-lista li {
   display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
-  padding: 1rem 0; border-bottom: 1px solid var(--linea);
+  padding: .95rem 0; border-bottom: 1px solid var(--linea);
 }
+.local-lista h4 { font-size: var(--t-m); margin: 0 0 .2rem; }
 .local-lista p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
-.local-precio { grid-column: 2; grid-row: 1 / span 2; font-weight: 700; white-space: nowrap; }
+.local-precio { grid-column: 2; grid-row: 1 / span 2; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.local-precio.incluido { font-weight: 400; color: var(--gris); }
+.pack-total { border-bottom: 2px solid var(--tinta) !important; padding-top: 1.1rem !important; }
+.pack-total h4 { margin: 0; font: 400 1.2rem/1.3 var(--cursiva); font-style: italic; }
+.pack-total .local-precio { grid-row: 1; font: 400 1.9rem/1 var(--titular); }
+.pack-opcion {
+  display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
+  margin: -1rem 0 2rem; padding: 1.1rem 1.2rem; background: var(--niebla);
+}
+.pack-opcion h4 { font-size: var(--t-m); margin: 0 0 .2rem; }
+.pack-opcion p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
+/* Opción con varios productos y miniatura (material para mesas en hostelería) */
+.pack-opcion-lista { grid-template-columns: 96px 1fr; column-gap: 1.2rem; align-items: start; }
+.opcion-foto { margin: 0; }
+.opcion-foto img { width: 100%; height: auto; }
+.opcion-foto figcaption { font-size: .75rem; color: var(--gris); margin-top: .3rem; }
+.pack-opcion-lista > div > p { margin-bottom: .6rem; }
+.pack-opcion-lista ul li {
+  display: grid; grid-template-columns: 1fr auto; column-gap: 1rem;
+  padding: .6rem 0; border-top: 1px solid var(--linea);
+}
+.pack-opcion-lista h5 { font-size: .95rem; margin: 0 0 .1rem; }
+.pack-opcion-lista li p { grid-column: 1; margin: 0; color: var(--gris); font-size: .9rem; line-height: 1.4; }
+@media (max-width: 900px) { .sectores { grid-template-columns: 1fr; gap: 4rem; } }
+@media (max-width: 480px) {
+  .pack-opcion-lista { grid-template-columns: 1fr; }
+  .opcion-foto { max-width: 140px; margin-bottom: .8rem; }
+}
 
 /* ---------- 7. Por qué elegirnos ---------- */
-.porque-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 4rem; align-items: start; }
-.porque-intro { font-size: var(--t-l); line-height: 1.45; }
-.motivos { margin: 0; }
-.motivos div { padding: 1.1rem 0; border-top: 1px solid var(--linea); }
+.porque-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 4.5rem; align-items: start; }
+.porque-intro { font-size: 1.15rem; line-height: 1.55; }
+.motivos { margin: 0; counter-reset: motivo; }
+.motivos div {
+  display: grid; grid-template-columns: 3rem minmax(0, 1fr);
+  padding: 1.1rem 0; border-top: 1px solid var(--linea); counter-increment: motivo;
+}
+.motivos div::before { content: counter(motivo, upper-roman); grid-row: 1 / span 2; font: italic 400 1rem/1.6 var(--cursiva); color: var(--gris); }
 .motivos div:last-child { border-bottom: 1px solid var(--linea); }
-.motivos dt { font-weight: 700; font-size: var(--t-l); letter-spacing: -0.01em; margin-bottom: .2rem; }
+.motivos dt { font-weight: 700; font-size: 1.1rem; margin-bottom: .15rem; }
 .motivos dd { margin: 0; color: var(--gris); }
-@media (max-width: 860px) { .porque-grid { grid-template-columns: 1fr; gap: 2rem; } }
+.porque-grid > div:first-child { position: sticky; top: 7rem; } /* el título acompaña a la lista al bajar */
+@media (max-width: 860px) { .porque-grid { grid-template-columns: 1fr; gap: 2rem; } .porque-grid > div:first-child { position: static; } }
 
 /* ---------- 8. Así trabajamos ---------- */
 .como { background: var(--niebla); }
-.pasos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem; margin: 2.5rem 0 1.5rem; counter-reset: paso; }
-.pasos li { counter-increment: paso; border-top: 2px solid var(--tinta); padding-top: 1rem; }
-.pasos li::before { content: counter(paso); display: block; font-size: var(--t-xl); font-weight: 700; color: var(--atlantico); margin-bottom: .4rem; }
+.pasos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; margin: 2.8rem 0 1.5rem; counter-reset: paso; }
+.pasos li { counter-increment: paso; border-top: 1px solid var(--tinta); padding-top: 1.1rem; }
+.pasos li::before { content: counter(paso, upper-roman) "."; display: block; font: italic 400 1.1rem/1 var(--cursiva); color: var(--gris); margin-bottom: .8rem; }
+.pasos h3 { font-size: 1.2rem; }
 .pasos p { color: var(--gris); }
 @media (max-width: 760px) { .pasos { grid-template-columns: 1fr; gap: 1.8rem; } }
 
 /* ---------- 9. Precios: la carta ---------- */
+.precios h2, .precios > .wrap > .suave { margin-inline: auto; text-align: center; }
 .carta-precios {
-  max-width: 780px; margin-top: 2.2rem;
-  padding: 2.4rem clamp(1.2rem, 4vw, 3rem);
-  border: 2px solid var(--tinta);
+  max-width: 780px; margin: 2.6rem auto 0;
+  padding: 3rem clamp(1.2rem, 5vw, 3.6rem);
+  border: 1px solid var(--tinta);
   outline: 1px solid var(--tinta); outline-offset: -9px; /* doble filete de carta impresa */
 }
-.pack { background: var(--tinta); color: var(--papel); padding: 1.6rem 1.8rem; margin-bottom: 2.4rem; }
-.pack h3 { font-size: var(--t-xl); margin-bottom: .5rem; }
-.pack p { color: #D5E1F0; margin: 0; }
-.pack .pack-precio { margin-top: 1rem; color: var(--papel); }
-.pack-precio strong { font-size: 2.4rem; color: var(--sol); letter-spacing: -0.02em; }
-.carta-grupo + .carta-grupo { margin-top: 2.2rem; }
-.carta-grupo h3 { font-size: var(--t-m); color: var(--gris); font-weight: 600; margin-bottom: .6rem; }
-.carta-precios li { padding: .6rem 0; }
-.carta-precios li > span:first-child { font-weight: 500; }
-.importe { font-weight: 700; white-space: nowrap; }
-.precios-nota { margin: 2rem 0 0; font-size: var(--t-s); color: var(--gris); }
+/* El pack destacado, como el "menú del día" de la carta */
+.pack { border: 1px solid var(--tinta); padding: 1.5rem 1.6rem; margin-bottom: 2.6rem; text-align: center; }
+.pack h3 { font: italic 400 1.4rem/1.25 var(--cursiva); margin-bottom: .5rem; }
+.pack p { color: var(--gris); margin: 0 auto; font-size: .95rem; }
+.pack .pack-precio { margin-top: 1rem; }
+.pack-precio strong { font: 400 2.6rem/1 var(--titular); color: var(--tinta); }
+.carta-grupo + .carta-grupo { margin-top: 2.4rem; }
+.carta-grupo h3 { font: italic 400 1.15rem/1.3 var(--cursiva); text-align: center; color: var(--tinta); margin-bottom: .8rem; }
+.carta-precios li { padding: .55rem 0; }
+.importe { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.precios-nota { margin: 2.2rem auto 0; font-size: var(--t-s); color: var(--gris); text-align: center; }
 @media (max-width: 520px) {
   .carta-precios li { flex-wrap: wrap; }
   .carta-precios .guia { display: none; }
@@ -354,8 +341,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* ---------- 10. Equipo ---------- */
 .equipo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-top: 2rem; }
 .foto {
-  aspect-ratio: 1; border-radius: 6px; background: var(--niebla);
-  display: grid; place-items: center; font-weight: 700; font-size: 2.4rem; color: var(--atlantico);
+  aspect-ratio: 1; background: var(--niebla);
+  display: grid; place-items: center; font: 400 2.4rem/1 var(--titular); color: var(--tinta);
   margin-bottom: .8rem; overflow: hidden;
 }
 .foto img { width: 100%; height: 100%; object-fit: cover; }
@@ -364,19 +351,19 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* ---------- 11. Contacto ---------- */
 .contacto { background: var(--tinta); color: var(--papel); }
-.contacto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: start; }
+.contacto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
 .contacto-datos { color: #C7D4E4; }
-form { background: var(--papel); color: var(--tinta); border-radius: 14px; padding: 1.6rem; }
+form { background: var(--papel); color: var(--tinta); padding: 1.8rem; }
 label { display: block; font-weight: 600; margin-bottom: .9rem; font-size: .95rem; }
 input, textarea {
   width: 100%; margin-top: .3rem;
   font: 400 1rem/1.4 var(--fuente); padding: .7rem .85rem;
-  border: 1.5px solid #B9C6D5; border-radius: 10px; background: var(--papel); color: var(--tinta);
+  border: 1px solid #9FB0C2; border-radius: 2px; background: var(--papel); color: var(--tinta);
 }
 input:focus, textarea:focus { outline: 3px solid var(--sol); border-color: var(--tinta); }
 textarea { min-height: 100px; resize: vertical; }
 .legal-form { font-size: .82rem; color: var(--gris); margin: .2rem 0 1rem; }
-.form-error { background: #FDECEC; color: #9B1C1C; border-radius: 10px; padding: .6rem .85rem; font-size: .92rem; }
+.form-error { background: #FDECEC; color: #9B1C1C; padding: .6rem .85rem; font-size: .92rem; }
 @media (max-width: 860px) { .contacto-grid { grid-template-columns: 1fr; gap: 2rem; } }
 
 /* ---------- 12. Pie ---------- */
@@ -387,118 +374,26 @@ footer a { text-decoration: none; }
 
 /* ---------- 13. Páginas simples (legales, 404) ---------- */
 .pagina-simple { padding: 4rem 0 5rem; min-height: 60vh; }
-.pagina-simple h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); letter-spacing: -0.03em; }
-.legal h2 { font-size: 1.4rem; margin-top: 2.2rem; }
+.pagina-simple h1 { font-size: clamp(2.4rem, 6vw, 3.6rem); }
+.legal h2 { font-size: 1.6rem; margin-top: 2.4rem; }
 .legal p { max-width: 72ch; }
 
-/* Al cambiar de pestaña, el panel nuevo aparece con un fundido corto en vez de saltar de golpe.
+/* Al cambiar de pestaña en la carta, el panel nuevo aparece con un fundido corto en vez de saltar de golpe.
    Solo tras iniciar las pestañas (clase de site.js), para no animar la carga de la página. */
-.tabs-listas .sector-panel, .tabs-listas .carta-panel {
+.tabs-listas .carta-panel {
   transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
 }
 @starting-style {
-  .tabs-listas .sector-panel, .tabs-listas .carta-panel { opacity: 0; transform: translateY(4px); }
+  .tabs-listas .carta-panel { opacity: 0; transform: translateY(4px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .btn { transition: background-color .15s ease, color .15s ease; }
-  .btn:active, .sector-tabs button:active, .carta-tabs button:active { transform: none; }
+  .btn:active, .carta-tabs button:active { transform: none; }
   /* Menos movimiento no es ninguno: el fundido se mantiene, sin desplazamiento. */
-  .tabs-listas .sector-panel, .tabs-listas .carta-panel { transition: opacity 200ms ease; }
+  .tabs-listas .carta-panel { transition: opacity 200ms ease; }
   @starting-style {
-    .tabs-listas .sector-panel, .tabs-listas .carta-panel { opacity: 0; transform: none; }
+    .tabs-listas .carta-panel { opacity: 0; transform: none; }
   }
-}
-
-/* ---------- 14. Packs por tipo de negocio (pestañas) ---------- */
-.packs h2 { margin-bottom: 1.6rem; }
-.sector-tabs {
-  display: inline-flex; flex-wrap: wrap; gap: .3rem; padding: .3rem;
-  background: var(--niebla); border-radius: 999px; margin-bottom: 2.6rem;
-}
-.sector-tabs button {
-  border: 0; border-radius: 999px; padding: .75rem 1.3rem;
-  background: transparent; color: var(--tinta);
-  font: 600 1rem/1.2 var(--fuente); cursor: pointer;
-}
-.sector-tabs button[aria-selected="true"] { background: var(--tinta); color: var(--papel); }
-.sector-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 4rem; align-items: center; }
-.sector-tabs[hidden] ~ .sector-panel + .sector-panel { margin-top: 4rem; } /* sin JavaScript se ven seguidos */
-.sector-panel { scroll-margin-top: 13rem; } /* al entrar por .../#cita-previa se ven también título y pestañas */
-.sector-titulo { font-size: var(--t-2xl); letter-spacing: -0.02em; }
-/* Con pestañas, el título ya es la pestaña: se oculta a la vista pero se mantiene para lectores de pantalla
-   (si no, los h4 del panel quedarían colgando de un h2 y se rompería el orden de títulos). */
-.sector-tabs:not([hidden]) ~ .sector-panel .sector-titulo {
-  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
-  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
-}
-.sector-intro { font-size: var(--t-l); line-height: 1.45; }
-.local-lista h4 { font-size: var(--t-m); margin: 0 0 .2rem; }
-.mostrador { /* móvil y tarjeta sobre el mostrador */
-  position: relative; margin: 0; padding: 2.5rem 1rem 8rem;
-  background: var(--niebla); border-radius: 6px;
-}
-.movil-suelto {
-  position: relative; left: auto; top: auto;
-  width: 240px; aspect-ratio: 9 / 15.5; margin: 0 auto 0 6%;
-  transform: rotate(-3deg);
-}
-.movil-suelto .carta-cab { margin-bottom: .6rem; }
-.tarjeta-nfc {
-  position: absolute; right: 5%; bottom: 3rem;
-  width: 190px; aspect-ratio: 85.6 / 54; /* tamaño de una tarjeta de crédito */
-  padding: .8rem .9rem;
-  display: flex; flex-direction: column; justify-content: space-between;
-  background: var(--tinta); color: var(--papel); border-radius: 10px;
-  transform: rotate(-7deg);
-  box-shadow: -10px 16px 18px -10px rgba(14, 42, 71, .45);
-}
-.tarjeta-nfc .nfc { width: 26px; height: 26px; color: var(--sol); }
-.tarjeta-nfc .estrellas { color: var(--sol); letter-spacing: .12em; font-size: .8rem; }
-.tarjeta-nfc strong { font-size: .82rem; line-height: 1.2; }
-.mostrador figcaption { position: absolute; left: 1rem; bottom: .8rem; font-size: var(--t-s); color: var(--gris); }
-
-/* Pack: servicios incluidos, total, hosting aparte y opción */
-.local-precio.incluido { font-weight: 500; color: var(--gris); }
-.pack-total { border-bottom: 2px solid var(--tinta) !important; }
-.pack-total h4 { margin: 0; font-size: var(--t-l); }
-.pack-total .local-precio { grid-row: 1; font-size: var(--t-xl); color: var(--atlantico); }
-.pack-opcion {
-  display: grid; grid-template-columns: 1fr auto; column-gap: 1.5rem;
-  margin: -1rem 0 2rem; padding: 1rem; background: var(--niebla); border-radius: 6px;
-}
-.pack-opcion h4 { font-size: var(--t-m); margin: 0 0 .2rem; }
-.pack-opcion p { grid-column: 1; margin: 0; color: var(--gris); font-size: .95rem; }
-
-@media (max-width: 860px) {
-  .sector-panel { grid-template-columns: 1fr; gap: 2.5rem; }
-  .sector-panel > div { order: -1; } /* en móvil, primero el texto */
-}
-@media (max-width: 480px) { /* en móvil: sin superponer, móvil arriba y tarjeta debajo */
-  .sector-tabs { display: flex; border-radius: 16px; }
-  .sector-tabs button { flex: 1 1 100%; border-radius: 12px; text-align: left; }
-  .mostrador { padding: 1.8rem 1rem 1rem; }
-  .movil-suelto { width: 220px; margin: 0 auto; }
-  .movil-suelto .carta { font-size: .84rem; }
-  .movil-suelto .carta-lista li:nth-child(n+5) { display: none; }
-  .tarjeta-nfc { position: relative; right: auto; bottom: auto; width: 170px; margin: -1rem 0 0 auto; }
-  .mostrador figcaption { position: static; margin-top: 1rem; }
-}
-
-/* Opción con varios productos y miniatura (material para mesas en hostelería) */
-.pack-opcion-lista { grid-template-columns: 110px 1fr; column-gap: 1.2rem; align-items: start; }
-.opcion-foto { margin: 0; }
-.opcion-foto img { width: 100%; height: auto; border-radius: 4px; }
-.opcion-foto figcaption { font-size: .75rem; color: var(--gris); margin-top: .3rem; }
-.pack-opcion-lista > div > p { margin-bottom: .6rem; }
-.pack-opcion-lista ul li {
-  display: grid; grid-template-columns: 1fr auto; column-gap: 1rem;
-  padding: .6rem 0; border-top: 1px solid var(--linea);
-}
-.pack-opcion-lista h5 { font-size: .95rem; margin: 0 0 .1rem; }
-.pack-opcion-lista li p { grid-column: 1; margin: 0; color: var(--gris); font-size: .9rem; line-height: 1.4; }
-@media (max-width: 480px) {
-  .pack-opcion-lista { grid-template-columns: 1fr; }
-  .opcion-foto { max-width: 140px; margin-bottom: .8rem; }
 }

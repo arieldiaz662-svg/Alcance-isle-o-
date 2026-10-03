@@ -21,9 +21,9 @@ const server = http.createServer((req, res) => {
   const page = await browser.newPage({ viewport: { width: 1200, height: 760 }, deviceScaleFactor: 1, bypassCSP: true }); // la CSP de la web bloquearía el estilo que oculta el menú
   await page.goto('http://localhost:4099/');
   await page.evaluate(() => document.fonts.ready);
-  await page.addStyleTag({ content: '.nav{display:none}.mesa-nota,.bodegon figcaption{visibility:hidden}' });
-  const box = await page.locator('.mesa').boundingBox();
-  await page.screenshot({ path: join(__dirname, '..', 'public', 'img', 'og.jpg'), type: 'jpeg', quality: 82, clip: { x: 0, y: box.y + 40, width: 1200, height: 630 } });
+  await page.addStyleTag({ content: '.nav{display:none}.portada-nota,.muestra figcaption{visibility:hidden}' });
+  const box = await page.locator('.portada').boundingBox();
+  await page.screenshot({ path: join(__dirname, '..', 'public', 'img', 'og.jpg'), type: 'jpeg', quality: 82, clip: { x: 0, y: box.y, width: 1200, height: 630 } });
   await browser.close();
   server.close();
   console.log('public/img/og.jpg generada');
