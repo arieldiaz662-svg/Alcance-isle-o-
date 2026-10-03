@@ -108,6 +108,14 @@ describe('construcción y publicación', () => {
     assert.ok(!existsSync(join(outDir, 'assets/admin')), 'el panel no se publica');
   });
 
+  test('cabecera con el logotipo de la marca (puerta con tilde) y nombre accesible', () => {
+    const marca = index.match(/<a class="marca"[\s\S]*?<\/a>/)[0];
+    assert.match(marca, /aria-label="Alcance Isleño, inicio"/);
+    assert.match(marca, /<svg class="marca-logo" aria-hidden="true"/);
+    assert.match(marca, /fill="#FFC93C"/, 'la puerta encendida');
+    assert.doesNotMatch(read('assets/img/favicon.svg'), /#1B62C9/, 'sin la chincheta azul anterior');
+  });
+
   test('funciona en una subcarpeta y sin recursos de terceros', () => {
     assert.doesNotMatch(index, /(href|src)="\/(?!\/)/, 'sin rutas absolutas');
     assert.doesNotMatch(index, /fonts\.googleapis|fonts\.gstatic/);
