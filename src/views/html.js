@@ -37,7 +37,8 @@ export function contact(site, config) {
 export const STATIC_CSP = "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; object-src 'none'; base-uri 'self'";
 
 // Rutas de enlaces y recursos, relativas y con .html para que la web funcione en cualquier subcarpeta
-// o dominio. assetVersions añade ?v=<hash> a CSS y JS para evitar cachés antiguas.
+// o dominio. assetVersions añade ?v=<hash> a CSS, JS y favicon para evitar cachés antiguas (los navegadores
+// guardan el icono de la pestaña mucho tiempo: sin versión seguirían enseñando el anterior).
 export function links(config) {
   return {
     home: './', legal: 'aviso-legal.html', privacy: 'privacidad.html', cookies: 'cookies.html',
@@ -80,6 +81,7 @@ ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">
 ` : ''}
 <meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="${to.asset('img/favicon.svg')}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="${to.home}apple-touch-icon.png">
 <link rel="preload" href="${to.asset('fonts/familjen-grotesk.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${to.asset('css/site.css')}">
 ${head}</head>
