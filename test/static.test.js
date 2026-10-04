@@ -116,6 +116,14 @@ describe('construcción y publicación', () => {
     assert.doesNotMatch(read('assets/img/favicon.svg'), /#1B62C9/, 'sin la chincheta azul anterior');
   });
 
+  test('icono de la pestaña: con versión para no quedarse en caché, favicon.ico y el de iPhone en la raíz', () => {
+    assert.match(index, /<link rel="icon" href="assets\/img\/favicon\.svg\?v=[0-9a-f]{10}" type="image\/svg\+xml">/);
+    assert.match(index, /<link rel="apple-touch-icon" href="\.\/apple-touch-icon\.png">/);
+    const ico = readFileSync(join(outDir, 'favicon.ico'));
+    assert.deepEqual([...ico.subarray(0, 4)], [0, 0, 1, 0], 'favicon.ico es un icono de verdad, no la página 404');
+    assert.ok(existsSync(join(outDir, 'apple-touch-icon.png')));
+  });
+
   test('funciona en una subcarpeta y sin recursos de terceros', () => {
     assert.doesNotMatch(index, /(href|src)="\/(?!\/)/, 'sin rutas absolutas');
     assert.doesNotMatch(index, /fonts\.googleapis|fonts\.gstatic/);

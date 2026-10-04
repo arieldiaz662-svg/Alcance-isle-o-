@@ -21,11 +21,11 @@ export function buildStatic({
   whatsappNumber = process.env.WHATSAPP_NUMBER || '',
   contactEmail = process.env.CONTACT_EMAIL || '',
 } = {}) {
-  // Versión de CSS y JS según su contenido (?v=...): tras publicar, nadie recibe el HTML nuevo
+  // Versión de CSS, JS y favicon según su contenido (?v=...): tras publicar, nadie recibe el HTML nuevo
   // con una hoja de estilos antigua guardada en caché.
   const version = (file) => createHash('sha256').update(readFileSync(join(ROOT, 'public', file))).digest('hex').slice(0, 10);
   const config = {
-    assetVersions: { 'css/site.css': version('css/site.css'), 'js/site.js': version('js/site.js') },
+    assetVersions: { 'css/site.css': version('css/site.css'), 'js/site.js': version('js/site.js'), 'img/favicon.svg': version('img/favicon.svg') },
     publicBaseUrl: publicBaseUrl.replace(/\/+$/, ''),
     whatsappNumber: whatsappNumber.replace(/\D/g, ''),
     contactEmail,

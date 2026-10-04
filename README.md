@@ -51,3 +51,5 @@ test/static.test.js     tests de la web generada
 ## Historial
 
 Hasta la versión 0.1 el repositorio incluía también una aplicación con servidor (panel de administración, base de datos de contactos y redirector de tarjetas NFC). No se llegó a usar y se archivó en la rama `archivo-app-servidor`.
+
+En octubre de 2026 se preparó un rediseño más clásico ("carta impresa": titulares con serifa, filetes finos, sin objetos dibujados) con el logo ajustado (esquinas rectas). De momento se mantiene el diseño actual; el rediseño completo está guardado en la rama `archivo-rediseno-carta-impresa`. Para recuperarlo, abrir una PR desde esa rama hacia `main`.
