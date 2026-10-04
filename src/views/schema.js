@@ -43,6 +43,8 @@ export function structuredDataObject({ site, config, priceGroups }) {
     telephone: `+${config.whatsappNumber || site.whatsappNumber}`,
     ...(config.contactEmail || site.email ? { email: config.contactEmail || site.email } : {}),
     ...(site.ogImage ? { image: `${base}/assets/${site.ogImage}` } : {}),
+    // Logo para Google (panel de la empresa en los resultados): PNG cuadrado de 512 px, el símbolo de la marca.
+    ...(site.logo ? { logo: `${base}/assets/${site.logo}` } : {}),
     areaServed: { '@type': 'AdministrativeArea', name: site.region },
     ...(business.address ? { address: { '@type': 'PostalAddress', addressRegion: business.address.region, addressCountry: business.address.country } } : {}),
     ...(business.hours ? {
