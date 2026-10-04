@@ -10,6 +10,8 @@ export const site = {
   // Imagen de vista previa al compartir el enlace (WhatsApp, redes). 1200×630, en public/img/.
   // Se regenera con: npm run og-image (tras cambios visibles en la portada).
   ogImage: 'img/og.jpg',
+  // Logo que lee Google en los datos estructurados (PNG cuadrado de 512 px, generado desde docs/marca/simbolo.svg).
+  logo: 'img/logo.png',
   ogImageAlt: 'Alcance Isleño: tu escaparate digital. Carta digital en el móvil sobre una mesa de bar.',
 
   // Contacto. Las variables de entorno WHATSAPP_NUMBER y CONTACT_EMAIL, si existen, tienen prioridad.

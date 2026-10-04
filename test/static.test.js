@@ -359,6 +359,16 @@ describe('datos estructurados para Google', () => {
     assert.equal(web.publisher['@id'], negocio['@id']);
   });
 
+  test('el logo para Google es el de la marca: PNG cuadrado de al menos 112 px', () => {
+    const [negocio] = leer('index.html')['@graph'];
+    assert.equal(negocio.logo, `${BASE}/assets/${site.logo}`);
+    const png = readFileSync(join(outDir, 'assets', site.logo));
+    assert.equal(png.toString('ascii', 1, 4), 'PNG');
+    const [ancho, alto] = [png.readUInt32BE(16), png.readUInt32BE(20)];
+    assert.equal(ancho, alto, 'cuadrado');
+    assert.ok(ancho >= 112, 'Google pide al menos 112 × 112 px');
+  });
+
   test('los servicios y precios son los mismos que se ven en la web, sin IGIC', () => {
     const [negocio] = leer('index.html')['@graph'];
     const ofertas = negocio.hasOfferCatalog.itemListElement.flatMap((g) => g.itemListElement);
