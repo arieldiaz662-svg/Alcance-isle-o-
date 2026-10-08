@@ -21,7 +21,7 @@ const server = http.createServer((req, res) => {
   const page = await browser.newPage({ viewport: { width: 1200, height: 760 }, deviceScaleFactor: 1, bypassCSP: true }); // la CSP de la web bloquearía el estilo que oculta el menú
   await page.goto('http://localhost:4099/');
   await page.evaluate(() => document.fonts.ready);
-  await page.addStyleTag({ content: '.nav{display:none}.mesa-nota,.bodegon figcaption{visibility:hidden}' });
+  await page.addStyleTag({ content: '.nav{display:none}.mesa-nota,.bodegon figcaption{visibility:hidden}.oferta-chapa{font-size:1.2rem;padding:.4rem .9rem;margin-bottom:1rem;white-space:nowrap}' });
   const box = await page.locator('.mesa').boundingBox();
   await page.screenshot({ path: join(__dirname, '..', 'public', 'img', 'og.jpg'), type: 'jpeg', quality: 82, clip: { x: 0, y: box.y + 40, width: 1200, height: 630 } });
   await browser.close();

@@ -46,7 +46,7 @@ export function priceList(site) {
     ...(sectors || []).filter((sector) => sector.pack !== 'main').map((sector) => ({
       title: sector.title,
       rows: [
-        { label: `${sector.pack.name} (${sector.pack.label.charAt(0).toLowerCase()}${sector.pack.label.slice(1)})`, price: sector.pack.price },
+        { label: `${sector.pack.name} (${sector.pack.label.charAt(0).toLowerCase()}${sector.pack.label.slice(1)})`, price: sector.pack.price, regularPrice: sector.pack.regularPrice },
         ...(sector.option ? [{ label: `${sector.option.name} (opcional)`, price: sector.option.price }] : []),
       ],
     })),
@@ -81,6 +81,20 @@ export function renderLanding({ site, config }) {
     ? `${mainSector.includes.map((i, n) => (n ? i.name.charAt(0).toLowerCase() + i.name.slice(1) : i.name)).join(' + ')}.`
     : '';
 
+  // Oferta de lanzamiento: precio normal tachado delante del precio con descuento (solo mientras dura).
+  const launch = site.launch && site.launch.active ? site.launch : null;
+  const priceHtml = (price, regularPrice) => (regularPrice
+    ? `<s class="antes"><span class="solo-lectores">Precio normal: </span>${esc(regularPrice)}</s> <span class="solo-lectores">Precio de lanzamiento: </span>${esc(price)}`
+    : esc(price));
+  const launchBanner = launch ? `
+    <aside class="oferta" aria-labelledby="oferta-titulo">
+      <p class="oferta-etiqueta">${esc(launch.badge)}</p>
+      <h3 id="oferta-titulo">${esc(launch.title)}</h3>
+      <p>${esc(launch.text)}</p>
+      <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, launch.whatsappText))}" rel="noopener" target="_blank">${esc(launch.cta)}</a>
+      <p class="oferta-condiciones">${esc(launch.terms.replace('{plan}', planText))}</p>
+    </aside>` : '';
+
   // ---------- Portada: la mesa ----------
   const qrUrl = whatsappUrl(whatsapp, demoMenu.qrWhatsappText);
   const menuTabs = demoMenu.sections.map((section, i) => `
@@ -94,6 +108,7 @@ export function renderLanding({ site, config }) {
 <div class="mesa" id="inicio">
   <div class="wrap mesa-grid">
     <div class="mesa-texto">
+      ${launch ? `<a class="oferta-chapa" href="#packs">${esc(launch.badge)} · primeros ${esc(String(launch.spots))} clientes</a>` : ''}
       <h1>${esc(hero.title)}</h1>
       <p class="lead">${esc(hero.lead)}</p>
       <div class="acciones">
@@ -192,7 +207,7 @@ export function renderLanding({ site, config }) {
           </li>`).join('')}
           <li class="pack-total">
             <h4>${esc(sectorPack.label || sectorPack.name)}</h4>
-            <span class="local-precio">${esc(sectorPack.price)}</span>
+            <span class="local-precio">${priceHtml(sectorPack.price, sectorPack.regularPrice)}</span>
           </li>
         </ul>${sector.option && sector.option.items ? `
         <div class="pack-opcion pack-opcion-lista">
@@ -241,7 +256,7 @@ export function renderLanding({ site, config }) {
   const sectorsSection = sectors ? `
 <section class="packs" id="packs">
   <div class="wrap">
-    <h2>${esc(site.sectorsTitle)}</h2>
+    <h2>${esc(site.sectorsTitle)}</h2>${launchBanner}
     <div class="sector-tabs" role="tablist" aria-label="${esc(site.sectorsTitle)}" hidden>${sectors.map((sector, i) => `
       <button type="button" role="tab" id="tab-${esc(sector.id)}" aria-controls="${esc(sector.id)}" aria-selected="${i === 0}"${i === 0 ? '' : ' tabindex="-1"'}>${esc(sector.tab)}</button>`).join('')}
     </div>${sectors.map(sectorPanel).join('')}
@@ -279,8 +294,8 @@ export function renderLanding({ site, config }) {
 </section>`;
 
   // ---------- Precios: como la carta de una cafetería ----------
-  const priceRow = (label, price) => `
-          <li><span>${esc(label)}</span><span class="guia" aria-hidden="true"></span><span class="importe">${esc(price)}</span></li>`;
+  const priceRow = (label, price, regularPrice) => `
+          <li><span>${esc(label)}</span><span class="guia" aria-hidden="true"></span><span class="importe">${priceHtml(price, regularPrice)}</span></li>`;
   const priceGroups = priceList(site);
   const pricesSection = `
 <section class="precios" id="precios">
@@ -291,11 +306,12 @@ export function renderLanding({ site, config }) {
       <div class="pack">
         <h3>${esc(pack.name)}</h3>
         <p>${esc(packText)}</p>
-        <p class="pack-precio"><strong>${esc(pack.price)}</strong></p>
+        <p class="pack-precio">${pack.regularPrice ? `<s class="antes"><span class="solo-lectores">Precio normal: </span>${esc(pack.regularPrice)}</s> <span class="solo-lectores">Precio de lanzamiento: </span>` : ''}<strong>${esc(pack.price)}</strong></p>
+        ${launch ? `<p class="pack-oferta">${esc(launch.badge)} · primeros ${esc(String(launch.spots))} clientes</p>` : ''}
       </div>` : ''}${priceGroups.map((group) => `
       <div class="carta-grupo">
         <h3>${esc(group.title)}</h3>
-        <ul>${group.rows.map((row) => priceRow(row.label, row.price)).join('')}
+        <ul>${group.rows.map((row) => priceRow(row.label, row.price, row.regularPrice)).join('')}
         </ul>
       </div>`).join('')}
       <p class="precios-nota">${esc(site.pricesNote)}</p>

@@ -502,3 +502,21 @@ footer a { text-decoration: none; }
   .pack-opcion-lista { grid-template-columns: 1fr; }
   .opcion-foto { max-width: 140px; margin-bottom: .8rem; }
 }
+
+/* ---------- Oferta de lanzamiento ---------- */
+.solo-lectores { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+s.antes { color: var(--gris); font-weight: 400; font-size: .7em; margin-right: .3rem; text-decoration-thickness: 2px; }
+.pack-precio s.antes { color: #D5E1F0; font-size: 1.2rem; }
+.oferta-chapa {
+  display: inline-block; margin-bottom: 1rem; padding: .35rem .8rem;
+  background: var(--sol); color: var(--tinta); font-weight: 700; font-size: var(--t-s); text-decoration: none;
+}
+.oferta {
+  margin: 0 0 2rem; padding: 1.6rem 1.8rem; background: var(--tinta); color: var(--papel);
+}
+.oferta h3 { font-size: var(--t-xl); margin: .2rem 0 .5rem; }
+.oferta p { color: #D5E1F0; margin: 0 0 1rem; }
+.oferta .oferta-etiqueta { color: var(--sol); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: var(--t-s); margin: 0; }
+.oferta .oferta-condiciones { font-size: var(--t-s); margin: 1rem 0 0; }
+.pack .pack-oferta { margin-top: .4rem; color: var(--sol); font-weight: 600; }
+.importe s.antes { font-size: .85em; }

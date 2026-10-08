@@ -30,6 +30,13 @@ const priceRow = (label, price) => new RegExp(`<span>${escapeRe(label)}</span><s
 const amount = (price) => Number(String(price).match(/\d+(?:,\d+)?/)[0].replace(',', '.'));
 const service = (id) => site.services.find((s) => s.id === id);
 const extra = (id) => site.extras.items.find((i) => i.id === id);
+// Precio normal de un pack (con la oferta de lanzamiento activa, el que aparece tachado).
+const normalPrice = (pack) => pack.regularPrice || pack.price;
+const launch = site.launch.active ? site.launch : null;
+// Importe de un pack en la web: con la oferta, el precio normal tachado delante del de lanzamiento.
+const packPriceRe = (pack) => (pack.regularPrice
+  ? `<s class="antes"><span class="solo-lectores">Precio normal: </span>${escapeRe(pack.regularPrice)}</s> <span class="solo-lectores">Precio de lanzamiento: </span>${escapeRe(pack.price)}`
+  : escapeRe(pack.price));
 
 before(() => {
   buildStatic({ outDir, publicBaseUrl: `${BASE}/` });
@@ -166,14 +173,14 @@ describe('coherencia del contenido', () => {
     assert.deepEqual(positions, [...positions].sort((a, b) => a - b), `orden del menú: ${navIds.join(', ')}`);
   });
 
-  test('cada pack es más barato que sus servicios sueltos, sin mostrar precio "antes" ni ahorro', () => {
+  test('cada pack (a precio normal) es más barato que sus servicios sueltos, sin mostrar ahorro', () => {
     // Pack completo hostelería = ficha + landing + primer año del plan de mantenimiento (pago anual) + tarjeta de reseñas.
     const planAnual = amount(service('hosting').prices[1].price);
     const suelto = amount(service('gbp').price) + amount(service('landing').price) + planAnual + amount(extra('nfc').price);
-    assert.equal(suelto - amount(site.pack.price), 25, 'el pack de hostelería ahorra 25 € frente a los servicios sueltos');
+    assert.equal(suelto - amount(normalPrice(site.pack)), 25, 'el pack de hostelería ahorra 25 € frente a los servicios sueltos');
     // Pack negocios con cita previa = landing + tarjeta de reseñas + primer año del plan, más barato que por separado.
     const cita = site.sectors.find((s) => s.id === 'cita-previa');
-    assert.equal(amount(service('landing').price) + amount(extra('nfc').price) + planAnual - amount(cita.pack.price), 25,
+    assert.equal(amount(service('landing').price) + amount(extra('nfc').price) + planAnual - amount(normalPrice(cita.pack)), 25,
       'el pack de cita previa ahorra 25 € frente a los servicios sueltos');
   });
 
@@ -196,17 +203,19 @@ describe('coherencia del contenido', () => {
     const [mensual, anual] = service('hosting').prices.map((row) => row.price);
     const plan = `${mensual.replace(' / mes', ' al mes')} o ${anual.replace(' / año', ' al año')}`;
     assert.equal(plan, '12 € al mes o 120 € al año');
-    assert.match(between(index, 'class="recorrido"', 'id="por-que"'), new RegExp(escapeRe(`por ${plan}. El primer año va incluido en los packs.`)));
+    assert.match(between(index, 'class="recorrido"', 'id="por-que"'), new RegExp(escapeRe(`por ${plan}. ${launch ? `Los packs de lanzamiento incluyen los ${launch.months} primeros meses.` : 'El primer año va incluido en los packs.'}`)));
   });
 
-  test('plan de mantenimiento: sustituye al hosting suelto, hasta 2 cambios al mes y primer año incluido en los dos packs', () => {
+  test('plan de mantenimiento: sustituye al hosting suelto, hasta 2 cambios al mes e incluido en los dos packs', () => {
     const plan = service('hosting');
     assert.equal(plan.name, 'Plan de mantenimiento');
     assert.deepEqual(plan.prices.slice(0, 2).map((row) => row.price), ['12 € / mes', '120 € / año']);
     assert.doesNotMatch(index, /90 € \/ año|90 € al año|se paga aparte|hosting aparte/);
     for (const sector of site.sectors) {
       const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido"');
-      assert.match(panel, /<h4>Plan de mantenimiento el primer año<\/h4>\s*<p>Hosting, dominio y hasta 2 cambios al mes/, sector.id);
+      const incluido = sector.includes.find((i) => i.name.startsWith('Plan de mantenimiento'));
+      assert.equal(incluido.name, launch ? `Plan de mantenimiento los ${launch.months} primeros meses` : 'Plan de mantenimiento el primer año');
+      assert.match(panel, new RegExp(`<h4>${escapeRe(incluido.name)}</h4>\\s*<p>[^<]*hosting, dominio y hasta 2 cambios al mes`, 'i'), sector.id);
     }
   });
 
@@ -293,7 +302,7 @@ describe('packs por tipo de negocio', () => {
     const panel = between(index, 'id="hosteleria"', 'id="cita-previa"');
     assert.doesNotMatch(index, /[Dd]e regalo/);
     assert.equal((panel.match(/class="local-precio incluido">Incluido</g) || []).length, site.sectors[0].includes.length);
-    assert.match(panel, new RegExp(`class="pack-total">[\\s\\S]*?<span class="local-precio">${site.pack.price}</span>`));
+    assert.match(panel, new RegExp(`class="pack-total">[\\s\\S]*?<span class="local-precio">${packPriceRe(site.pack)}</span>`));
     for (const id of ['mesa', 'pegatinas']) {
       assert.match(panel, new RegExp(`${escapeRe(extra(id).name)}</h5>[\\s\\S]*?${escapeRe(extra(id).price)}`));
     }
@@ -304,7 +313,7 @@ describe('packs por tipo de negocio', () => {
   test('cita previa: pack con el primer año de mantenimiento y tarjetas de visita; sin material de mesa', () => {
     const cita = site.sectors.find((s) => s.id === 'cita-previa');
     const panel = between(index, 'id="cita-previa"', 'class="recorrido"');
-    assert.match(panel, new RegExp(`${escapeRe(cita.pack.label)}</h4>\\s*<span class="local-precio">${cita.pack.price}`));
+    assert.match(panel, new RegExp(`${escapeRe(cita.pack.label)}</h4>\\s*<span class="local-precio">${packPriceRe(cita.pack)}</span>`));
     assert.match(panel, new RegExp(`Opcional: ${escapeRe(cita.option.name)}[\\s\\S]*?${escapeRe(cita.option.price)}`));
     assert.doesNotMatch(panel, /Expositor de mesa/);
     assert.match(panel, /wa\.me\/34623243294\?text=Hola%2C%20tengo%20un%20negocio%20con%20cita%20previa/);
@@ -317,9 +326,13 @@ describe('precios', () => {
       for (const row of s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) assert.match(precios, priceRow(row.label, row.price));
     }
     for (const item of site.extras.items) assert.match(precios, priceRow(item.name, item.price));
-    assert.match(precios, /class="pack"[\s\S]*?<p class="pack-precio"><strong>520 €<\/strong>/);
-    assert.doesNotMatch(index, /<s>|ahorr|antes \d/i, 'sin precio tachado ni ahorro');
-    assert.match(precios, /Pack negocios con cita previa \(web, tarjeta de reseñas QR \+ NFC y primer año de mantenimiento\)/);
+    const precioPack = launch ? '<s class="antes"><span class="solo-lectores">Precio normal: </span>520 €</s> <span class="solo-lectores">Precio de lanzamiento: </span><strong>260 €</strong>' : '<strong>520 €</strong>';
+    assert.match(precios, new RegExp(`class="pack"[\\s\\S]*?<p class="pack-precio">${escapeRe(precioPack)}</p>`));
+    assert.doesNotMatch(index, /ahorr|antes \d/i, 'sin ahorro calculado');
+    assert.equal(index.includes('<s '), Boolean(launch), 'precio tachado solo mientras dura la oferta');
+    const cita = site.sectors.find((s) => s.id === 'cita-previa');
+    assert.match(precios, new RegExp(`Pack negocios con cita previa \\(${escapeRe(cita.pack.label.charAt(0).toLowerCase() + cita.pack.label.slice(1))}\\)`));
+    assert.match(precios, new RegExp(`<span class="importe">${packPriceRe(cita.pack)}</span>`));
     assert.match(precios, /Precios sin IGIC/);
   });
 });
@@ -393,5 +406,35 @@ describe('datos estructurados para Google', () => {
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
+  });
+});
+
+describe('oferta de lanzamiento', () => {
+  test('50 % de descuento en los dos packs, con precio normal, cupo y condiciones visibles', () => {
+    assert.equal(site.launch.percent, 50);
+    for (const pack of [site.pack, site.sectors.find((s) => s.id === 'cita-previa').pack]) {
+      assert.equal(amount(pack.price), amount(pack.regularPrice) / 2, pack.name);
+    }
+    assert.deepEqual([site.pack.price, site.pack.regularPrice], ['260 €', '520 €']);
+    const oferta = between(index, 'class="oferta"', '</aside>');
+    assert.match(oferta, /Oferta de lanzamiento: -50 %/);
+    assert.match(oferta, /los 5 primeros clientes/);
+    assert.match(oferta, /3 primeros meses de mantenimiento/);
+    assert.match(oferta, /Precios sin IGIC/);
+    assert.match(oferta, /wa\.me\/34623243294\?text=Hola%2C%20quiero%20aprovechar%20la%20oferta/);
+    assert.match(index, /class="oferta-chapa" href="#packs"/);
+  });
+
+  test('la oferta no toca los servicios sueltos ni el material', () => {
+    const grupos = precios.split('class="carta-grupo"').slice(1);
+    assert.ok(grupos.length >= 3);
+    assert.doesNotMatch(grupos.slice(0, 2).join(''), /<s /);
+  });
+
+  test('los datos estructurados anuncian el precio de lanzamiento', () => {
+    const [negocio] = JSON.parse(/<script type="application\/ld\+json">\n([\s\S]*?)\n<\/script>/.exec(index)[1])['@graph'];
+    const precios = negocio.hasOfferCatalog.itemListElement.flatMap((g) => g.itemListElement)
+      .filter((o) => /^Pack /.test(o.itemOffered.name)).map((o) => o.priceSpecification.price);
+    assert.deepEqual(precios, [260, 210]);
   });
 });
