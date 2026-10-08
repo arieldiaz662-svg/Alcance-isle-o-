@@ -34,6 +34,8 @@ export function structuredDataObject({ site, config, priceGroups }) {
     const spec = parsePrice(row.price);
     return spec.price ?? spec.minPrice;
   });
+  // Perfiles oficiales del negocio: ficha de Google e Instagram.
+  const sameAs = [business.googleBusinessUrl, site.instagram && `https://www.instagram.com/${site.instagram}/`].filter(Boolean);
   const negocio = {
     '@type': 'ProfessionalService',
     '@id': `${base}/#negocio`,
@@ -57,7 +59,8 @@ export function structuredDataObject({ site, config, priceGroups }) {
     } : {}),
     priceRange: `${Math.min(...amounts)} € - ${Math.max(...amounts)} €`,
     currenciesAccepted: 'EUR',
-    ...(business.googleBusinessUrl ? { sameAs: [business.googleBusinessUrl], hasMap: business.googleBusinessUrl } : {}),
+    ...(sameAs.length ? { sameAs } : {}),
+    ...(business.googleBusinessUrl ? { hasMap: business.googleBusinessUrl } : {}),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Servicios y precios',

@@ -54,7 +54,7 @@ export function priceList(site) {
 }
 
 export function renderLanding({ site, config }) {
-  const { whatsapp, phoneDisplay, email } = contact(site, config);
+  const { whatsapp, phoneDisplay, email, instagram } = contact(site, config);
   const to = links(config);
   const wa = whatsappUrl(whatsapp, site.whatsappGreeting);
   const team = site.team.filter((person) => person.name && person.name.trim());
@@ -354,7 +354,8 @@ ${teamSection}
       <p><a class="btn btn-sol" href="${esc(wa)}" rel="noopener" target="_blank">Escribir por WhatsApp</a></p>
       <p class="contacto-datos">Trabajamos en ${esc(site.region)}.${phoneDisplay ? `<br>
       Teléfono: <a href="tel:+${esc(whatsapp)}">${escPhone(phoneDisplay)}</a>` : ''}${email ? `<br>
-      Email: <a href="mailto:${esc(email)}">${esc(email)}</a>` : ''}</p>
+      Email: <a href="mailto:${esc(email)}">${esc(email)}</a>` : ''}${instagram ? `<br>
+      Instagram: <a href="${esc(instagram.url)}" rel="me noopener" target="_blank">${esc(instagram.handle)}</a>` : ''}</p>
     </div>
 
     <form id="formulario" novalidate data-whatsapp="${esc(whatsapp)}">

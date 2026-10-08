@@ -438,3 +438,17 @@ describe('oferta de lanzamiento', () => {
     assert.deepEqual(precios, [260, 210]);
   });
 });
+
+describe('instagram', () => {
+  test('la cuenta @alcanceisleno aparece en contacto, en el pie de todas las páginas y en los datos para Google', () => {
+    const url = `https://www.instagram.com/${site.instagram}/`;
+    assert.equal(site.instagram, 'alcanceisleno');
+    assert.match(between(index, 'id="contacto"'), new RegExp(`Instagram: <a href="${escapeRe(url)}" rel="me noopener" target="_blank">@alcanceisleno</a>`));
+    for (const file of ['index.html', 'privacidad.html', 'cookies.html', '404.html']) {
+      assert.match(between(read(file), '<footer'), new RegExp(`href="${escapeRe(url)}"`), file);
+    }
+    const ld = JSON.parse(/<script type="application\/ld\+json">\n([\s\S]*?)\n<\/script>/.exec(index)[1]);
+    assert.ok(ld['@graph'][0].sameAs.includes(url));
+  });
+});
+

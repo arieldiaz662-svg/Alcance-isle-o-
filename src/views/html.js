@@ -29,6 +29,7 @@ export function contact(site, config) {
     whatsapp: config.whatsappNumber || site.whatsappNumber,
     phoneDisplay: site.phoneDisplay,
     email: config.contactEmail || site.email,
+    instagram: site.instagram ? { handle: `@${site.instagram}`, url: `https://www.instagram.com/${site.instagram}/` } : null,
   };
 }
 
@@ -50,6 +51,7 @@ export function links(config) {
 // baseHref: para páginas que se sirven desde cualquier ruta (la página 404), fija la base de los
 // enlaces relativos en la raíz de la web. head: HTML extra para <head> (p. ej. datos estructurados).
 export function layout({ site, config, title, description, path = '/', nav = [], body, scripts = [], baseHref = '', head = '' }) {
+  const { instagram } = contact(site, config);
   const to = links(config);
   // og:image necesita URL absoluta: solo se añade cuando se conoce la dirección pública.
   const ogImage = config.publicBaseUrl && site.ogImage ? `${config.publicBaseUrl}/assets/${site.ogImage}` : '';
@@ -103,7 +105,7 @@ ${body}
 
 <footer>
   <div class="wrap">
-    <div>© ${year} ${esc(site.name)}</div>
+    <div>© ${year} ${esc(site.name)}${instagram ? ` · <a href="${esc(instagram.url)}" rel="me noopener" target="_blank">Instagram ${esc(instagram.handle)}</a>` : ''}</div>
     <nav aria-label="Información legal">
       ${hasLegalNotice(site) ? `<a href="${to.legal}">Aviso legal</a>` : ''}
       <a href="${to.privacy}">Política de privacidad</a>

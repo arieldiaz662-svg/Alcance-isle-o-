@@ -42,6 +42,7 @@ export const site = {
   whatsappNumber: '34623243294', // con prefijo de país, solo dígitos
   phoneDisplay: '+34 623 24 32 94',
   email: 'info@alcanceisleno.com',
+  instagram: 'alcanceisleno', // usuario de Instagram, sin @ (vacío para ocultarlo)
   whatsappGreeting: 'Hola, quiero información sobre Alcance Isleño',
 
   // Datos de negocio local para Google (datos estructurados de la portada). Deben coincidir con la
