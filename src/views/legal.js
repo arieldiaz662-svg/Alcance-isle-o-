@@ -45,22 +45,31 @@ export function renderPrivacy({ site, config }) {
   ];
 
   sections.push(
-    ['Qué datos tratamos', '<p>Esta web no guarda ningún dato. El formulario de contacto solo prepara un mensaje de WhatsApp en tu dispositivo: nos llega únicamente si tú decides enviarlo. En ese caso tratamos tu nombre, tu número de teléfono y lo que nos escribas.</p>'],
-    ['Para qué los usamos', '<p>Únicamente para responder a tu consulta y, si te interesa, preparar un presupuesto. No enviamos publicidad ni tomamos decisiones automatizadas.</p>'],
-    ['Base legal', '<p>Tu consentimiento al escribirnos (art. 6.1.a RGPD) y, si contratas, la ejecución del contrato (art. 6.1.b RGPD).</p>'],
-    ['Cuánto tiempo los guardamos', '<p>Si no llegas a contratar, borramos la conversación en un plazo máximo de 12 meses. Si contratas, durante la relación comercial y los plazos legales de conservación.</p>'],
-    ['Con quién los compartimos', '<p>No cedemos tus datos a terceros salvo obligación legal. Al usar WhatsApp se aplican además las condiciones y la política de privacidad de WhatsApp (Meta).</p>'],
+    ['Qué datos tratamos', '<p>Esta web no guarda ningún dato por su cuenta: no tiene formularios que almacenen información, ni cuentas de usuario, ni analítica, ni publicidad. El formulario de contacto solo prepara un mensaje de WhatsApp en tu dispositivo: nos llega únicamente si tú decides enviarlo. En ese caso tratamos los datos que nos facilites: tu nombre, tu número de teléfono y lo que nos escribas, y los datos del negocio que nos pases si pides información o un presupuesto.</p>'],
+    ['Datos técnicos de la visita', '<p>Para servir la web, el proveedor de alojamiento (Cloudflare, Inc.) recibe de forma automática datos técnicos de tu conexión, como la dirección IP, el navegador y la fecha y hora de la visita. Los usa para entregar la página y garantizar su seguridad; nosotros no accedemos a un registro individual de visitantes ni lo usamos para identificarte. Cloudflare puede tratar estos datos fuera del Espacio Económico Europeo con las garantías previstas en el RGPD (cláusulas contractuales tipo o decisión de adecuación).</p>'],
+    ['Para qué los usamos', '<p>Únicamente para responder a tu consulta, preparar un presupuesto y, si contratas, prestar el servicio y facturarlo. No enviamos publicidad que no hayas pedido, no elaboramos perfiles y no tomamos decisiones automatizadas.</p>'],
+    ['Base legal', '<p>Tu consentimiento al escribirnos (art. 6.1.a RGPD); la aplicación de medidas precontractuales a petición tuya y, si contratas, la ejecución del contrato (art. 6.1.b RGPD); el cumplimiento de obligaciones legales, como las fiscales y contables (art. 6.1.c RGPD); y, para los datos técnicos de la visita, el interés legítimo en el funcionamiento y la seguridad de la web (art. 6.1.f RGPD).</p>'],
+    ['Cuánto tiempo los guardamos', '<p>Si no llegas a contratar, borramos la conversación en un plazo máximo de 12 meses. Si contratas, durante la relación comercial y después, bloqueados, durante los plazos legales de conservación (en general, hasta 6 años para la documentación mercantil y contable).</p>'],
+    ['Con quién los compartimos', '<p>No vendemos ni cedemos tus datos a terceros salvo obligación legal. Intervienen como proveedores (encargados del tratamiento): Cloudflare, para el alojamiento de la web, y WhatsApp (Meta Platforms Ireland Ltd.), que es el canal que eliges para escribirnos y cuyas condiciones y política de privacidad se aplican además a esa conversación. Si contratas, podemos necesitar acceder a tu ficha de Google Business para configurarla, siempre con tu autorización y solo para ese fin.</p>'],
+    ['Menores', '<p>Esta web se dirige a profesionales y titulares de negocios. No recogemos conscientemente datos de menores de 14 años.</p>'],
   );
 
-  sections.push(['Tus derechos', `<p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiéndonos a ${reach}. Si consideras que no hemos atendido correctamente tu solicitud, puedes reclamar ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" rel="noopener">www.aepd.es</a>).</p>`]);
+  sections.push(
+    ['Tus derechos', `<p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad, y retirar tu consentimiento en cualquier momento, escribiéndonos a ${reach}. Responderemos en el plazo de un mes. Si consideras que no hemos atendido correctamente tu solicitud, puedes reclamar ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" rel="noopener">www.aepd.es</a>).</p>`],
+    ['Cambios en esta política', `<p>Si cambiamos la forma de tratar tus datos, actualizaremos esta página y su fecha. Última revisión: ${esc(site.legal.lastUpdated)}.</p>`],
+  );
 
   return page({ site, config, path: '/privacidad', title: 'Política de privacidad', sections });
 }
 
 export function renderCookies({ site, config }) {
   const sections = [
-    ['Qué cookies usamos', `<p>La web de ${esc(site.name)} no utiliza cookies de ningún tipo, y las tipografías se sirven desde nuestro propio alojamiento. Por eso no te mostramos un aviso de cookies.</p>`],
-    ['Enlaces externos', '<p>Al pulsar los botones de WhatsApp sales de esta web; desde ese momento se aplica la política de cookies de WhatsApp.</p>'],
+    ['Qué son las cookies', '<p>Las cookies son pequeños archivos que una web guarda en tu dispositivo para recordarte o medir tu actividad. También existen tecnologías parecidas, como el almacenamiento local del navegador.</p>'],
+    ['Qué cookies usamos', `<p>La web de ${esc(site.name)} <strong>no utiliza cookies ni tecnologías similares</strong> en tu dispositivo: ni propias ni de terceros, ni técnicas, de análisis o de publicidad. No guardamos nada en tu navegador. Las tipografías se sirven desde nuestro propio alojamiento y no cargamos recursos de terceros.</p>
+  <p>Por eso, conforme al artículo 22.2 de la LSSI-CE, no te mostramos un aviso de cookies ni te pedimos que las aceptes.</p>`],
+    ['Enlaces externos', '<p>Al pulsar los botones de WhatsApp o los enlaces a otras webs sales de este sitio; desde ese momento se aplican la política de cookies y de privacidad de cada servicio.</p>'],
+    ['Si esto cambia', '<p>Si en el futuro añadimos algún servicio que use cookies (por ejemplo, estadísticas), te lo pediremos antes con un aviso que puedas aceptar o rechazar, y actualizaremos esta página.</p>'],
+    ['Cómo gestionar las cookies', '<p>Aunque esta web no las usa, puedes bloquear o borrar las de otros sitios desde la configuración de tu navegador.</p>'],
   ];
   return page({ site, config, path: '/cookies', title: 'Política de cookies', sections });
 }

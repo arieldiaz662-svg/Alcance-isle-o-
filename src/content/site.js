@@ -1,7 +1,31 @@
 // CONTENIDO EDITABLE DE LA WEB.
 // Cambia aquí textos, precios, contacto y equipo.
 
+// OFERTA DE LANZAMIENTO: 50 % de descuento en los dos packs para los primeros clientes.
+// Para terminarla: pon active en false. Los precios de los packs vuelven a los normales y los
+// packs vuelven a incluir el primer año de mantenimiento. El cupo no se descuenta solo:
+// cuando se cubran las plazas, desactívala (o baja "spots") y vuelve a publicar.
+const launch = { active: true, percent: 50, spots: 5, months: 3 };
+const euros = (n) => `${n} €`;
+// Precio de un pack: con la oferta, la mitad; "regularPrice" (precio normal) solo existe mientras dura.
+const packPrice = (regular) => (launch.active ? euros(regular * (100 - launch.percent) / 100) : euros(regular));
+const regularPrice = (regular) => (launch.active ? { regularPrice: euros(regular) } : {});
+const maintenanceName = launch.active ? `Plan de mantenimiento los ${launch.months} primeros meses` : 'Plan de mantenimiento el primer año';
+const maintenanceText = launch.active
+  ? `En la oferta de lanzamiento: hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos) durante ${launch.months} meses.`
+  : 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).';
+const maintenanceInPack = launch.active ? `${launch.months} primeros meses de mantenimiento` : 'primer año de mantenimiento';
+
 export const site = {
+  launch: {
+    ...launch,
+    badge: `Oferta de lanzamiento: -${launch.percent} %`,
+    title: `-${launch.percent} % en los packs para los ${launch.spots} primeros clientes`,
+    text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Incluye los ${launch.months} primeros meses de mantenimiento.`,
+    terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni al material.`,
+    cta: 'Reserva tu plaza',
+    whatsappText: `Hola, quiero aprovechar la oferta de lanzamiento del ${launch.percent} % en el pack`,
+  },
   name: 'Alcance Isleño',
   title: 'Alcance Isleño | Tu escaparate digital: presencia digital para negocios de Tenerife',
   description:
@@ -107,7 +131,7 @@ export const site = {
       includes: [
         { name: 'Landing page con carta digital', text: 'Tu carta con precios, horario, ubicación y contacto por WhatsApp. Se abre desde el QR de la mesa, sin descargar nada.' },
         { name: 'Ficha de Google Business', text: 'La creamos o optimizamos: horarios, fotos, enlace a tu carta y acceso directo a tus reseñas.' },
-        { name: 'Plan de mantenimiento el primer año', text: 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).' },
+        { name: maintenanceName, text: maintenanceText },
         { name: 'Tarjeta de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.' },
       ],
       pack: 'main',
@@ -142,9 +166,9 @@ export const site = {
       includes: [
         { name: 'Landing page con tus servicios', text: 'Servicios y precios, fotos de tus trabajos, horarios, ubicación y un botón para pedir cita por WhatsApp.' },
         { name: 'Tarjeta de reseñas QR + NFC', text: 'En el mostrador o junto al espejo: al pagar, tu cliente acerca el móvil y deja su reseña en Google en segundos. También funciona con QR.' },
-        { name: 'Plan de mantenimiento el primer año', text: 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).' },
+        { name: maintenanceName, text: maintenanceText },
       ],
-      pack: { name: 'Pack negocios con cita previa', label: 'Web, tarjeta de reseñas QR + NFC y primer año de mantenimiento', price: '420 €' },
+      pack: { name: 'Pack negocios con cita previa', label: `Web, tarjeta de reseñas QR + NFC y ${maintenanceInPack}`, price: packPrice(420), ...regularPrice(420) },
       option: {
         name: 'Tarjetas de visita personalizadas',
         text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas QR + NFC.',
@@ -178,7 +202,9 @@ export const site = {
       { moment: 'Te deja una reseña', service: 'nfc' },
     ],
     // {plan} se sustituye por los precios del plan de mantenimiento ("12 € al mes o 120 € al año").
-    note: 'Y para que todo siga al día, nuestro plan de mantenimiento incluye hosting, dominio y hasta 2 cambios al mes (carta, servicios, precios, horarios o fotos) por {plan}. El primer año va incluido en los packs.',
+    note: 'Y para que todo siga al día, nuestro plan de mantenimiento incluye hosting, dominio y hasta 2 cambios al mes (carta, servicios, precios, horarios o fotos) por {plan}. ' + (launch.active
+      ? `Los packs de lanzamiento incluyen los ${launch.months} primeros meses.`
+      : 'El primer año va incluido en los packs.'),
   },
 
   // POR QUÉ ELEGIRNOS
@@ -240,7 +266,8 @@ export const site = {
   // comprueba que el pack sigue siendo más barato que sus servicios sueltos. Pon "pack: null" para ocultarlo.
   pack: {
     name: 'Pack completo para hostelería',
-    price: '520 €',
+    price: packPrice(520),
+    ...regularPrice(520),
   },
   pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
 
@@ -289,6 +316,6 @@ export const site = {
     taxId: '', // NIF/CIF
     address: '', // dirección postal
     registry: '', // datos registrales, si es sociedad
-    lastUpdated: '30 de septiembre de 2026',
+    lastUpdated: '8 de octubre de 2026',
   },
 };
