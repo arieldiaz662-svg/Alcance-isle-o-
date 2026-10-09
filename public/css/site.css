@@ -520,3 +520,9 @@ s.antes { color: var(--gris); font-weight: 400; font-size: .7em; margin-right: .
 .oferta .oferta-condiciones { font-size: var(--t-s); margin: 1rem 0 0; }
 .pack .pack-oferta { margin-top: .4rem; color: var(--sol); font-weight: 600; }
 .importe s.antes { font-size: .85em; }
+
+/* Servicios extra: aparte del pack y de la oferta */
+.extras-aparte { margin-top: 2rem; padding-top: 1.4rem; border-top: 1px dashed var(--gris); }
+.extras-titulo { font-size: var(--t-l); margin: 0 0 .2rem; }
+.extras-nota { color: var(--gris); font-size: var(--t-s); margin: 0 0 1rem; }
+.extras-aparte .pack-opcion { margin-top: 0; }

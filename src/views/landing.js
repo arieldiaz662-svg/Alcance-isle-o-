@@ -41,7 +41,7 @@ export function priceList(site) {
   const { extras, sectors } = site;
   return [
     { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
-    ...(extras ? [{ title: 'Material para tu local', rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
+    ...(extras ? [{ title: site.extrasTitle, rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
     // Packs propios de cada tipo de negocio (el de hostelería ya aparece destacado arriba).
     ...(sectors || []).filter((sector) => sector.pack !== 'main').map((sector) => ({
       title: sector.title,
@@ -209,7 +209,10 @@ export function renderLanding({ site, config }) {
             <h4>${esc(sectorPack.label || sectorPack.name)}</h4>
             <span class="local-precio">${priceHtml(sectorPack.price, sectorPack.regularPrice)}</span>
           </li>
-        </ul>${sector.option && sector.option.items ? `
+        </ul>${sector.option ? `
+        <div class="extras-aparte">
+          <h3 class="extras-titulo">${esc(site.extrasTitle)}</h3>
+          <p class="extras-nota">${esc(launch ? site.extrasNoteLaunch : site.extrasNote)}</p>${sector.option.items ? `
         <div class="pack-opcion pack-opcion-lista">
           ${img ? `<figure class="opcion-foto">
             <picture>
@@ -234,6 +237,7 @@ export function renderLanding({ site, config }) {
           <h4>Opcional: ${esc(sector.option.name)}</h4>
           <p>${esc(sector.option.text)}</p>
           <span class="local-precio">${esc(sector.option.price)}</span>
+        </div>` : ''}
         </div>` : ''}
         <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, sector.whatsappText))}" rel="noopener" target="_blank">${esc(sector.cta)}</a>
       </div>

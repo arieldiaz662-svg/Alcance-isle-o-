@@ -425,6 +425,20 @@ describe('oferta de lanzamiento', () => {
     assert.match(index, /class="oferta-chapa" href="#packs"/);
   });
 
+  test('los servicios extra (material y tarjetas de visita) van aparte del pack y fuera del descuento', () => {
+    for (const [id, hasta] of [['hosteleria', 'id="cita-previa"'], ['cita-previa', 'class="recorrido"']]) {
+      const panel = between(index, `id="${id}"`, hasta);
+      assert.ok(panel.indexOf('class="pack-total"') < panel.indexOf('class="extras-aparte"'), id);
+      const extras = between(panel, 'class="extras-aparte"');
+      assert.match(extras, /Servicios extra<\/h3>/);
+      assert.match(extras, /No están incluidos en el pack ni en el descuento del 50 %/);
+      assert.doesNotMatch(extras, /<s /);
+    }
+    assert.match(precios, /<h3>Servicios extra<\/h3>/);
+    assert.doesNotMatch(index, /Material para tu local/);
+    assert.match(between(index, 'class="oferta"', '</aside>'), /ni a los servicios extra \(material para mesas, tarjetas de visita, etc\.\)/);
+  });
+
   test('la oferta no toca los servicios sueltos ni el material', () => {
     const grupos = precios.split('class="carta-grupo"').slice(1);
     assert.ok(grupos.length >= 3);
