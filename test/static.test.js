@@ -420,9 +420,29 @@ describe('oferta de lanzamiento', () => {
     assert.match(oferta, /Oferta de lanzamiento: -50 %/);
     assert.match(oferta, /los 5 primeros clientes/);
     assert.match(oferta, /3 primeros meses de mantenimiento/);
+    assert.match(oferta, /Cada pack incluye la tarjeta de reseñas QR \+ NFC/);
+    for (const sector of site.sectors) {
+      const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido"');
+      assert.match(panel, /<h4>Tarjeta de reseñas QR \+ NFC<\/h4>[\s\S]*?class="local-precio incluido">Incluido</, `${sector.id}: la tarjeta va dentro del pack`);
+      assert.ok(panel.indexOf('Tarjeta de reseñas QR + NFC') < panel.indexOf('class="pack-total"'), sector.id);
+    }
     assert.match(oferta, /Precios sin IGIC/);
     assert.match(oferta, /wa\.me\/34623243294\?text=Hola%2C%20quiero%20aprovechar%20la%20oferta/);
     assert.match(index, /class="oferta-chapa" href="#packs"/);
+  });
+
+  test('los servicios extra (material y tarjetas de visita) van aparte del pack y fuera del descuento', () => {
+    for (const [id, hasta] of [['hosteleria', 'id="cita-previa"'], ['cita-previa', 'class="recorrido"']]) {
+      const panel = between(index, `id="${id}"`, hasta);
+      assert.ok(panel.indexOf('class="pack-total"') < panel.indexOf('class="extras-aparte"'), id);
+      const extras = between(panel, 'class="extras-aparte"');
+      assert.match(extras, /Servicios extra<\/h3>/);
+      assert.match(extras, /No están incluidos en el pack ni en el descuento del 50 %/);
+      assert.doesNotMatch(extras, /<s /);
+    }
+    assert.match(precios, /<h3>Servicios extra<\/h3>/);
+    assert.doesNotMatch(index, /Material para tu local/);
+    assert.match(between(index, 'class="oferta"', '</aside>'), /ni a los servicios extra \(material para mesas, tarjetas de visita, etc\.\)/);
   });
 
   test('la oferta no toca los servicios sueltos ni el material', () => {

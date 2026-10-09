@@ -21,8 +21,8 @@ export const site = {
     ...launch,
     badge: `Oferta de lanzamiento: -${launch.percent} %`,
     title: `-${launch.percent} % en los packs para los ${launch.spots} primeros clientes`,
-    text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Incluye los ${launch.months} primeros meses de mantenimiento.`,
-    terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni al material.`,
+    text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Cada pack incluye la tarjeta de reseñas QR + NFC y los ${launch.months} primeros meses de mantenimiento.`,
+    terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni a los servicios extra (material para mesas, tarjetas de visita, etc.), que se contratan aparte a su precio normal.`,
     cta: 'Reserva tu plaza',
     whatsappText: `Hola, quiero aprovechar la oferta de lanzamiento del ${launch.percent} % en el pack`,
   },
@@ -271,6 +271,12 @@ export const site = {
     ...regularPrice(520),
   },
   pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
+
+  // SERVICIOS EXTRA (material para el local): fuera de la oferta de lanzamiento. Se muestran aparte del pack,
+  // en cada pestaña y en la lista de precios.
+  extrasTitle: 'Servicios extra',
+  extrasNote: 'Se contratan aparte del pack.',
+  extrasNoteLaunch: `No están incluidos en el pack ni en el descuento del ${launch.percent} %: se contratan aparte a su precio normal.`,
 
   // COMPLEMENTOS FÍSICOS: se ofrecen como opción dentro de la pestaña de hostelería (sectors[0].option)
   // y aparecen en la lista de precios.
