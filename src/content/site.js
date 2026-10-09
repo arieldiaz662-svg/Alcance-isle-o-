@@ -21,7 +21,7 @@ export const site = {
     ...launch,
     badge: `Oferta de lanzamiento: -${launch.percent} %`,
     title: `-${launch.percent} % en los packs para los ${launch.spots} primeros clientes`,
-    text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Incluye los ${launch.months} primeros meses de mantenimiento.`,
+    text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Cada pack incluye la tarjeta de reseñas QR + NFC y los ${launch.months} primeros meses de mantenimiento.`,
     terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni a los servicios extra (material para mesas, tarjetas de visita, etc.), que se contratan aparte a su precio normal.`,
     cta: 'Reserva tu plaza',
     whatsappText: `Hola, quiero aprovechar la oferta de lanzamiento del ${launch.percent} % en el pack`,
