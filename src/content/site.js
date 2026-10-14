@@ -50,7 +50,7 @@ export const site = {
   business: {
     address: { region: 'Canarias', country: 'ES' }, // sin calle: trabajamos en toda la isla, sin local
     hours: { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:00', closes: '18:00' },
-    googleBusinessUrl: '', // enlace a la ficha en Google Maps, cuando esté verificada
+    googleBusinessUrl: 'https://share.google/TgCCcHxarszEX6u9L', // enlace a la ficha en Google Maps, cuando esté verificada
   },
 
   // PORTADA
