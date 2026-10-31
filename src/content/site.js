@@ -22,7 +22,7 @@ export const site = {
     badge: `Oferta de lanzamiento: -${launch.percent} %`,
     title: `-${launch.percent} % en los packs para los ${launch.spots} primeros clientes`,
     text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Cada pack incluye la tarjeta de reseñas QR + NFC y los ${launch.months} primeros meses de mantenimiento.`,
-    terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni a los servicios extra ni externalizados (pegatinas QR, diseño de tarjetas de visita, etc.), que se contratan aparte a su precio normal.`,
+    terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni a los servicios extra ni externalizados (tarjeta de reseñas QR + NFC suelta, diseño de tarjetas de visita, etc.), que se contratan aparte a su precio normal.`,
     cta: 'Reserva tu plaza',
     whatsappText: `Hola, quiero aprovechar la oferta de lanzamiento del ${launch.percent} % en el pack`,
   },
@@ -136,12 +136,8 @@ export const site = {
         { name: 'Tarjeta de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.' },
       ],
       pack: 'main',
-      // Opción: material para las mesas. "items" son ids de extras.items.
-      option: {
-        name: 'Para tus mesas',
-        text: 'Lleva tu carta digital a cada mesa con un código QR.',
-        items: ['pegatinas'],
-      },
+      // Opción (no se usa ahora): bloque "Servicios extra" bajo el pack, con { name, text, items }, donde
+      // "items" son ids de extras.items. Si un sector no la define, el bloque no se muestra.
       cta: 'Pide información para tu local',
       whatsappText: 'Hola, tengo un bar, restaurante o cafetería y quiero información sobre el pack completo',
       demo: {
@@ -267,22 +263,15 @@ export const site = {
   },
   pricesNote: 'Precios sin IGIC. Otros trabajos de imprenta y la fotografía profesional se presupuestan aparte.',
 
-  // SERVICIOS EXTRA (material para el local): fuera de la oferta de lanzamiento. Se muestran aparte del pack,
+  // SERVICIOS EXTRA: fuera de la oferta de lanzamiento. Se muestran aparte del pack,
   // en cada pestaña y en la lista de precios.
   extrasTitle: 'Servicios extra',
   extrasNote: 'Se contratan aparte del pack.',
   extrasNoteLaunch: `No están incluidos en el pack ni en el descuento del ${launch.percent} %: se contratan aparte a su precio normal.`,
 
-  // COMPLEMENTOS: se ofrecen como opción dentro de la pestaña de hostelería (sectors[0].option)
-  // y aparecen en la lista de precios. Todo lo que no es digital se presupuesta aparte (outsourced).
+  // COMPLEMENTOS: aparecen en la lista de precios y, si un sector define "option", bajo su pack. Todo lo que no es digital se presupuesta aparte (outsourced).
   extras: {
     items: [
-      {
-        id: 'pegatinas',
-        name: 'Pegatinas QR para mesa',
-        text: 'La opción más sencilla y económica para llevar a tus clientes a la carta.',
-        price: '50 € / 10 uds.',
-      },
       {
         id: 'nfc',
         name: 'Tarjeta de reseñas QR + NFC',

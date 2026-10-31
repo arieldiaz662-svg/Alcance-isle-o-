@@ -119,7 +119,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 | # | Sección | Contenido | Acción principal |
 |---|---|---|---|
 | 1 | **Portada** | "Tu escaparate digital" · "Presencia digital para negocios locales de Tenerife…" · mesa con carta digital funcionando (pestañas), expositor con **QR real**, barraquito | *Pide tu diagnóstico gratuito* → WhatsApp |
-| 2 | **¿Qué tipo de negocio tienes?** (pestañas) | **Bares, restaurantes y cafeterías:** pack completo, pegatinas QR para mesas · **Negocios con cita previa:** pack · **Ambas:** diseño de tarjetas de visita a presupuesto (servicio externalizado) | *Pide información para tu local / negocio* → WhatsApp con mensaje propio |
+| 2 | **¿Qué tipo de negocio tienes?** (pestañas) | **Bares, restaurantes y cafeterías:** pack completo · **Negocios con cita previa:** pack · **Ambas:** diseño de tarjetas de visita a presupuesto (servicio externalizado) | *Pide información para tu local / negocio* → WhatsApp con mensaje propio |
 | 3 | **Así llega un cliente a tu negocio** | Te busca en Google → Mira tu carta o tus servicios → Te deja una reseña, con el servicio y precio de cada paso | — |
 | 4 | **Por qué elegirnos** | 5 motivos: equipo local, puesta en marcha ágil, todo conectado, formación, diagnóstico gratuito | — |
 | 5 | **Así trabajamos** | Diagnóstico → Lo preparamos → Entrega y formación · pago 50 % / 50 % | — |
@@ -139,7 +139,6 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 | Plan de mantenimiento: hosting, dominio y hasta 2 cambios al mes | 12 € / mes o 120 € / año |
 | Cambio puntual sin plan de mantenimiento | 15 € / cambio |
 | Actualización completa de la carta | 40 € |
-| Pegatinas QR para mesa | 50 € / 10 uds. |
 | Tarjeta de reseñas QR + NFC | 25 € / unidad |
 | Diseño personalizado de tarjetas de visita (servicio externalizado) | Pide presupuesto |
 
