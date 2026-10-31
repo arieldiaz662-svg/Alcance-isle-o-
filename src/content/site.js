@@ -313,7 +313,7 @@ export const site = {
   },
 
   // CON QUÉ TRABAJAMOS: plataformas y lenguajes con los que se monta la web, el hosting y el dominio.
-  // "icon" elige el dibujo animado (TECH_ICONS en src/views/landing.js). Son dibujos propios, no logotipos oficiales.
+  // "icon" elige el logotipo oficial (TECH_ICONS en src/views/landing.js; los dibujos están en src/views/logos.js).
   tech: {
     title: 'Con qué trabajamos',
     intro: 'Herramientas profesionales y abiertas para que tu web sea rápida, segura y siempre tuya.',
@@ -327,6 +327,7 @@ export const site = {
         text: 'Guardamos el código de tu web con todo su historial. Cada cambio se prueba y se publica de forma automática, y siempre se puede volver atrás.',
       },
     ],
+    note: 'Cloudflare, GitHub, HTML5, CSS3 y JavaScript, y sus logotipos, son marcas de sus respectivos propietarios. Se muestran solo para indicar las tecnologías que utilizamos.',
     languages: {
       name: 'Lenguajes', role: 'Cómo está construida',
       text: 'Una web ligera hecha con los lenguajes estándar de la web: sin plantillas pesadas ni plugins que se queden obsoletos.',

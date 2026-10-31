@@ -1,4 +1,5 @@
 import QRCode from 'qrcode';
+import { LOGOS } from './logos.js';
 
 import { contact, esc, escPhone, layout, links, whatsappUrl } from './html.js';
 import { structuredData } from './schema.js';
@@ -41,50 +42,36 @@ const JOURNEY_ICONS = {
   // Ficha en Google Maps: la chincheta cae y su sombra late dos veces.
   google: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
     <ellipse class="ic-onda ic-sombra" cx="32" cy="56" rx="11" ry="3"/>
-    <g class="ic-caida"><path class="ic-t" pathLength="1" style="--i:0" d="M32 53s-14-12.2-14-23.5a14 14 0 0 1 28 0C46 40.8 32 53 32 53z"/>
-    <circle class="ic-pop ic-acento" style="--i:3" cx="32" cy="29.5" r="5"/></g></svg>`,
+    <g class="ic-caida"><path class="ic-t" pathLength="1" data-i="0" d="M32 53s-14-12.2-14-23.5a14 14 0 0 1 28 0C46 40.8 32 53 32 53z"/>
+    <circle class="ic-pop ic-acento" data-i="3" cx="32" cy="29.5" r="5"/></g></svg>`,
   // Página web: ventana, tres puntos, líneas de contenido que crecen y botón.
   web: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <path class="ic-t" pathLength="1" style="--i:0" d="M12 11h40a4 4 0 0 1 4 4v34a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V15a4 4 0 0 1 4-4z"/>
-    <path class="ic-t" pathLength="1" style="--i:1" d="M8 22h48"/>
-    <circle class="ic-pop ic-punto" style="--i:3" cx="14" cy="16.5" r="1.3"/><circle class="ic-pop ic-punto" style="--i:4" cx="19" cy="16.5" r="1.3"/><circle class="ic-pop ic-punto" style="--i:5" cx="24" cy="16.5" r="1.3"/>
-    <path class="ic-linea" style="--i:4" d="M15 30h26"/><path class="ic-linea" style="--i:5" d="M15 36h34"/>
-    <rect class="ic-pop ic-boton" style="--i:7" x="15" y="42" width="18" height="6" rx="3"/></svg>`,
+    <path class="ic-t" pathLength="1" data-i="0" d="M12 11h40a4 4 0 0 1 4 4v34a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V15a4 4 0 0 1 4-4z"/>
+    <path class="ic-t" pathLength="1" data-i="1" d="M8 22h48"/>
+    <circle class="ic-pop ic-punto" data-i="3" cx="14" cy="16.5" r="1.3"/><circle class="ic-pop ic-punto" data-i="4" cx="19" cy="16.5" r="1.3"/><circle class="ic-pop ic-punto" data-i="5" cx="24" cy="16.5" r="1.3"/>
+    <path class="ic-linea" data-i="4" d="M15 30h26"/><path class="ic-linea" data-i="5" d="M15 36h34"/>
+    <rect class="ic-pop ic-boton" data-i="7" x="15" y="42" width="18" height="6" rx="3"/></svg>`,
   // Tarjeta de reseñas QR + NFC: la tarjeta se endereza y las ondas se encienden una tras otra.
   nfc: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <g class="ic-tarjeta"><rect class="ic-t" pathLength="1" style="--i:0" x="7" y="21" width="36" height="24" rx="4"/>
-    <rect class="ic-pop ic-acento" style="--i:3" x="13" y="27" width="8" height="6" rx="1.5"/>
-    <path class="ic-linea" style="--i:4" d="M13 39h18"/></g>
-    <path class="ic-onda" style="--o:0" d="M48 28.5a5 5 0 0 1 0 7"/><path class="ic-onda" style="--o:1" d="M52 24.5a10 10 0 0 1 0 15"/><path class="ic-onda" style="--o:2" d="M56 20.5a15 15 0 0 1 0 23"/></svg>`,
+    <g class="ic-tarjeta"><rect class="ic-t" pathLength="1" data-i="0" x="7" y="21" width="36" height="24" rx="4"/>
+    <rect class="ic-pop ic-acento" data-i="3" x="13" y="27" width="8" height="6" rx="1.5"/>
+    <path class="ic-linea" data-i="4" d="M13 39h18"/></g>
+    <path class="ic-onda" data-o="0" d="M48 28.5a5 5 0 0 1 0 7"/><path class="ic-onda" data-o="1" d="M52 24.5a10 10 0 0 1 0 15"/><path class="ic-onda" data-o="2" d="M56 20.5a15 15 0 0 1 0 23"/></svg>`,
 };
 
-// Iconos de "Con qué trabajamos": dibujos propios (no logotipos oficiales) que usan las mismas clases de animación que el recorrido.
+// Logotipos de "Con qué trabajamos": los oficiales (ver src/views/logos.js), incrustados y sin modificar. Entran con el mismo
+// escalonado que el recorrido del cliente (clase ic-pop).
+const logoMarca = (key, i = 0) => {
+  const logo = LOGOS[key];
+  return `<svg viewBox="0 0 24 24" class="logo-marca" aria-hidden="true" focusable="false"><g class="ic-pop" data-i="${i}">${logo.fondo
+    ? `<path d="${logo.d}" fill="${logo.fondo}"/>` : ''}<path d="${logo.d}" fill="${logo.color}"/></g></svg>`;
+};
 const TECH_ICONS = {
-  // Hosting: la nube se dibuja y una flecha de subida sale de ella (tu web, publicada).
-  cloud: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <path class="ic-t" pathLength="1" style="--i:0" d="M18 46a11 11 0 0 1-1-21.9 16 16 0 0 1 30.5 3.6A9.5 9.5 0 0 1 46 46z"/>
-    <path class="ic-sube ic-acento-trazo" style="--o:0" d="M32 42V30M26.5 35.5 32 30l5.5 5.5"/></svg>`,
-  // Control de versiones: dos ramas que se unen y el último cambio late.
-  git: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <path class="ic-t" pathLength="1" style="--i:0" d="M20 18v28"/>
-    <path class="ic-t" pathLength="1" style="--i:2" d="M44 28c0 10-24 3-24 14"/>
-    <circle class="ic-pop" style="--i:3" cx="20" cy="14" r="4.5"/><circle class="ic-pop" style="--i:4" cx="20" cy="50" r="4.5"/>
-    <circle class="ic-pop ic-acento" style="--i:5" cx="44" cy="24" r="4.5"/>
-    <circle class="ic-onda ic-sombra ic-anillo" cx="44" cy="24" r="8"/></svg>`,
-  // HTML: etiqueta de apertura, cierre y barra.
-  html: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <path class="ic-t" pathLength="1" style="--i:0" d="M22 20 9 32l13 12"/><path class="ic-t" pathLength="1" style="--i:1" d="M42 20l13 12-13 12"/>
-    <path class="ic-t ic-acento-trazo" pathLength="1" style="--i:2" d="M36 16 28 48"/></svg>`,
-  // CSS: llaves de estilo con una muestra de color.
-  css: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <path class="ic-t" pathLength="1" style="--i:0" d="M25 14c-6 0-6 4-6 8v5c0 3-3 5-7 5 4 0 7 2 7 5v5c0 4 0 8 6 8"/>
-    <path class="ic-t" pathLength="1" style="--i:1" d="M39 14c6 0 6 4 6 8v5c0 3 3 5 7 5-4 0-7 2-7 5v5c0 4 0 8-6 8"/>
-    <circle class="ic-pop ic-acento" style="--i:3" cx="32" cy="32" r="4.5"/></svg>`,
-  // JavaScript: insignia con las letras J y S dibujadas.
-  js: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <rect class="ic-t" pathLength="1" style="--i:0" x="10" y="10" width="44" height="44" rx="7"/>
-    <path class="ic-t" pathLength="1" style="--i:2" d="M30 22v15a5 5 0 0 1-9 3"/>
-    <path class="ic-t ic-acento-trazo" pathLength="1" style="--i:3" d="M45 24c-1.5-3-9-3.5-9 .5 0 6 10 3 10 9.5 0 4.5-8.5 4.5-11 1"/></svg>`,
+  cloud: logoMarca('cloudflare'),
+  git: logoMarca('github'),
+  html: logoMarca('html5'),
+  css: logoMarca('css3'),
+  js: logoMarca('javascript'),
 };
 
 // Lista de precios por grupos (sin el pack principal, que se muestra destacado). La usan la sección de
@@ -388,7 +375,8 @@ export function renderLanding({ site, config }) {
         <p class="tecnologia-rol">${esc(tech.languages.role)}</p>
         <p>${esc(tech.languages.text)}</p>
       </li>` : ''}
-    </ul>
+    </ul>${tech.note ? `
+    <p class="tecnologia-nota">${esc(tech.note)}</p>` : ''}
   </div>
 </section>` : '';
 
