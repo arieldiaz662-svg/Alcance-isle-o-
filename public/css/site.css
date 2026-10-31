@@ -525,3 +525,5 @@ s.antes { color: var(--gris); font-weight: 400; font-size: .7em; margin-right: .
 .externalizados p { color: var(--gris); font-size: .95rem; margin: 0 0 .8rem; }
 .extras-aparte + .extras-aparte { margin-top: 1.4rem; }
 .externalizados li + li { margin-top: 1.4rem; }
+
+.pack-nota { grid-column: 1 / -1; margin: .5rem 0 0; font-size: var(--t-s); color: var(--gris); }
