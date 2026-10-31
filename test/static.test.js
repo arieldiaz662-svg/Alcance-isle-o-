@@ -418,7 +418,7 @@ describe('oferta de lanzamiento', () => {
       // launch.active: false → packs a precio normal y con el primer año de mantenimiento, sin banner ni precios tachados.
       assert.deepEqual([site.pack.price, site.pack.regularPrice], ['520 €', undefined]);
       assert.equal(site.sectors.find((s) => s.id === 'cita-previa').pack.price, '420 €');
-      assert.doesNotMatch(index, /class="oferta"|oferta-chapa|<s |Oferta de lanzamiento|pack-nota|primeros 5 clientes/);
+      assert.doesNotMatch(index, /class="oferta"|oferta-chapa|<s |Oferta de lanzamiento|pack-nota|quedan \d+ plazas?/);
       assert.match(index, /Plan de mantenimiento el primer año/);
       assert.match(index, /El primer año va incluido en los packs\./);
       return;
@@ -430,7 +430,10 @@ describe('oferta de lanzamiento', () => {
     assert.deepEqual([site.pack.price, site.pack.regularPrice], ['260 €', '520 €']);
     const oferta = between(index, 'class="oferta"', '</aside>');
     assert.match(oferta, /Oferta de lanzamiento: -50 %/);
-    assert.match(oferta, /los 5 primeros clientes/);
+    assert.equal(site.launch.spots, 4, 'un cliente ya la ha usado: quedan 4 plazas');
+    assert.match(oferta, /-50 % en los packs: quedan 4 plazas/);
+    assert.match(oferta, /Para los 4 próximos negocios que contraten un pack/);
+    assert.match(index, /class="oferta-chapa" href="#packs">Oferta de lanzamiento: -50 % · quedan 4 plazas<\/a>/);
     assert.match(oferta, /Incluye la tarjeta de reseñas QR \+ NFC y 3 meses de mantenimiento/);
     assert.ok(oferta.replace(/<[^>]+>/g, '').length < 560, 'banner breve');
     assert.match(precios, /El precio tachado es el del pack normal, que incluye 12 meses de mantenimiento/);

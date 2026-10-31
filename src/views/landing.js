@@ -162,7 +162,7 @@ export function renderLanding({ site, config }) {
 <div class="mesa" id="inicio">
   <div class="wrap mesa-grid">
     <div class="mesa-texto">
-      ${launch ? `<a class="oferta-chapa" href="#packs">${esc(launch.badge)} · primeros ${esc(String(launch.spots))} clientes</a>` : ''}
+      ${launch ? `<a class="oferta-chapa" href="#packs">${esc(launch.badge)} · ${esc(launch.spotsLabel)}</a>` : ''}
       <h1>${esc(hero.title)}</h1>
       <p class="lead">${esc(hero.lead)}</p>
       <div class="acciones">
@@ -435,7 +435,7 @@ export function renderLanding({ site, config }) {
         <h3>${esc(pack.name)}</h3>
         <p>${esc(packText)}</p>
         <p class="pack-precio">${pack.regularPrice ? `<s class="antes"><span class="solo-lectores">Precio normal con ${launch ? launch.regularMonths : ''} meses de mantenimiento: </span>${esc(pack.regularPrice)}</s> <span class="solo-lectores">Precio de lanzamiento: </span>` : ''}<strong>${esc(pack.price)}</strong></p>
-        ${launch ? `<p class="pack-oferta">${esc(launch.badge)} · primeros ${esc(String(launch.spots))} clientes</p>` : ''}
+        ${launch ? `<p class="pack-oferta">${esc(launch.badge)} · ${esc(launch.spotsLabel)}</p>` : ''}
       </div>` : ''}${priceGroups.map((group) => `
       <div class="carta-grupo">
         <h3>${esc(group.title)}</h3>

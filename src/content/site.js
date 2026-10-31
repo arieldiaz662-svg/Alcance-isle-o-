@@ -2,11 +2,13 @@
 // Cambia aquí textos, precios, contacto y equipo.
 
 // OFERTA DE LANZAMIENTO: 50 % de descuento en los dos packs para los primeros clientes.
-// Para terminarla: pon active en false. Los precios de los packs vuelven a los normales y los
-// packs vuelven a incluir el primer año de mantenimiento. El cupo no se descuenta solo:
-// cuando se cubran las plazas, desactívala (o baja "spots") y vuelve a publicar.
+// "spots" son las plazas que QUEDAN (empezó con 5; ya hay 1 cliente, quedan 4). El cupo no se descuenta solo:
+// cada vez que entre un cliente, baja "spots" en 1 y vuelve a publicar (regenera la imagen para compartir con
+// npm run build && npm run og-image). Para terminarla: pon active en false; los packs vuelven a su precio normal
+// y a incluir el primer año de mantenimiento.
 // regularMonths: meses de mantenimiento que incluye el pack a precio normal (el precio tachado).
-const launch = { active: false, percent: 50, spots: 5, months: 3, regularMonths: 12 };
+const launch = { active: true, percent: 50, spots: 4, months: 3, regularMonths: 12 };
+const spotsLabel = launch.spots === 1 ? 'queda 1 plaza' : `quedan ${launch.spots} plazas`;
 const euros = (n) => `${n} €`;
 // Precio de un pack: con la oferta, la mitad; "regularPrice" (precio normal) solo existe mientras dura.
 const packPrice = (regular) => (launch.active ? euros(regular * (100 - launch.percent) / 100) : euros(regular));
@@ -23,8 +25,9 @@ export const site = {
     badge: `Oferta de lanzamiento: -${launch.percent} %`,
     // Aclara qué incluye el pack tachado: el precio normal lleva el primer año; el de lanzamiento, solo unos meses.
     regularNote: `El precio tachado es el del pack normal, que incluye ${launch.regularMonths} meses de mantenimiento; el pack de lanzamiento incluye ${launch.months}.`,
-    title: `-${launch.percent} % en los packs para los ${launch.spots} primeros clientes`,
-    text: `Para los ${launch.spots} primeros negocios que contraten un pack. Incluye la tarjeta de reseñas QR + NFC y ${launch.months} meses de mantenimiento.`,
+    spotsLabel,
+    title: `-${launch.percent} % en los packs: ${spotsLabel}`,
+    text: `${launch.spots === 1 ? 'Para el próximo negocio' : `Para los ${launch.spots} próximos negocios`} que contraten un pack. Incluye la tarjeta de reseñas QR + NFC y ${launch.months} meses de mantenimiento.`,
     terms: `Precios sin IGIC. Después, plan de mantenimiento a {plan}. No acumulable con otras promociones ni aplicable a servicios sueltos, extras o externalizados, que van a su precio normal.`,
     cta: 'Reserva tu plaza',
     whatsappText: `Hola, quiero aprovechar la oferta de lanzamiento del ${launch.percent} % en el pack`,
