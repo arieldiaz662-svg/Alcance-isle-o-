@@ -16,3 +16,5 @@ Copiadas de [emilkowalski/skill](https://github.com/emilkowalski/skill) (commit 
 
 Se omiten las de Swift, Expo/React Native, Sonner y selección de librerías de React: la web no usa esas tecnologías.
 Para actualizarlas, vuelve a copiar las carpetas desde el repositorio original.
+
+Además, el plugin `design` de Anthropic (crítica de diseño, accesibilidad, design system, UX copy) está conectado por referencia en `.claude/settings.json`; ver [docs/PLANTILLA.md](../../docs/PLANTILLA.md).

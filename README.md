@@ -6,6 +6,7 @@ Es una web **100 % estática**: sin servidor, sin base de datos y sin cookies. E
 
 - Diseño y criterios visuales: [docs/DISENO.md](docs/DISENO.md)
 - Auditoría técnica y desglose de la web: [docs/AUDITORIA.md](docs/AUDITORIA.md)
+- Usar el repositorio como plantilla para otro negocio y skills de diseño conectadas: [docs/PLANTILLA.md](docs/PLANTILLA.md)
 
 ## Uso
 
