@@ -596,22 +596,32 @@ describe('recorrido animado', () => {
 });
 
 describe('con qué trabajamos', () => {
-  test('plataformas (Cloudflare, GitHub) y lenguajes (HTML, CSS, JavaScript) con iconos propios animados', () => {
+  test('plataformas (Cloudflare, GitHub) y lenguajes (HTML, CSS, JavaScript) con sus logotipos oficiales, incrustados y con aviso de marcas', () => {
     const tecnologia = between(index, 'id="tecnologia"', 'id="trabajos"');
     assert.match(tecnologia, /<h2>Con qué trabajamos<\/h2>/);
     assert.ok(index.indexOf('id="por-que"') < index.indexOf('id="tecnologia"') && index.indexOf('id="tecnologia"') < index.indexOf('id="trabajos"'));
     assert.match(tecnologia, /<h3>Cloudflare<\/h3>\s*<p class="tecnologia-rol">Hosting y dominio<\/p>/);
     assert.match(tecnologia, /<h3>GitHub<\/h3>\s*<p class="tecnologia-rol">Código y publicación<\/p>/);
     for (const lang of ['HTML', 'CSS', 'JavaScript']) assert.match(tecnologia, new RegExp(`<span>${lang}</span>`));
-    const iconos = tecnologia.match(/<div class="paso-icono[^"]*">[\s\S]*?<\/svg><\/div>/g) || [];
-    assert.equal(iconos.length, 5, 'nube, ramas y tres lenguajes');
-    for (const icono of iconos) {
-      assert.match(icono, /aria-hidden="true" focusable="false"/);
-      assert.doesNotMatch(icono, /<img|<text|logo/i, 'dibujos propios, sin logotipos oficiales ni texto');
-      assert.match(icono, /class="ic-/, 'usa las clases de animación');
+    const logos = tecnologia.match(/<svg viewBox="0 0 24 24" class="logo-marca"[\s\S]*?<\/svg>/g) || [];
+    assert.equal(logos.length, 5, 'Cloudflare, GitHub, HTML5, CSS3 y JavaScript');
+    // Colores de marca (Simple Icons) y logotipos sin modificar.
+    for (const [i, color] of ['#F38020', '#181717', '#E34F26', '#1572B6', '#F7DF1E'].entries()) {
+      assert.match(logos[i], new RegExp(`fill="${color}"`), `logotipo ${i}`);
+      assert.match(logos[i], /aria-hidden="true" focusable="false"/);
+      assert.match(logos[i], /<g class="ic-pop" data-i="0">/);
     }
-    assert.match(iconos[0], /ic-sube/);
-    assert.match(iconos[1], /ic-anillo/);
-    assert.match(index, /<section class="tecnologia anim-seccion" id="tecnologia">/, 'se anima al entrar en pantalla como el recorrido');
+    // Todo incrustado: ninguna imagen ni recurso externo.
+    assert.doesNotMatch(tecnologia, /<img|<image|<use|href="http|src="http/);
+    assert.match(tecnologia, /<p class="tecnologia-nota">Cloudflare, GitHub, HTML5, CSS3 y JavaScript, y sus logotipos, son marcas de sus respectivos propietarios/);
+    assert.match(index, /<section class="tecnologia anim-seccion" id="tecnologia">/, 'entran en pantalla como el recorrido');
+  });
+
+  test('sin estilos en línea (la política de seguridad no los admite): el escalonado va con data-i y data-o', () => {
+    for (const file of ['index.html', 'privacidad.html', 'cookies.html', '404.html']) assert.doesNotMatch(read(file), /\sstyle="/, file);
+    const css = read('assets/css/site.css');
+    assert.match(css, /\[data-i="7"\] \{ --i: 7; \}/);
+    assert.match(css, /\[data-o="2"\] \{ --o: 2; \}/);
+    assert.match(index, /data-i="3"/);
   });
 });
