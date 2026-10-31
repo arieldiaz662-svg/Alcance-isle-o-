@@ -413,7 +413,16 @@ describe('datos estructurados para Google', () => {
 });
 
 describe('oferta de lanzamiento', () => {
-  test('50 % de descuento en los dos packs, con precio normal, cupo y condiciones visibles', () => {
+  test('50 % de descuento en los dos packs, con precio normal, cupo y condiciones visibles (o sin oferta si está apagada)', () => {
+    if (!launch) {
+      // launch.active: false → packs a precio normal y con el primer año de mantenimiento, sin banner ni precios tachados.
+      assert.deepEqual([site.pack.price, site.pack.regularPrice], ['520 €', undefined]);
+      assert.equal(site.sectors.find((s) => s.id === 'cita-previa').pack.price, '420 €');
+      assert.doesNotMatch(index, /class="oferta"|oferta-chapa|<s |Oferta de lanzamiento|pack-nota|primeros 5 clientes/);
+      assert.match(index, /Plan de mantenimiento el primer año/);
+      assert.match(index, /El primer año va incluido en los packs\./);
+      return;
+    }
     assert.equal(site.launch.percent, 50);
     for (const pack of [site.pack, site.sectors.find((s) => s.id === 'cita-previa').pack]) {
       assert.equal(amount(pack.price), amount(pack.regularPrice) / 2, pack.name);
@@ -456,6 +465,7 @@ describe('oferta de lanzamiento', () => {
     assert.match(precios, /Pegatinas QR para mesas<\/span><span class="guia" aria-hidden="true"><\/span><span class="importe">Pide presupuesto</);
     assert.match(index, /wa\.me\/34623243294\?text=Hola%2C%20quiero%20pedir%20presupuesto%20para%20pegatinas%20QR/);
     assert.doesNotMatch(index, /Material para tu local/);
+    if (!launch) return;
     assert.match(between(index, 'class="oferta"', '</aside>'), /ni aplicable a servicios sueltos, extras o externalizados, que van a su precio normal/);
   });
 
@@ -465,11 +475,11 @@ describe('oferta de lanzamiento', () => {
     assert.doesNotMatch(grupos.slice(0, 2).join(''), /<s /);
   });
 
-  test('los datos estructurados anuncian el precio de lanzamiento', () => {
+  test('los datos estructurados anuncian el precio vigente (el de lanzamiento mientras dura)', () => {
     const [negocio] = JSON.parse(/<script type="application\/ld\+json">\n([\s\S]*?)\n<\/script>/.exec(index)[1])['@graph'];
     const precios = negocio.hasOfferCatalog.itemListElement.flatMap((g) => g.itemListElement)
       .filter((o) => /^Pack /.test(o.itemOffered.name)).map((o) => o.priceSpecification.price);
-    assert.deepEqual(precios, [260, 210]);
+    assert.deepEqual(precios, launch ? [260, 210] : [520, 420]);
   });
 });
 
