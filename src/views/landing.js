@@ -35,6 +35,29 @@ const CHANNEL_ICONS = {
   resena: '<path d="m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>',
 };
 
+// Iconos del recorrido del cliente: dibujos propios (no logotipos de marcas). Los trazos llevan pathLength="1" y la clase
+// ic-t para dibujarse con stroke-dashoffset; ic-pop, ic-linea y ic-onda aparecen después (ver "Recorrido animado" en site.css).
+const JOURNEY_ICONS = {
+  // Ficha en Google Maps: la chincheta cae y su sombra late dos veces.
+  google: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <ellipse class="ic-onda ic-sombra" cx="32" cy="56" rx="11" ry="3"/>
+    <g class="ic-caida"><path class="ic-t" pathLength="1" style="--i:0" d="M32 53s-14-12.2-14-23.5a14 14 0 0 1 28 0C46 40.8 32 53 32 53z"/>
+    <circle class="ic-pop ic-acento" style="--i:3" cx="32" cy="29.5" r="5"/></g></svg>`,
+  // Página web: ventana, tres puntos, líneas de contenido que crecen y botón.
+  web: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <path class="ic-t" pathLength="1" style="--i:0" d="M12 11h40a4 4 0 0 1 4 4v34a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V15a4 4 0 0 1 4-4z"/>
+    <path class="ic-t" pathLength="1" style="--i:1" d="M8 22h48"/>
+    <circle class="ic-pop ic-punto" style="--i:3" cx="14" cy="16.5" r="1.3"/><circle class="ic-pop ic-punto" style="--i:4" cx="19" cy="16.5" r="1.3"/><circle class="ic-pop ic-punto" style="--i:5" cx="24" cy="16.5" r="1.3"/>
+    <path class="ic-linea" style="--i:4" d="M15 30h26"/><path class="ic-linea" style="--i:5" d="M15 36h34"/>
+    <rect class="ic-pop ic-boton" style="--i:7" x="15" y="42" width="18" height="6" rx="3"/></svg>`,
+  // Tarjeta de reseñas QR + NFC: la tarjeta se endereza y las ondas se encienden una tras otra.
+  nfc: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <g class="ic-tarjeta"><rect class="ic-t" pathLength="1" style="--i:0" x="7" y="21" width="36" height="24" rx="4"/>
+    <rect class="ic-pop ic-acento" style="--i:3" x="13" y="27" width="8" height="6" rx="1.5"/>
+    <path class="ic-linea" style="--i:4" d="M13 39h18"/></g>
+    <path class="ic-onda" style="--o:0" d="M48 28.5a5 5 0 0 1 0 7"/><path class="ic-onda" style="--o:1" d="M52 24.5a10 10 0 0 1 0 15"/><path class="ic-onda" style="--o:2" d="M56 20.5a15 15 0 0 1 0 23"/></svg>`,
+};
+
 // Lista de precios por grupos (sin el pack principal, que se muestra destacado). La usan la sección de
 // precios y los datos estructurados para Google, así que siempre coinciden.
 export function priceList(site) {
@@ -153,7 +176,8 @@ export function renderLanding({ site, config }) {
     <ol class="recorrido-pasos">${journey.steps.map((step) => {
       const service = serviceById[step.service];
       return `
-      <li>
+      <li>${step.icon ? `
+        <div class="paso-icono">${JOURNEY_ICONS[step.icon]}</div>` : ''}
         <h3>${esc(step.moment)}</h3>
         <p class="recorrido-servicio">${esc(service.name)} <span>${esc(priceOf(service))}</span></p>
         <p>${esc(service.text)}</p>
@@ -320,7 +344,7 @@ export function renderLanding({ site, config }) {
     <h2>${esc(works.title)}</h2>
     ${works.intro ? `<p class="suave">${esc(works.intro)}</p>` : ''}
     <ul class="trabajos-lista">${works.items.map((item) => `
-      <li>
+      <li${item.compact ? ' class="trabajo-compacto"' : ''}>
         <figure>
           <picture>
             <source type="image/webp" srcset="${esc(to.asset(`${item.img}.webp`))}">

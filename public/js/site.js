@@ -80,3 +80,18 @@
     else location.href = url; // si el navegador bloquea la pestaña nueva, se abre en la misma
   });
 })();
+
+// Iconos del recorrido del cliente: se dibujan una sola vez, al entrar la sección en pantalla (ver "Recorrido animado"
+// en site.css). Sin IntersectionObserver o con movimiento reducido no se hace nada y los iconos quedan estáticos y completos.
+(function () {
+  var section = document.querySelector('.recorrido');
+  if (!section || !('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.classList.add('anim-listo');
+  var observer = new IntersectionObserver(function (entries) {
+    if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
+    section.classList.add('en-vista');
+    observer.disconnect();
+  }, { threshold: 0.3 });
+  observer.observe(section);
+})();

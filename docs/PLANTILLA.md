@@ -35,6 +35,9 @@ Para montar la web de otro negocio (o una nueva versión de esta) no hace falta 
   Guarda cada imagen en `public/img/trabajos/` en dos versiones (`NOMBRE.webp` y `NOMBRE.jpg`, de unos 800–1200 px de ancho) y añade
   `{ img: 'img/trabajos/NOMBRE', width, height, alt, caption }` (sin extensión; `width` y `height` son los píxeles reales).
   Usa solo trabajos reales y con permiso del cliente. Cada imagen conserva su proporción.
+  Con `compact: true` una imagen se muestra algo más pequeña (útil para cartas o fotos muy altas).
+- **Recorrido del cliente animado** (`journey.steps[].icon`: `google`, `web`, `nfc`): iconos propios que se dibujan una vez al entrar en pantalla.
+  Sin JavaScript o con «reducir movimiento» activado quedan estáticos y completos.
 
 ## Revisión antes de publicar
 
