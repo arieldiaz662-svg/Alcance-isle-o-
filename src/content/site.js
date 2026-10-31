@@ -19,6 +19,35 @@ const maintenanceText = launch.active
   : 'Hosting, dominio y hasta 2 cambios al mes (carta, precios, horarios, fotos).';
 const maintenanceInPack = launch.active ? `${launch.months} primeros meses de mantenimiento` : 'primer año de mantenimiento';
 
+// TRABAJOS (galería): se muestran solo con el visto bueno y el pago del cliente. Memphis Belle, pendiente: ver "works" más abajo.
+const TRABAJOS_AUTORIZADOS = false;
+const TRABAJOS_MEMPHIS_BELLE = [
+      {
+        img: 'img/trabajos/memphis-belle-portada', width: 1200, height: 565, fit: 'contain',
+        alt: 'Portada de la web de Memphis Belle Coctelería: «Coctelería de autor», aviso de horario «Cerrado, abrimos hoy a las 18:00» y botones «Ver la carta» y «Cómo llegar».',
+        title: 'Memphis Belle · Portada de la web',
+        description: 'Primera pantalla de la web: el título «Coctelería de autor», una foto con el neón del bar y un aviso que indica si el local está abierto o a qué hora abre. Dos botones llevan directos a la carta y a cómo llegar, y un interruptor cambia entre español e inglés.',
+      },
+      {
+        img: 'img/trabajos/memphis-belle-bar', width: 1200, height: 404, fit: 'contain',
+        alt: 'Sección «El bar» de la web de Memphis Belle: «Cócteles de autor, sin prisa», sobre una estantería de rones y whiskies.',
+        title: 'Memphis Belle · Sección «El bar»',
+        description: 'Presenta el estilo del local con una frase corta, «Cócteles de autor, sin prisa», sobre una fotografía de su estantería de rones y whiskies. Mantiene el menú siempre a mano y el botón «Cómo llegar» para que el cliente pueda decidir sin salir de la página.',
+      },
+      {
+        img: 'img/trabajos/memphis-belle-carta', width: 800, height: 1000, fit: 'contain',
+        alt: 'Carta de Memphis Belle Coctelería en dos columnas, «Refrescantes» y «Ácidos y sour», con el nombre, los ingredientes y el precio de cada cóctel.',
+        title: 'Memphis Belle · Carta de cócteles',
+        description: 'Carta en dos columnas, «Refrescantes» y «Ácidos y sour», con el nombre de cada cóctel, sus ingredientes y su precio. Usa la paleta verde y dorada de la marca, indica que los precios llevan IGIC incluido y recuerda el consumo responsable.',
+      },
+      {
+        img: 'img/trabajos/memphis-belle-tarjeta', width: 1000, height: 645, fit: 'cover',
+        alt: 'Tarjeta de visita de Memphis Belle Coctelería: dibujo de una coctelera, dos cucharas y una copa sobre el nombre en blanco y dorado, con fondo verde oliva.',
+        title: 'Memphis Belle · Tarjeta de visita',
+        description: 'Tarjeta con el emblema del bar (una coctelera, dos cucharas cruzadas y una copa) sobre el nombre en blanco y dorado y el verde oliva de la marca. Comparte tipografía y colores con la web y la carta, para que todo se reconozca como el mismo negocio.',
+      },
+];
+
 export const site = {
   launch: {
     ...launch,
@@ -339,40 +368,20 @@ export const site = {
     },
   },
 
-  // TRABAJOS: galería de webs, cartas y tarjetas ya hechas. Sin elementos, la sección no se muestra.
+  // TRABAJOS: galería de webs, cartas y tarjetas ya hechas. Sin elementos, la sección no se muestra ni sale en el menú.
   // Guarda cada imagen en public/img/trabajos/ en dos versiones, NOMBRE.webp y NOMBRE.jpg, y añade
   // { img: 'img/trabajos/NOMBRE', width, height, fit, alt, title, description } (img sin extensión; width y height son los
   // píxeles reales). Todas se muestran en un marco del mismo tamaño: fit 'contain' (entera, con bandas) o 'cover' (rellena el marco).
   // Solo con trabajos reales y con permiso del cliente.
+  //
+  // PENDIENTE: la galería de Memphis Belle Coctelería está OCULTA hasta que el cliente dé el visto bueno y pague el trabajo.
+  // Las imágenes esperan en docs/trabajos-pendientes/memphis-belle/ (fuera de public/, así no se publican). Para mostrarla:
+  //   1. git mv docs/trabajos-pendientes/memphis-belle/* public/img/trabajos/
+  //   2. poner TRABAJOS_AUTORIZADOS en true (justo debajo de esta sección) y publicar.
   works: {
     title: 'Trabajos',
     intro: 'Webs, cartas y tarjetas que ya funcionan en negocios de la isla. Ejemplo: Memphis Belle Coctelería, en Santa Cruz de Tenerife.',
-    items: [
-      {
-        img: 'img/trabajos/memphis-belle-portada', width: 1200, height: 565, fit: 'contain',
-        alt: 'Portada de la web de Memphis Belle Coctelería: «Coctelería de autor», aviso de horario «Cerrado, abrimos hoy a las 18:00» y botones «Ver la carta» y «Cómo llegar».',
-        title: 'Memphis Belle · Portada de la web',
-        description: 'Primera pantalla de la web: el título «Coctelería de autor», una foto con el neón del bar y un aviso que indica si el local está abierto o a qué hora abre. Dos botones llevan directos a la carta y a cómo llegar, y un interruptor cambia entre español e inglés.',
-      },
-      {
-        img: 'img/trabajos/memphis-belle-bar', width: 1200, height: 404, fit: 'contain',
-        alt: 'Sección «El bar» de la web de Memphis Belle: «Cócteles de autor, sin prisa», sobre una estantería de rones y whiskies.',
-        title: 'Memphis Belle · Sección «El bar»',
-        description: 'Presenta el estilo del local con una frase corta, «Cócteles de autor, sin prisa», sobre una fotografía de su estantería de rones y whiskies. Mantiene el menú siempre a mano y el botón «Cómo llegar» para que el cliente pueda decidir sin salir de la página.',
-      },
-      {
-        img: 'img/trabajos/memphis-belle-carta', width: 800, height: 1000, fit: 'contain',
-        alt: 'Carta de Memphis Belle Coctelería en dos columnas, «Refrescantes» y «Ácidos y sour», con el nombre, los ingredientes y el precio de cada cóctel.',
-        title: 'Memphis Belle · Carta de cócteles',
-        description: 'Carta en dos columnas, «Refrescantes» y «Ácidos y sour», con el nombre de cada cóctel, sus ingredientes y su precio. Usa la paleta verde y dorada de la marca, indica que los precios llevan IGIC incluido y recuerda el consumo responsable.',
-      },
-      {
-        img: 'img/trabajos/memphis-belle-tarjeta', width: 1000, height: 645, fit: 'cover',
-        alt: 'Tarjeta de visita de Memphis Belle Coctelería: dibujo de una coctelera, dos cucharas y una copa sobre el nombre en blanco y dorado, con fondo verde oliva.',
-        title: 'Memphis Belle · Tarjeta de visita',
-        description: 'Tarjeta con el emblema del bar (una coctelera, dos cucharas cruzadas y una copa) sobre el nombre en blanco y dorado y el verde oliva de la marca. Comparte tipografía y colores con la web y la carta, para que todo se reconozca como el mismo negocio.',
-      },
-    ],
+    items: TRABAJOS_AUTORIZADOS ? TRABAJOS_MEMPHIS_BELLE : [],
   },
 
   // LLAMADA FINAL tras "Así trabajamos": para quien ya ha leído cómo se trabaja y está listo para escribir.
