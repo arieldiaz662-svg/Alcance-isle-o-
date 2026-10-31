@@ -149,8 +149,8 @@ export const site = {
         items: [
           ['Papas con mojo', '4,50 €'],
           ['Queso asado', '6,00 €'],
-          ['Carne de cabra', '12 €'],
-          ['Vieja sancochada', '14 €'],
+          ['Carne de cabra', '12,00 €'],
+          ['Vieja sancochada', '14,00 €'],
           ['Postre casero', '3,50 €'],
         ],
         button: 'Reservar por WhatsApp',
@@ -222,7 +222,7 @@ export const site = {
     { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta o tus servicios, tarjeta de reseñas QR + NFC y hosting, a partir del material que nos envíes.' },
     { title: 'Entrega y formación', text: 'Revisamos el diseño contigo (2 rondas de cambios), lo publicamos y te enseñamos a usarlo.' },
   ],
-  stepsNote: 'Pagas el 50% al empezar y el 50% restante a la entrega.',
+  stepsNote: 'Pagas el 50 % al empezar y el 50 % restante a la entrega.',
 
 
   // SERVICIOS PRINCIPALES: lo que hacemos nosotros (software).

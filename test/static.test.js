@@ -21,7 +21,8 @@ const BASE = 'https://ejemplo.github.io/alcance-isleno';
 const outDir = mkdtempSync(join(tmpdir(), 'alcance-static-'));
 let index;
 let precios;
-const read = (file) => readFileSync(join(outDir, file), 'utf8');
+// Los espacios de no separación ("12\u00a0€") se leen como espacios normales para comparar con site.js.
+const read = (file) => readFileSync(join(outDir, file), 'utf8').replace(/\u00a0/g, ' ');
 const between = (html, from, to) => html.slice(html.indexOf(from), to ? html.indexOf(to) : undefined);
 const escapeRe = (text) => text.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
 // Fila de la carta de precios: concepto, puntos guía e importe.
