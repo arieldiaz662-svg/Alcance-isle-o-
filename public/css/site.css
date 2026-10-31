@@ -106,10 +106,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .marca { display: flex; align-items: center; text-decoration: none; }
 .marca-logo { display: block; height: 28px; width: auto; }
 .nav ul { display: flex; gap: 1.8rem; }
-.nav ul a { text-decoration: none; font-weight: 500; }
+.nav ul a { text-decoration: none; font-weight: 500; display: inline-block; padding: .7rem 0; } /* zona táctil de 44 px */
 .nav .btn { padding: .55rem 1.1rem; }
 @media (max-width: 820px) { /* en móvil, los enlaces pasan a una segunda fila desplazable */
-  html { scroll-padding-top: 112px; }
+  html { scroll-padding-top: 128px; }
   .marca-logo { height: 19px; } /* que quepa junto al botón en 360 px */
   .nav .wrap { flex-wrap: wrap; height: auto; padding: .6rem 0 .1rem; row-gap: .15rem; }
   .nav ul {
@@ -527,3 +527,32 @@ s.antes { color: var(--gris); font-weight: 400; font-size: .7em; margin-right: .
 .externalizados li + li { margin-top: 1.4rem; }
 
 .pack-nota { grid-column: 1 / -1; margin: .5rem 0 0; font-size: var(--t-s); color: var(--gris); }
+
+/* ---------- Revisión de diseño: espacios, tipografía y zonas táctiles ---------- */
+h1, h2, h3, h4 { text-wrap: balance; } /* sin palabras sueltas en la última línea de un título */
+p, li { text-wrap: pretty; }
+.importe, .local-precio, .pack-precio, .recorrido-servicio span { font-variant-numeric: lining-nums tabular-nums; }
+.oferta-chapa { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* La maqueta acompaña al texto del pack en vez de quedar flotando en el centro con huecos arriba y abajo */
+.sector-panel { align-items: start; }
+@media (min-width: 861px) { .mostrador { position: sticky; top: 7rem; } }
+
+/* Banner de la oferta: texto a la izquierda y llamada a la derecha, sin media caja vacía */
+@media (min-width: 861px) {
+  .oferta { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 3rem; align-items: start; }
+  .oferta > * { grid-column: 1; }
+  .oferta .btn { grid-column: 2; grid-row: 1 / span 4; align-self: center; }
+  .oferta .oferta-condiciones { grid-column: 1 / -1; max-width: 80ch; }
+}
+
+/* Carta de precios: en pantallas anchas los grupos fluyen en dos columnas en vez de dejar la mitad vacía */
+@media (min-width: 1000px) {
+  .carta-precios { max-width: none; column-count: 2; column-gap: 4rem; }
+  .carta-precios > .pack, .carta-precios > .precios-nota { column-span: all; }
+  .carta-precios > .carta-grupo { break-inside: avoid; margin-top: 0; padding-bottom: 2.2rem; }
+  .carta-precios .precios-nota { max-width: 80ch; margin-top: 0; }
+}
+.marca { min-height: 44px; } /* zona táctil del logotipo */
+
+@media (max-width: 640px) { section { padding: 3.75rem 0; } }

@@ -1,7 +1,8 @@
 const ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 
+// Escapa HTML y evita que "12 €" o "50 %" se partan entre dos líneas (espacio de no separación).
 export function esc(value) {
-  return String(value ?? '').replace(/[&<>"']/g, (char) => ESCAPES[char]);
+  return String(value ?? '').replace(/[&<>"']/g, (char) => ESCAPES[char]).replace(/(\d) ([€%])/g, '$1\u00a0$2');
 }
 
 // Teléfono para mostrar: espacios de no separación para que el número no se parta entre dos líneas.
