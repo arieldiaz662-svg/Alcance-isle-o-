@@ -119,7 +119,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 | # | Sección | Contenido | Acción principal |
 |---|---|---|---|
 | 1 | **Portada** | "Tu escaparate digital" · "Presencia digital para negocios locales de Tenerife…" · mesa con carta digital funcionando (pestañas), expositor con **QR real**, barraquito | *Pide tu diagnóstico gratuito* → WhatsApp |
-| 2 | **¿Qué tipo de negocio tienes?** (pestañas) | **Bares, restaurantes y cafeterías:** pack completo · **Negocios con cita previa:** pack · **Ambas:** diseño de tarjetas de visita a presupuesto (servicio externalizado) | *Pide información para tu local / negocio* → WhatsApp con mensaje propio |
+| 2 | **¿Qué tipo de negocio tienes?** (pestañas) | **Bares, restaurantes y cafeterías:** pack completo, pegatinas QR a presupuesto · **Negocios con cita previa:** pack · **Ambas:** diseño de tarjetas de visita a presupuesto (servicio externalizado) | *Pide información para tu local / negocio* → WhatsApp con mensaje propio |
 | 3 | **Así llega un cliente a tu negocio** | Te busca en Google → Mira tu carta o tus servicios → Te deja una reseña, con el servicio y precio de cada paso | — |
 | 4 | **Por qué elegirnos** | 5 motivos: equipo local, puesta en marcha ágil, todo conectado, formación, diagnóstico gratuito | — |
 | 5 | **Así trabajamos** | Diagnóstico → Lo preparamos → Entrega y formación · pago 50 % / 50 % | — |
@@ -141,6 +141,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 | Actualización completa de la carta | 40 € |
 | Tarjeta de reseñas QR + NFC | 25 € / unidad |
 | Diseño personalizado de tarjetas de visita (servicio externalizado) | Pide presupuesto |
+| Pegatinas QR para mesas (servicio externalizado, solo hostelería) | Pide presupuesto |
 
 ### 4.3 Mensajes de WhatsApp que recibiréis (+34 623 24 32 94)
 

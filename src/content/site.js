@@ -295,6 +295,13 @@ export const site = {
         text: 'Tus tarjetas con tu marca y a juego con tu web. Cuéntanos qué necesitas y te pasamos presupuesto sin compromiso.',
         whatsappText: 'Hola, quiero pedir presupuesto para el diseño personalizado de tarjetas de visita',
       },
+      {
+        id: 'pegatinas-qr',
+        name: 'Pegatinas QR para mesas',
+        text: 'Llevan a tus clientes a tu carta digital desde cada mesa. Dinos cuántas necesitas y te pasamos presupuesto sin compromiso.',
+        whatsappText: 'Hola, quiero pedir presupuesto para pegatinas QR para las mesas de mi local',
+        sectors: ['hosteleria'], // sin "sectors", sale en todas las pestañas
+      },
     ],
   },
 

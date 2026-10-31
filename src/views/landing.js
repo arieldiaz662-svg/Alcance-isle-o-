@@ -164,6 +164,9 @@ export function renderLanding({ site, config }) {
 
   const extraById = Object.fromEntries((extras ? extras.items : []).map((item) => [item.id, item]));
 
+  // Servicios externalizados de cada pestaña (los que no indican "sectors" salen en todas).
+  const outsourcedFor = (sector) => (site.outsourced ? site.outsourced.items.filter((item) => !item.sectors || item.sectors.includes(sector.id)) : []);
+
   // ---------- Packs por tipo de negocio (pestañas) ----------
   const packOf = (sector) => (sector.pack === 'main' ? pack : sector.pack);
   const nfcIcon = `<svg class="nfc" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7.5a6 6 0 0 1 0 9M12 5a9.5 9.5 0 0 1 0 14M15.5 2.5a13 13 0 0 1 0 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5" cy="12" r="1.8" fill="currentColor"/></svg>`;
@@ -224,11 +227,11 @@ export function renderLanding({ site, config }) {
               </ul>
             </div>
           </div>
-        </div>` : ''}${site.outsourced ? `
+        </div>` : ''}${outsourcedFor(sector).length ? `
         <div class="extras-aparte">
           <h3 class="extras-titulo">${esc(site.outsourced.title)}</h3>
           <p class="extras-nota">${esc(site.outsourced.note)}</p>
-          <ul class="externalizados">${site.outsourced.items.map((item) => `
+          <ul class="externalizados">${outsourcedFor(sector).map((item) => `
             <li>
               <h4>${esc(item.name)}</h4>
               <p>${esc(item.text)}</p>
