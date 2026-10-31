@@ -22,7 +22,7 @@ export const site = {
     badge: `Oferta de lanzamiento: -${launch.percent} %`,
     title: `-${launch.percent} % en los packs para los ${launch.spots} primeros clientes`,
     text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Cada pack incluye la tarjeta de reseñas QR + NFC y los ${launch.months} primeros meses de mantenimiento.`,
-    terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni a los servicios extra (material para mesas, tarjetas de visita, etc.), que se contratan aparte a su precio normal.`,
+    terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni a los servicios extra ni externalizados (pegatinas QR, diseño de tarjetas de visita, etc.), que se contratan aparte a su precio normal.`,
     cta: 'Reserva tu plaza',
     whatsappText: `Hola, quiero aprovechar la oferta de lanzamiento del ${launch.percent} % en el pack`,
   },
@@ -136,11 +136,11 @@ export const site = {
         { name: 'Tarjeta de reseñas QR + NFC', text: 'Tus clientes dejan su reseña en Google o Tripadvisor en segundos.' },
       ],
       pack: 'main',
-      // Opción: material para las mesas. "items" son ids de extras.items; se muestran con la imagen de extras.
+      // Opción: material para las mesas. "items" son ids de extras.items.
       option: {
         name: 'Para tus mesas',
-        text: 'Lleva tu carta digital a cada mesa, personalizada con tu marca.',
-        items: ['mesa', 'pegatinas'],
+        text: 'Lleva tu carta digital a cada mesa con un código QR.',
+        items: ['pegatinas'],
       },
       cta: 'Pide información para tu local',
       whatsappText: 'Hola, tengo un bar, restaurante o cafetería y quiero información sobre el pack completo',
@@ -170,11 +170,6 @@ export const site = {
         { name: maintenanceName, text: maintenanceText },
       ],
       pack: { name: 'Pack negocios con cita previa', label: `Web, tarjeta de reseñas QR + NFC y ${maintenanceInPack}`, price: packPrice(420), ...regularPrice(420) },
-      option: {
-        name: 'Tarjetas de visita personalizadas',
-        text: 'Impresas con tu marca, a juego con tu web y tu tarjeta de reseñas QR + NFC.',
-        price: '50 € / 100 uds.',
-      },
       cta: 'Pide información para tu negocio',
       whatsappText: 'Hola, tengo un negocio con cita previa y quiero información sobre el pack de web y tarjeta de reseñas QR + NFC',
       demo: {
@@ -278,21 +273,10 @@ export const site = {
   extrasNote: 'Se contratan aparte del pack.',
   extrasNoteLaunch: `No están incluidos en el pack ni en el descuento del ${launch.percent} %: se contratan aparte a su precio normal.`,
 
-  // COMPLEMENTOS FÍSICOS: se ofrecen como opción dentro de la pestaña de hostelería (sectors[0].option)
-  // y aparecen en la lista de precios.
+  // COMPLEMENTOS: se ofrecen como opción dentro de la pestaña de hostelería (sectors[0].option)
+  // y aparecen en la lista de precios. Todo lo que no es digital se presupuesta aparte (outsourced).
   extras: {
-    image: {
-      small: 'img/productos/expositor-mesa-480', // sin extensión: hay versión .webp y .jpg
-      alt: 'Expositor de mesa personalizado con logo, número de mesa y código QR de la carta',
-      caption: 'Imagen de muestra', // quitar cuando se sustituya por la foto real
-    },
     items: [
-      {
-        id: 'mesa',
-        name: 'Expositor de mesa personalizado',
-        text: 'Impreso en 3D en Tenerife con tu logo, el número de mesa y un QR. Con chip NFC opcional: basta con acercar el móvil.',
-        price: '10 € / unidad',
-      },
       {
         id: 'pegatinas',
         name: 'Pegatinas QR para mesa',
@@ -304,6 +288,23 @@ export const site = {
         name: 'Tarjeta de reseñas QR + NFC',
         text: 'Tus clientes escanean el QR o acercan el móvil y dejan su reseña en Google o Tripadvisor en segundos, sin buscar nada.',
         price: '25 € / unidad',
+      },
+    ],
+  },
+
+  // SERVICIOS EXTERNALIZADOS: no son nuestro servicio principal (que es digital). Los gestionamos con
+  // proveedores externos y se presupuestan a medida. Salen en las dos pestañas, fuera de la oferta.
+  outsourced: {
+    title: 'Servicios externalizados',
+    note: 'Los gestionamos con proveedores externos y se presupuestan a medida.',
+    quoteLabel: 'Pide presupuesto',
+    quoteCta: 'Pedir presupuesto',
+    items: [
+      {
+        id: 'diseno-tarjetas',
+        name: 'Diseño personalizado de tarjetas de visita',
+        text: 'Tus tarjetas con tu marca y a juego con tu web. Cuéntanos qué necesitas y te pasamos presupuesto sin compromiso.',
+        whatsappText: 'Hola, quiero pedir presupuesto para el diseño personalizado de tarjetas de visita',
       },
     ],
   },

@@ -49,5 +49,4 @@ Una fachada marino con una puerta en arco encendida en amarillo y una tilde enci
 
 ## Pendiente
 
-- Sustituir la maqueta del expositor por la foto real (`public/img/productos/`) y quitar `caption` en `site.js`.
 - Buscar marcas parecidas en la OEPM y la EUIPO (clases 35 y 42) y registrar la marca antes de imprimir tarjetas o expositores.

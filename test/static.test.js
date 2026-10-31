@@ -303,19 +303,20 @@ describe('packs por tipo de negocio', () => {
     assert.doesNotMatch(index, /[Dd]e regalo/);
     assert.equal((panel.match(/class="local-precio incluido">Incluido</g) || []).length, site.sectors[0].includes.length);
     assert.match(panel, new RegExp(`class="pack-total">[\\s\\S]*?<span class="local-precio">${packPriceRe(site.pack)}</span>`));
-    for (const id of ['mesa', 'pegatinas']) {
-      assert.match(panel, new RegExp(`${escapeRe(extra(id).name)}</h5>[\\s\\S]*?${escapeRe(extra(id).price)}`));
-    }
-    assert.match(panel, /<figcaption>Imagen de muestra<\/figcaption>/);
-    assert.match(panel, /Impreso en 3D en Tenerife/);
+    assert.match(panel, new RegExp(`${escapeRe(extra('pegatinas').name)}</h5>[\\s\\S]*?${escapeRe(extra('pegatinas').price)}`));
+    // No se ofrece el expositor de mesa impreso en 3D: ni en el texto, ni en la lista, ni su foto.
+    assert.equal(extra('mesa'), undefined);
+    assert.deepEqual(site.sectors[0].option.items, ['pegatinas']);
+    assert.doesNotMatch(index, /[Ee]xpositor de mesa|Impreso en 3D|Imagen de muestra|expositor-mesa/);
   });
 
-  test('cita previa: pack con el primer año de mantenimiento y tarjetas de visita; sin material de mesa', () => {
+  test('cita previa: pack con mantenimiento y diseño de tarjetas de visita a presupuesto; sin material de mesa', () => {
     const cita = site.sectors.find((s) => s.id === 'cita-previa');
     const panel = between(index, 'id="cita-previa"', 'class="recorrido"');
     assert.match(panel, new RegExp(`${escapeRe(cita.pack.label)}</h4>\\s*<span class="local-precio">${packPriceRe(cita.pack)}</span>`));
-    assert.match(panel, new RegExp(`Opcional: ${escapeRe(cita.option.name)}[\\s\\S]*?${escapeRe(cita.option.price)}`));
-    assert.doesNotMatch(panel, /Expositor de mesa/);
+    assert.equal(cita.option, undefined);
+    assert.match(panel, /<h4>Diseño personalizado de tarjetas de visita<\/h4>[\s\S]*?Pedir presupuesto/);
+    assert.doesNotMatch(panel, /Expositor de mesa|50 € \/ 100 uds/);
     assert.match(panel, /wa\.me\/34623243294\?text=Hola%2C%20tengo%20un%20negocio%20con%20cita%20previa/);
   });
 });
@@ -385,7 +386,8 @@ describe('datos estructurados para Google', () => {
   test('los servicios y precios son los mismos que se ven en la web, sin IGIC', () => {
     const [negocio] = leer('index.html')['@graph'];
     const ofertas = negocio.hasOfferCatalog.itemListElement.flatMap((g) => g.itemListElement);
-    const filas = [{ label: site.pack.name, price: site.pack.price }, ...priceList(site).flatMap((g) => g.rows)];
+    // Los servicios a presupuesto (sin importe) no se anuncian con precio.
+    const filas = [{ label: site.pack.name, price: site.pack.price }, ...priceList(site).flatMap((g) => g.rows)].filter((f) => /\d/.test(f.price));
     assert.deepEqual(ofertas.map((o) => o.itemOffered.name), filas.map((f) => f.label));
     assert.deepEqual(ofertas.map((o) => o.priceSpecification), filas.map((f) => parsePrice(f.price)));
     assert.ok(ofertas.every((o) => o.priceSpecification.valueAddedTaxIncluded === false));
@@ -431,18 +433,22 @@ describe('oferta de lanzamiento', () => {
     assert.match(index, /class="oferta-chapa" href="#packs"/);
   });
 
-  test('los servicios extra (material y tarjetas de visita) van aparte del pack y fuera del descuento', () => {
+  test('los servicios extra y externalizados van aparte del pack y fuera del descuento', () => {
     for (const [id, hasta] of [['hosteleria', 'id="cita-previa"'], ['cita-previa', 'class="recorrido"']]) {
       const panel = between(index, `id="${id}"`, hasta);
       assert.ok(panel.indexOf('class="pack-total"') < panel.indexOf('class="extras-aparte"'), id);
       const extras = between(panel, 'class="extras-aparte"');
-      assert.match(extras, /Servicios extra<\/h3>/);
-      assert.match(extras, /No están incluidos en el pack ni en el descuento del 50 %/);
+      assert.match(extras, /Servicios externalizados<\/h3>/);
       assert.doesNotMatch(extras, /<s /);
+      if (id === 'hosteleria') {
+        assert.match(extras, /Servicios extra<\/h3>/);
+        assert.match(extras, /No están incluidos en el pack ni en el descuento del 50 %/);
+      }
     }
+    assert.match(precios, /Diseño personalizado de tarjetas de visita<\/span><span class="guia" aria-hidden="true"><\/span><span class="importe">Pide presupuesto</);
     assert.match(precios, /<h3>Servicios extra<\/h3>/);
     assert.doesNotMatch(index, /Material para tu local/);
-    assert.match(between(index, 'class="oferta"', '</aside>'), /ni a los servicios extra \(material para mesas, tarjetas de visita, etc\.\)/);
+    assert.match(between(index, 'class="oferta"', '</aside>'), /ni a los servicios extra ni externalizados \(pegatinas QR, diseño de tarjetas de visita, etc\.\)/);
   });
 
   test('la oferta no toca los servicios sueltos ni el material', () => {
