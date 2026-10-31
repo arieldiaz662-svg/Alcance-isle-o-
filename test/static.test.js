@@ -204,7 +204,7 @@ describe('coherencia del contenido', () => {
     const [mensual, anual] = service('hosting').prices.map((row) => row.price);
     const plan = `${mensual.replace(' / mes', ' al mes')} o ${anual.replace(' / año', ' al año')}`;
     assert.equal(plan, '12 € al mes o 120 € al año');
-    assert.match(between(index, 'class="recorrido"', 'id="por-que"'), new RegExp(escapeRe(`por ${plan}. ${launch ? `Los packs de lanzamiento incluyen los ${launch.months} primeros meses.` : 'El primer año va incluido en los packs.'}`)));
+    assert.match(between(index, 'class="recorrido anim-seccion"', 'id="por-que"'), new RegExp(escapeRe(`por ${plan}. ${launch ? `Los packs de lanzamiento incluyen los ${launch.months} primeros meses.` : 'El primer año va incluido en los packs.'}`)));
   });
 
   test('plan de mantenimiento: sustituye al hosting suelto, hasta 2 cambios al mes e incluido en los dos packs', () => {
@@ -213,7 +213,7 @@ describe('coherencia del contenido', () => {
     assert.deepEqual(plan.prices.slice(0, 2).map((row) => row.price), ['12 € / mes', '120 € / año']);
     assert.doesNotMatch(index, /90 € \/ año|90 € al año|se paga aparte|hosting aparte/);
     for (const sector of site.sectors) {
-      const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido"');
+      const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido anim-seccion"');
       const incluido = sector.includes.find((i) => i.name.startsWith('Plan de mantenimiento'));
       assert.equal(incluido.name, launch ? `Plan de mantenimiento los ${launch.months} primeros meses` : 'Plan de mantenimiento el primer año');
       assert.match(panel, new RegExp(`<h4>${escapeRe(incluido.name)}</h4>\\s*<p>[^<]*hosting, dominio y hasta 2 cambios al mes`, 'i'), sector.id);
@@ -313,7 +313,7 @@ describe('packs por tipo de negocio', () => {
 
   test('cita previa: pack con mantenimiento y diseño de tarjetas de visita a presupuesto; sin material de mesa', () => {
     const cita = site.sectors.find((s) => s.id === 'cita-previa');
-    const panel = between(index, 'id="cita-previa"', 'class="recorrido"');
+    const panel = between(index, 'id="cita-previa"', 'class="recorrido anim-seccion"');
     assert.match(panel, new RegExp(`${escapeRe(cita.pack.label)}</h4>\\s*<span class="local-precio">${packPriceRe(cita.pack)}</span>`));
     assert.equal(cita.option, undefined);
     assert.match(panel, /<h4>Diseño personalizado de tarjetas de visita<\/h4>[\s\S]*?Pedir presupuesto/);
@@ -435,11 +435,11 @@ describe('oferta de lanzamiento', () => {
     assert.ok(oferta.replace(/<[^>]+>/g, '').length < 560, 'banner breve');
     assert.match(precios, /El precio tachado es el del pack normal, que incluye 12 meses de mantenimiento/);
     for (const sector of site.sectors) {
-      const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido"');
+      const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido anim-seccion"');
       assert.match(panel.slice(panel.indexOf('class="pack-total"')).split('</li>')[0], /class="pack-nota">El precio tachado es el del pack normal, que incluye 12 meses/, sector.id);
     }
     for (const sector of site.sectors) {
-      const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido"');
+      const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido anim-seccion"');
       assert.match(panel, /<h4>Tarjeta de reseñas QR \+ NFC<\/h4>[\s\S]*?class="local-precio incluido">Incluido</, `${sector.id}: la tarjeta va dentro del pack`);
       assert.ok(panel.indexOf('Tarjeta de reseñas QR + NFC') < panel.indexOf('class="pack-total"'), sector.id);
     }
@@ -449,7 +449,7 @@ describe('oferta de lanzamiento', () => {
   });
 
   test('los servicios extra y externalizados van aparte del pack y fuera del descuento', () => {
-    for (const [id, hasta] of [['hosteleria', 'id="cita-previa"'], ['cita-previa', 'class="recorrido"']]) {
+    for (const [id, hasta] of [['hosteleria', 'id="cita-previa"'], ['cita-previa', 'class="recorrido anim-seccion"']]) {
       const panel = between(index, `id="${id}"`, hasta);
       assert.ok(panel.indexOf('class="pack-total"') < panel.indexOf('class="extras-aparte"'), id);
       const extras = between(panel, 'class="extras-aparte"');
@@ -557,7 +557,7 @@ describe('conversión a WhatsApp', () => {
 
 describe('recorrido animado', () => {
   test('cada paso lleva su icono propio (Google, página web y tarjeta NFC), decorativo y sin logotipos', () => {
-    const recorrido = between(index, 'class="recorrido"', 'id="por-que"');
+    const recorrido = between(index, 'class="recorrido anim-seccion"', 'id="por-que"');
     assert.deepEqual(site.journey.steps.map((s) => s.icon), ['google', 'web', 'nfc']);
     const iconos = recorrido.match(/<div class="paso-icono">[\s\S]*?<\/svg><\/div>/g) || [];
     assert.equal(iconos.length, 3);
@@ -575,7 +575,7 @@ describe('recorrido animado', () => {
     const css = read('assets/css/site.css');
     const bloque = css.slice(css.indexOf('/* ---------- Recorrido animado'));
     assert.match(bloque, /@media \(prefers-reduced-motion: no-preference\)/);
-    assert.match(bloque, /\.anim-listo \.recorrido:not\(\.en-vista\)/, 'el estado oculto solo existe si el script lo activa');
+    assert.match(bloque, /\.anim-listo \.anim-seccion:not\(\.en-vista\)/, 'el estado oculto solo existe si el script lo activa');
     assert.doesNotMatch(bloque, /transition: all|ease-in[^-]|scale\(0\)/);
     assert.match(bloque, /var\(--ease-out\)/);
     // Duraciones: 450 ms los trazos, 700 ms las ondas; ninguna pasa de 700 ms en cada animación (explicativa, una sola vez).
@@ -586,7 +586,29 @@ describe('recorrido animado', () => {
     const js = read('assets/js/site.js');
     assert.match(js, /new IntersectionObserver/);
     assert.match(js, /prefers-reduced-motion: reduce/);
-    assert.match(js, /observer\.disconnect\(\)/);
+    assert.match(js, /observer\.unobserve\(entry\.target\)/);
     assert.match(js, /classList\.add\('en-vista'\)/);
+    assert.match(js, /querySelectorAll\('\.anim-seccion'\)/);
+  });
+});
+
+describe('con qué trabajamos', () => {
+  test('plataformas (Cloudflare, GitHub) y lenguajes (HTML, CSS, JavaScript) con iconos propios animados', () => {
+    const tecnologia = between(index, 'id="tecnologia"', 'id="trabajos"');
+    assert.match(tecnologia, /<h2>Con qué trabajamos<\/h2>/);
+    assert.ok(index.indexOf('id="por-que"') < index.indexOf('id="tecnologia"') && index.indexOf('id="tecnologia"') < index.indexOf('id="trabajos"'));
+    assert.match(tecnologia, /<h3>Cloudflare<\/h3>\s*<p class="tecnologia-rol">Hosting y dominio<\/p>/);
+    assert.match(tecnologia, /<h3>GitHub<\/h3>\s*<p class="tecnologia-rol">Código y publicación<\/p>/);
+    for (const lang of ['HTML', 'CSS', 'JavaScript']) assert.match(tecnologia, new RegExp(`<span>${lang}</span>`));
+    const iconos = tecnologia.match(/<div class="paso-icono[^"]*">[\s\S]*?<\/svg><\/div>/g) || [];
+    assert.equal(iconos.length, 5, 'nube, ramas y tres lenguajes');
+    for (const icono of iconos) {
+      assert.match(icono, /aria-hidden="true" focusable="false"/);
+      assert.doesNotMatch(icono, /<img|<text|logo/i, 'dibujos propios, sin logotipos oficiales ni texto');
+      assert.match(icono, /class="ic-/, 'usa las clases de animación');
+    }
+    assert.match(iconos[0], /ic-sube/);
+    assert.match(iconos[1], /ic-anillo/);
+    assert.match(index, /<section class="tecnologia anim-seccion" id="tecnologia">/, 'se anima al entrar en pantalla como el recorrido');
   });
 });

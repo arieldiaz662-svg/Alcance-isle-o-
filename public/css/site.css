@@ -615,6 +615,9 @@ p, li { text-wrap: pretty; }
   stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
 }
 .paso-icono .ic-acento, .paso-icono .ic-punto { fill: var(--atlantico); stroke: none; }
+.paso-icono .ic-acento-trazo { stroke: var(--atlantico); }
+.paso-icono .ic-sube { stroke: var(--atlantico); stroke-width: 2.6; }
+.paso-icono .ic-anillo { stroke: var(--atlantico); fill: none; }
 .paso-icono .ic-boton { fill: var(--sol); stroke: none; }
 .paso-icono .ic-onda { stroke: var(--atlantico); }
 .paso-icono .ic-sombra { stroke: var(--linea); stroke-width: 2; }
@@ -622,32 +625,40 @@ p, li { text-wrap: pretty; }
 .paso-icono .ic-linea { transform-origin: left center; }
 .recorrido-pasos li:nth-child(2) { --paso: 1; }
 .recorrido-pasos li:nth-child(3) { --paso: 2; }
+.tecnologia-lista > li:nth-child(2) { --paso: 1; }
+.tecnologia-lista > li:nth-child(3) { --paso: 2; }
+.lenguajes li:nth-child(2) { --paso: 3; }
+.lenguajes li:nth-child(3) { --paso: 4; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Estado inicial: solo cuando el script ha activado .anim-listo y la sección aún no está a la vista. */
-  .anim-listo .recorrido:not(.en-vista) .ic-t { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
-  .anim-listo .recorrido:not(.en-vista) :is(.ic-pop, .ic-linea, .ic-onda, .ic-caida) { opacity: 0; }
+  .anim-listo .anim-seccion:not(.en-vista) .ic-t { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
+  .anim-listo .anim-seccion:not(.en-vista) :is(.ic-pop, .ic-linea, .ic-onda, .ic-caida, .ic-sube) { opacity: 0; }
 
-  .recorrido.en-vista .ic-t {
+  .anim-seccion.en-vista .ic-t {
     stroke-dasharray: 1 1;
     animation: ic-trazo 450ms var(--ease-out) both;
     animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms);
   }
-  .recorrido.en-vista .ic-pop {
+  .anim-seccion.en-vista .ic-pop {
     animation: ic-pop 280ms var(--ease-out) both;
     animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms + 140ms);
   }
-  .recorrido.en-vista .ic-linea {
+  .anim-seccion.en-vista .ic-linea {
     animation: ic-linea 320ms var(--ease-out) both;
     animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms + 140ms);
   }
-  .recorrido.en-vista .ic-caida { animation: ic-caida 400ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 110ms); }
-  .recorrido.en-vista .ic-tarjeta { animation: ic-endereza 450ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 110ms); }
-  .recorrido.en-vista .ic-onda:not(.ic-sombra) {
+  .anim-seccion.en-vista .ic-caida { animation: ic-caida 400ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 110ms); }
+  .anim-seccion.en-vista .ic-tarjeta { animation: ic-endereza 450ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 110ms); }
+  .anim-seccion.en-vista .ic-onda:not(.ic-sombra) {
     animation: ic-onda 700ms ease-out 2 both;
     animation-delay: calc(var(--paso, 0) * 110ms + 450ms + var(--o, 0) * 110ms);
   }
-  .recorrido.en-vista .ic-sombra {
+  .anim-seccion.en-vista .ic-sube {
+    animation: ic-sube 700ms ease-out 2 both;
+    animation-delay: calc(var(--paso, 0) * 110ms + 450ms);
+  }
+  .anim-seccion.en-vista .ic-sombra {
     animation: ic-sombra 700ms ease-out 2 both; transform-origin: center;
     animation-delay: calc(var(--paso, 0) * 110ms + 300ms);
   }
@@ -658,4 +669,19 @@ p, li { text-wrap: pretty; }
 @keyframes ic-caida { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes ic-endereza { from { opacity: 0; transform: rotate(-8deg) translateX(-6px); } to { opacity: 1; transform: rotate(0) translateX(0); } }
 @keyframes ic-onda { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: .35; } }
+@keyframes ic-sube { 0% { opacity: 0; transform: translateY(8px); } 50% { opacity: 1; transform: translateY(0); } 100% { opacity: .4; transform: translateY(-3px); } }
 @keyframes ic-sombra { 0% { opacity: 0; transform: scale(.7); } 40% { opacity: 1; } 100% { opacity: .5; transform: scale(1.25); } }
+
+/* ---------- Con qué trabajamos ---------- */
+.tecnologia { background: var(--niebla); }
+.tecnologia-lista { list-style: none; margin: 2.2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+.tecnologia-lista > li { padding: 1.6rem; background: var(--papel); border: 1px solid var(--linea); border-radius: 8px; }
+.tecnologia-lista h3 { font-size: var(--t-xl); letter-spacing: -0.02em; margin-bottom: .1rem; }
+.tecnologia-rol { margin: 0 0 .7rem; font-weight: 600; color: var(--atlantico); }
+.tecnologia-lista p:last-child { margin: 0; color: var(--gris); }
+.tecnologia-lista .paso-icono { background: var(--niebla); }
+.lenguajes { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; gap: 1rem; }
+.lenguajes li { display: grid; justify-items: center; gap: .35rem; font-size: var(--t-s); font-weight: 600; color: var(--tinta); }
+.paso-icono-sm { width: 60px; height: 60px; margin: 0; border-radius: 14px; }
+.paso-icono-sm svg { width: 40px; height: 40px; }
+@media (max-width: 900px) { .tecnologia-lista { grid-template-columns: 1fr; } }

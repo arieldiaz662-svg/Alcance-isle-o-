@@ -309,6 +309,32 @@ export const site = {
     ],
   },
 
+  // CON QUÉ TRABAJAMOS: plataformas y lenguajes con los que se monta la web, el hosting y el dominio.
+  // "icon" elige el dibujo animado (TECH_ICONS en src/views/landing.js). Son dibujos propios, no logotipos oficiales.
+  tech: {
+    title: 'Con qué trabajamos',
+    intro: 'Herramientas profesionales y abiertas para que tu web sea rápida, segura y siempre tuya.',
+    items: [
+      {
+        icon: 'cloud', name: 'Cloudflare', role: 'Hosting y dominio',
+        text: 'Alojamos tu web en la red de Cloudflare: carga rápido en cualquier móvil y con HTTPS. Allí también se configura tu dominio.',
+      },
+      {
+        icon: 'git', name: 'GitHub', role: 'Código y publicación',
+        text: 'Guardamos el código de tu web con todo su historial. Cada cambio se prueba y se publica de forma automática, y siempre se puede volver atrás.',
+      },
+    ],
+    languages: {
+      name: 'Lenguajes', role: 'Cómo está construida',
+      text: 'Una web ligera hecha con los lenguajes estándar de la web: sin plantillas pesadas ni plugins que se queden obsoletos.',
+      items: [
+        { icon: 'html', label: 'HTML' },
+        { icon: 'css', label: 'CSS' },
+        { icon: 'js', label: 'JavaScript' },
+      ],
+    },
+  },
+
   // TRABAJOS: galería de webs, cartas y tarjetas ya hechas. Sin elementos, la sección no se muestra.
   // Guarda cada imagen en public/img/trabajos/ en dos versiones, NOMBRE.webp y NOMBRE.jpg, y añade
   // { img: 'img/trabajos/NOMBRE', width, height, fit, alt, title, description } (img sin extensión; width y height son los
