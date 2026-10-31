@@ -298,16 +298,16 @@ describe('packs por tipo de negocio', () => {
     assert.match(index, /class="sector-tabs" role="tablist"[^>]*hidden/, 'sin JavaScript se ven los dos paneles');
   });
 
-  test('hostelería: pack completo, todo "Incluido" (sin "De regalo") y material para mesas', () => {
+  test('hostelería: pack completo y todo "Incluido" (sin "De regalo"); sin material de mesa a precio fijo', () => {
     const panel = between(index, 'id="hosteleria"', 'id="cita-previa"');
     assert.doesNotMatch(index, /[Dd]e regalo/);
     assert.equal((panel.match(/class="local-precio incluido">Incluido</g) || []).length, site.sectors[0].includes.length);
     assert.match(panel, new RegExp(`class="pack-total">[\\s\\S]*?<span class="local-precio">${packPriceRe(site.pack)}</span>`));
-    assert.match(panel, new RegExp(`${escapeRe(extra('pegatinas').name)}</h5>[\\s\\S]*?${escapeRe(extra('pegatinas').price)}`));
-    // No se ofrece el expositor de mesa impreso en 3D: ni en el texto, ni en la lista, ni su foto.
+    // Sin material de mesa a precio fijo: ni el expositor impreso en 3D ni las pegatinas (estas, solo a presupuesto).
     assert.equal(extra('mesa'), undefined);
-    assert.deepEqual(site.sectors[0].option.items, ['pegatinas']);
-    assert.doesNotMatch(index, /[Ee]xpositor de mesa|Impreso en 3D|Imagen de muestra|expositor-mesa/);
+    assert.equal(extra('pegatinas'), undefined, 'las pegatinas ya no se venden con precio fijo');
+    assert.equal(site.sectors[0].option, undefined);
+    assert.doesNotMatch(index, /[Ee]xpositor de mesa|Impreso en 3D|Imagen de muestra|expositor-mesa|50 € \/ 10 uds|Para tus mesas/);
   });
 
   test('cita previa: pack con mantenimiento y diseño de tarjetas de visita a presupuesto; sin material de mesa', () => {
@@ -439,16 +439,18 @@ describe('oferta de lanzamiento', () => {
       assert.ok(panel.indexOf('class="pack-total"') < panel.indexOf('class="extras-aparte"'), id);
       const extras = between(panel, 'class="extras-aparte"');
       assert.match(extras, /Servicios externalizados<\/h3>/);
+      assert.match(extras, /<h4>Diseño personalizado de tarjetas de visita<\/h4>/);
+      // Las pegatinas QR para mesas son un servicio externalizado a presupuesto, solo en la pestaña de hostelería.
+      assert.equal(/<h4>Pegatinas QR para mesas<\/h4>[\s\S]*?Pedir presupuesto/.test(extras), id === 'hosteleria', id);
       assert.doesNotMatch(extras, /<s /);
-      if (id === 'hosteleria') {
-        assert.match(extras, /Servicios extra<\/h3>/);
-        assert.match(extras, /No están incluidos en el pack ni en el descuento del 50 %/);
-      }
+      assert.doesNotMatch(panel, /Servicios extra<\/h3>/, `${id}: sin servicios extra bajo el pack`);
     }
     assert.match(precios, /Diseño personalizado de tarjetas de visita<\/span><span class="guia" aria-hidden="true"><\/span><span class="importe">Pide presupuesto</);
     assert.match(precios, /<h3>Servicios extra<\/h3>/);
+    assert.match(precios, /Pegatinas QR para mesas<\/span><span class="guia" aria-hidden="true"><\/span><span class="importe">Pide presupuesto</);
+    assert.match(index, /wa\.me\/34623243294\?text=Hola%2C%20quiero%20pedir%20presupuesto%20para%20pegatinas%20QR/);
     assert.doesNotMatch(index, /Material para tu local/);
-    assert.match(between(index, 'class="oferta"', '</aside>'), /ni a los servicios extra ni externalizados \(pegatinas QR, diseño de tarjetas de visita, etc\.\)/);
+    assert.match(between(index, 'class="oferta"', '</aside>'), /ni a los servicios extra ni externalizados \(tarjeta de reseñas QR \+ NFC suelta, diseño de tarjetas de visita, etc\.\)/);
   });
 
   test('la oferta no toca los servicios sueltos ni el material', () => {

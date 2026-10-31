@@ -524,3 +524,4 @@ s.antes { color: var(--gris); font-weight: 400; font-size: .7em; margin-right: .
 .externalizados h4 { font-size: var(--t-m); margin: 0 0 .2rem; }
 .externalizados p { color: var(--gris); font-size: .95rem; margin: 0 0 .8rem; }
 .extras-aparte + .extras-aparte { margin-top: 1.4rem; }
+.externalizados li + li { margin-top: 1.4rem; }
