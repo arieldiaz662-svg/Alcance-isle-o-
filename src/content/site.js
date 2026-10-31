@@ -309,12 +309,29 @@ export const site = {
   },
 
   // TRABAJOS: galería de webs, cartas y tarjetas ya hechas. Sin elementos, la sección no se muestra.
-  // Guarda las fotos en public/img/trabajos/ y añade { img: 'img/trabajos/bar-luna.jpg', alt: '...', caption: '...' }.
+  // Guarda cada imagen en public/img/trabajos/ en dos versiones, NOMBRE.webp y NOMBRE.jpg, y añade
+  // { img: 'img/trabajos/NOMBRE', width, height, alt, caption } (img sin extensión; width y height son los píxeles reales).
   // Solo con trabajos reales y con permiso del cliente.
   works: {
     title: 'Trabajos',
-    intro: 'Webs, cartas digitales y tarjetas de reseñas que ya funcionan en negocios de la isla.',
-    items: [],
+    intro: 'Webs y cartas digitales que ya funcionan en negocios de la isla.',
+    items: [
+      {
+        img: 'img/trabajos/memphis-belle-portada', width: 1200, height: 567,
+        alt: 'Portada de la web de Memphis Belle Coctelería: «Coctelería de autor», aviso de horario «Cerrado, abrimos hoy a las 18:00» y botones «Ver la carta» y «Cómo llegar».',
+        caption: 'Memphis Belle Coctelería · web con horario «Abierto ahora»',
+      },
+      {
+        img: 'img/trabajos/memphis-belle-bar', width: 1200, height: 413,
+        alt: 'Sección «El bar» de la web de Memphis Belle: «Cócteles de autor, sin prisa», sobre una estantería de rones y whiskies.',
+        caption: 'Memphis Belle Coctelería · sección «El bar»',
+      },
+      {
+        img: 'img/trabajos/memphis-belle-carta', width: 800, height: 1000,
+        alt: 'Carta de Memphis Belle Coctelería en dos columnas, «Refrescantes» y «Ácidos y sour», con el nombre, los ingredientes y el precio de cada cóctel.',
+        caption: 'Memphis Belle Coctelería · carta de cócteles',
+      },
+    ],
   },
 
   // LLAMADA FINAL tras "Así trabajamos": para quien ya ha leído cómo se trabaja y está listo para escribir.
