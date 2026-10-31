@@ -344,13 +344,18 @@ export function renderLanding({ site, config }) {
     <h2>${esc(works.title)}</h2>
     ${works.intro ? `<p class="suave">${esc(works.intro)}</p>` : ''}
     <ul class="trabajos-lista">${works.items.map((item) => `
-      <li${item.compact ? ' class="trabajo-compacto"' : ''}>
+      <li>
         <figure>
-          <picture>
-            <source type="image/webp" srcset="${esc(to.asset(`${item.img}.webp`))}">
-            <img src="${esc(to.asset(`${item.img}.jpg`))}" alt="${esc(item.alt)}" loading="lazy" decoding="async" width="${esc(item.width)}" height="${esc(item.height)}">
-          </picture>
-          ${item.caption ? `<figcaption>${esc(item.caption)}</figcaption>` : ''}
+          <div class="trabajo-marco">
+            <picture>
+              <source type="image/webp" srcset="${esc(to.asset(`${item.img}.webp`))}">
+              <img class="trabajo-${item.fit === 'cover' ? 'cubre' : 'entera'}" src="${esc(to.asset(`${item.img}.jpg`))}" alt="${esc(item.alt)}" loading="lazy" decoding="async" width="${esc(item.width)}" height="${esc(item.height)}">
+            </picture>
+          </div>
+          <figcaption>
+            <strong>${esc(item.title)}</strong>
+            <span>${esc(item.description)}</span>
+          </figcaption>
         </figure>
       </li>`).join('')}
     </ul>

@@ -528,18 +528,19 @@ describe('conversión a WhatsApp', () => {
     assert.equal(read('privacidad.html').includes('wa-flotante'), false, 'solo en la portada');
   });
 
-  test('galería de trabajos con imágenes reales: webp con alternativa jpg, textos alternativos y tamaño reales', () => {
+  test('galería de trabajos: marcos uniformes, imagen real con alternativa jpg, texto alternativo y descripción detallada', () => {
     const galeria = between(index, 'id="trabajos"', 'id="como"');
     assert.match(index, /href="#trabajos"/);
-    assert.ok(site.works.items.length >= 1);
+    assert.equal(site.works.items.length, 4);
+    assert.equal((galeria.match(/<div class="trabajo-marco">/g) || []).length, site.works.items.length, 'todas en el mismo marco');
     for (const item of site.works.items) {
       assert.ok(item.alt.length > 30, `texto alternativo descriptivo: ${item.img}`);
+      assert.ok(item.description.length > 120, `descripción detallada: ${item.img}`);
+      assert.ok(['contain', 'cover'].includes(item.fit), item.img);
       assert.match(galeria, new RegExp(`<source type="image/webp" srcset="[^"]*${escapeRe(item.img)}\\.webp">`));
-      assert.match(galeria, new RegExp(`<img src="[^"]*${escapeRe(item.img)}\\.jpg" alt="[^"]+" loading="lazy" decoding="async" width="${item.width}" height="${item.height}">`));
-      for (const ext of ['webp', 'jpg']) {
-        const file = join(outDir, 'assets', `${item.img}.${ext}`);
-        assert.ok(existsSync(file), file);
-      }
+      assert.match(galeria, new RegExp(`<img class="trabajo-(entera|cubre)" src="[^"]*${escapeRe(item.img)}\\.jpg" alt="[^"]+" loading="lazy" decoding="async" width="${item.width}" height="${item.height}">`));
+      assert.match(galeria, new RegExp(`<strong>${escapeRe(item.title)}</strong>\\s*<span>${escapeRe(item.description)}</span>`));
+      for (const ext of ['webp', 'jpg']) assert.ok(existsSync(join(outDir, 'assets', `${item.img}.${ext}`)), `${item.img}.${ext}`);
       const jpg = readFileSync(join(outDir, 'assets', `${item.img}.jpg`));
       let o = 2; // SOF0/SOF2: alto y ancho reales del JPEG
       while (o < jpg.length) {
@@ -548,6 +549,9 @@ describe('conversión a WhatsApp', () => {
         o += 2 + jpg.readUInt16BE(o + 2);
       }
     }
+    const css = read('assets/css/site.css');
+    assert.match(css, /\.trabajo-marco \{ aspect-ratio: 3 \/ 2;/, 'marco 3:2 para todas');
+    assert.doesNotMatch(css, /trabajo-compacto/);
   });
 });
 
