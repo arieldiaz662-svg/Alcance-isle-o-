@@ -33,9 +33,10 @@ Para montar la web de otro negocio (o una nueva versión de esta) no hace falta 
 - **Llamada final** tras «Así trabajamos» (`closing` en `site.js`) y **botón fijo de WhatsApp en móvil** (`floatingCta`; vacío para quitarlo).
 - **Trabajos** (`works` en `site.js`): galería de webs, cartas y tarjetas ya hechas. Sin elementos no se muestra ni aparece en el menú.
   Guarda cada imagen en `public/img/trabajos/` en dos versiones (`NOMBRE.webp` y `NOMBRE.jpg`, de unos 800–1200 px de ancho) y añade
-  `{ img: 'img/trabajos/NOMBRE', width, height, alt, caption }` (sin extensión; `width` y `height` son los píxeles reales).
-  Usa solo trabajos reales y con permiso del cliente. Cada imagen conserva su proporción.
-  Con `compact: true` una imagen se muestra algo más pequeña (útil para cartas o fotos muy altas).
+  `{ img: 'img/trabajos/NOMBRE', width, height, fit, alt, title, description }` (sin extensión; `width` y `height` son los píxeles reales).
+  Todas se muestran en un marco 3:2 del mismo tamaño, así que nada desentona: `fit: 'contain'` enseña la imagen entera (con bandas del color
+  del marco) y `fit: 'cover'` rellena el marco. `title` y `description` salen bajo la imagen; `alt` es para lectores de pantalla.
+  Usa solo trabajos reales y con permiso del cliente.
 - **Recorrido del cliente animado** (`journey.steps[].icon`: `google`, `web`, `nfc`): iconos propios que se dibujan una vez al entrar en pantalla.
   Sin JavaScript o con «reducir movimiento» activado quedan estáticos y completos.
 

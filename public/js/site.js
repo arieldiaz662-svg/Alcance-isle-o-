@@ -81,17 +81,20 @@
   });
 })();
 
-// Iconos del recorrido del cliente: se dibujan una sola vez, al entrar la sección en pantalla (ver "Recorrido animado"
-// en site.css). Sin IntersectionObserver o con movimiento reducido no se hace nada y los iconos quedan estáticos y completos.
+// Iconos animados (recorrido del cliente y "Con qué trabajamos"): cada sección se dibuja una sola vez, al entrar en pantalla
+// (ver "Recorrido animado" en site.css). Sin IntersectionObserver o con movimiento reducido no se hace nada y los iconos
+// quedan estáticos y completos.
 (function () {
-  var section = document.querySelector('.recorrido');
-  if (!section || !('IntersectionObserver' in window)) return;
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.anim-seccion'));
+  if (!sections.length || !('IntersectionObserver' in window)) return;
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   document.documentElement.classList.add('anim-listo');
   var observer = new IntersectionObserver(function (entries) {
-    if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
-    section.classList.add('en-vista');
-    observer.disconnect();
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('en-vista');
+      observer.unobserve(entry.target);
+    });
   }, { threshold: 0.3 });
-  observer.observe(section);
+  sections.forEach(function (section) { observer.observe(section); });
 })();

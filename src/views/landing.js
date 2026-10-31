@@ -58,6 +58,35 @@ const JOURNEY_ICONS = {
     <path class="ic-onda" style="--o:0" d="M48 28.5a5 5 0 0 1 0 7"/><path class="ic-onda" style="--o:1" d="M52 24.5a10 10 0 0 1 0 15"/><path class="ic-onda" style="--o:2" d="M56 20.5a15 15 0 0 1 0 23"/></svg>`,
 };
 
+// Iconos de "Con qué trabajamos": dibujos propios (no logotipos oficiales) que usan las mismas clases de animación que el recorrido.
+const TECH_ICONS = {
+  // Hosting: la nube se dibuja y una flecha de subida sale de ella (tu web, publicada).
+  cloud: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <path class="ic-t" pathLength="1" style="--i:0" d="M18 46a11 11 0 0 1-1-21.9 16 16 0 0 1 30.5 3.6A9.5 9.5 0 0 1 46 46z"/>
+    <path class="ic-sube ic-acento-trazo" style="--o:0" d="M32 42V30M26.5 35.5 32 30l5.5 5.5"/></svg>`,
+  // Control de versiones: dos ramas que se unen y el último cambio late.
+  git: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <path class="ic-t" pathLength="1" style="--i:0" d="M20 18v28"/>
+    <path class="ic-t" pathLength="1" style="--i:2" d="M44 28c0 10-24 3-24 14"/>
+    <circle class="ic-pop" style="--i:3" cx="20" cy="14" r="4.5"/><circle class="ic-pop" style="--i:4" cx="20" cy="50" r="4.5"/>
+    <circle class="ic-pop ic-acento" style="--i:5" cx="44" cy="24" r="4.5"/>
+    <circle class="ic-onda ic-sombra ic-anillo" cx="44" cy="24" r="8"/></svg>`,
+  // HTML: etiqueta de apertura, cierre y barra.
+  html: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <path class="ic-t" pathLength="1" style="--i:0" d="M22 20 9 32l13 12"/><path class="ic-t" pathLength="1" style="--i:1" d="M42 20l13 12-13 12"/>
+    <path class="ic-t ic-acento-trazo" pathLength="1" style="--i:2" d="M36 16 28 48"/></svg>`,
+  // CSS: llaves de estilo con una muestra de color.
+  css: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <path class="ic-t" pathLength="1" style="--i:0" d="M25 14c-6 0-6 4-6 8v5c0 3-3 5-7 5 4 0 7 2 7 5v5c0 4 0 8 6 8"/>
+    <path class="ic-t" pathLength="1" style="--i:1" d="M39 14c6 0 6 4 6 8v5c0 3 3 5 7 5-4 0-7 2-7 5v5c0 4 0 8-6 8"/>
+    <circle class="ic-pop ic-acento" style="--i:3" cx="32" cy="32" r="4.5"/></svg>`,
+  // JavaScript: insignia con las letras J y S dibujadas.
+  js: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <rect class="ic-t" pathLength="1" style="--i:0" x="10" y="10" width="44" height="44" rx="7"/>
+    <path class="ic-t" pathLength="1" style="--i:2" d="M30 22v15a5 5 0 0 1-9 3"/>
+    <path class="ic-t ic-acento-trazo" pathLength="1" style="--i:3" d="M45 24c-1.5-3-9-3.5-9 .5 0 6 10 3 10 9.5 0 4.5-8.5 4.5-11 1"/></svg>`,
+};
+
 // Lista de precios por grupos (sin el pack principal, que se muestra destacado). La usan la sección de
 // precios y los datos estructurados para Google, así que siempre coinciden.
 export function priceList(site) {
@@ -133,7 +162,7 @@ export function renderLanding({ site, config }) {
 <div class="mesa" id="inicio">
   <div class="wrap mesa-grid">
     <div class="mesa-texto">
-      ${launch ? `<a class="oferta-chapa" href="#packs">${esc(launch.badge)} · primeros ${esc(String(launch.spots))} clientes</a>` : ''}
+      ${launch ? `<a class="oferta-chapa" href="#packs">${esc(launch.badge)} · ${esc(launch.spotsLabel)}</a>` : ''}
       <h1>${esc(hero.title)}</h1>
       <p class="lead">${esc(hero.lead)}</p>
       <div class="acciones">
@@ -170,7 +199,7 @@ export function renderLanding({ site, config }) {
 
   // ---------- Recorrido del cliente (servicios) ----------
   const journeySection = `
-<section class="recorrido" id="servicios">
+<section class="recorrido anim-seccion" id="servicios">
   <div class="wrap">
     <h2>${esc(journey.title)}</h2>
     <ol class="recorrido-pasos">${journey.steps.map((step) => {
@@ -337,6 +366,32 @@ export function renderLanding({ site, config }) {
   </div>
 </section>` : '';
 
+  // ---------- Con qué trabajamos: plataformas y lenguajes ----------
+  const tech = site.tech;
+  const techSection = tech ? `
+<section class="tecnologia anim-seccion" id="tecnologia">
+  <div class="wrap">
+    <h2>${esc(tech.title)}</h2>
+    ${tech.intro ? `<p class="suave">${esc(tech.intro)}</p>` : ''}
+    <ul class="tecnologia-lista">${tech.items.map((item) => `
+      <li>
+        <div class="paso-icono">${TECH_ICONS[item.icon]}</div>
+        <h3>${esc(item.name)}</h3>
+        <p class="tecnologia-rol">${esc(item.role)}</p>
+        <p>${esc(item.text)}</p>
+      </li>`).join('')}${tech.languages ? `
+      <li>
+        <ul class="lenguajes" aria-label="${esc(tech.languages.name)}">${tech.languages.items.map((lang) => `
+          <li><div class="paso-icono paso-icono-sm">${TECH_ICONS[lang.icon]}</div><span>${esc(lang.label)}</span></li>`).join('')}
+        </ul>
+        <h3>${esc(tech.languages.name)}</h3>
+        <p class="tecnologia-rol">${esc(tech.languages.role)}</p>
+        <p>${esc(tech.languages.text)}</p>
+      </li>` : ''}
+    </ul>
+  </div>
+</section>` : '';
+
   // ---------- Trabajos (solo si hay fotos reales) ----------
   const worksSection = works ? `
 <section class="trabajos" id="trabajos">
@@ -344,13 +399,18 @@ export function renderLanding({ site, config }) {
     <h2>${esc(works.title)}</h2>
     ${works.intro ? `<p class="suave">${esc(works.intro)}</p>` : ''}
     <ul class="trabajos-lista">${works.items.map((item) => `
-      <li${item.compact ? ' class="trabajo-compacto"' : ''}>
+      <li>
         <figure>
-          <picture>
-            <source type="image/webp" srcset="${esc(to.asset(`${item.img}.webp`))}">
-            <img src="${esc(to.asset(`${item.img}.jpg`))}" alt="${esc(item.alt)}" loading="lazy" decoding="async" width="${esc(item.width)}" height="${esc(item.height)}">
-          </picture>
-          ${item.caption ? `<figcaption>${esc(item.caption)}</figcaption>` : ''}
+          <div class="trabajo-marco">
+            <picture>
+              <source type="image/webp" srcset="${esc(to.asset(`${item.img}.webp`))}">
+              <img class="trabajo-${item.fit === 'cover' ? 'cubre' : 'entera'}" src="${esc(to.asset(`${item.img}.jpg`))}" alt="${esc(item.alt)}" loading="lazy" decoding="async" width="${esc(item.width)}" height="${esc(item.height)}">
+            </picture>
+          </div>
+          <figcaption>
+            <strong>${esc(item.title)}</strong>
+            <span>${esc(item.description)}</span>
+          </figcaption>
         </figure>
       </li>`).join('')}
     </ul>
@@ -375,7 +435,7 @@ export function renderLanding({ site, config }) {
         <h3>${esc(pack.name)}</h3>
         <p>${esc(packText)}</p>
         <p class="pack-precio">${pack.regularPrice ? `<s class="antes"><span class="solo-lectores">Precio normal con ${launch ? launch.regularMonths : ''} meses de mantenimiento: </span>${esc(pack.regularPrice)}</s> <span class="solo-lectores">Precio de lanzamiento: </span>` : ''}<strong>${esc(pack.price)}</strong></p>
-        ${launch ? `<p class="pack-oferta">${esc(launch.badge)} · primeros ${esc(String(launch.spots))} clientes</p>` : ''}
+        ${launch ? `<p class="pack-oferta">${esc(launch.badge)} · ${esc(launch.spotsLabel)}</p>` : ''}
       </div>` : ''}${priceGroups.map((group) => `
       <div class="carta-grupo">
         <h3>${esc(group.title)}</h3>
@@ -411,6 +471,7 @@ ${channelsSection}
 ${sectorsSection}
 ${journeySection}
 ${whySection}
+${techSection}
 ${worksSection}
 ${stepsSection}
 ${closingSection}

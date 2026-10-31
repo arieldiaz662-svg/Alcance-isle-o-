@@ -575,13 +575,17 @@ p, li { text-wrap: pretty; }
 .cierre p { margin: 0; color: #D5E1F0; max-width: 52ch; }
 .cierre .btn { flex: 0 0 auto; }
 
-.trabajos-lista { list-style: none; margin: 2rem 0 0; padding: 0; column-gap: 2rem; } /* mosaico: cada imagen conserva su proporción */
-.trabajos-lista li { break-inside: avoid; margin: 0 0 2rem; }
-@media (min-width: 700px) { .trabajos-lista { column-count: 2; } }
+/* Todas las imágenes, en un marco del mismo tamaño (3:2): ninguna domina ni descuadra el conjunto. */
+.trabajos-lista { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 2.4rem 2rem; align-items: start; }
 .trabajos-lista figure { margin: 0; }
-.trabajos-lista .trabajo-compacto { padding-inline: 11%; } /* imagen alta: algo más pequeña para no dominar el mosaico */
-.trabajos-lista img { display: block; width: 100%; height: auto; background: var(--niebla); border-radius: 6px; }
-.trabajos-lista figcaption { margin-top: .6rem; font-size: var(--t-s); color: var(--gris); }
+.trabajo-marco { aspect-ratio: 3 / 2; background: #0c0f12; border-radius: 8px; overflow: hidden; }
+.trabajo-marco picture { display: block; width: 100%; height: 100%; }
+.trabajo-marco img { display: block; width: 100%; height: 100%; }
+.trabajo-entera { object-fit: contain; } /* la imagen se ve entera, con bandas del color del marco */
+.trabajo-cubre { object-fit: cover; } /* la imagen rellena todo el marco */
+.trabajos-lista figcaption { margin-top: .9rem; color: var(--gris); font-size: var(--t-s); line-height: 1.5; }
+.trabajos-lista figcaption strong { display: block; margin-bottom: .25rem; color: var(--tinta); font-size: var(--t-m); }
+.trabajos-lista figcaption span { display: block; max-width: 62ch; }
 
 .wa-flotante { display: none; }
 @media (max-width: 820px) {
@@ -600,7 +604,7 @@ p, li { text-wrap: pretty; }
 
 /* ---------- Recorrido animado: iconos propios que se dibujan al entrar en pantalla ---------- */
 /* Propósito: explicar cómo funciona cada servicio (una sola vez por visita). Solo trazo, transform y opacity;
-   curva fuerte de salida (--ease-out); trazos de 700 ms con escalones de 90 ms; ondas y sombra, 2 repeticiones y quietos.
+   curva fuerte de salida (--ease-out); trazos de 450 ms con escalones de 60 ms entre elementos y 110 ms entre pasos (el dibujado termina en ~1 s); ondas y sombra, 2 repeticiones de 700 ms y quietos.
    Sin JavaScript o con movimiento reducido los iconos quedan estáticos y completos. */
 .paso-icono {
   display: grid; place-items: center; width: 76px; height: 76px; margin-bottom: 1rem;
@@ -611,6 +615,9 @@ p, li { text-wrap: pretty; }
   stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
 }
 .paso-icono .ic-acento, .paso-icono .ic-punto { fill: var(--atlantico); stroke: none; }
+.paso-icono .ic-acento-trazo { stroke: var(--atlantico); }
+.paso-icono .ic-sube { stroke: var(--atlantico); stroke-width: 2.6; }
+.paso-icono .ic-anillo { stroke: var(--atlantico); fill: none; }
 .paso-icono .ic-boton { fill: var(--sol); stroke: none; }
 .paso-icono .ic-onda { stroke: var(--atlantico); }
 .paso-icono .ic-sombra { stroke: var(--linea); stroke-width: 2; }
@@ -618,34 +625,42 @@ p, li { text-wrap: pretty; }
 .paso-icono .ic-linea { transform-origin: left center; }
 .recorrido-pasos li:nth-child(2) { --paso: 1; }
 .recorrido-pasos li:nth-child(3) { --paso: 2; }
+.tecnologia-lista > li:nth-child(2) { --paso: 1; }
+.tecnologia-lista > li:nth-child(3) { --paso: 2; }
+.lenguajes li:nth-child(2) { --paso: 3; }
+.lenguajes li:nth-child(3) { --paso: 4; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Estado inicial: solo cuando el script ha activado .anim-listo y la sección aún no está a la vista. */
-  .anim-listo .recorrido:not(.en-vista) .ic-t { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
-  .anim-listo .recorrido:not(.en-vista) :is(.ic-pop, .ic-linea, .ic-onda, .ic-caida) { opacity: 0; }
+  .anim-listo .anim-seccion:not(.en-vista) .ic-t { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
+  .anim-listo .anim-seccion:not(.en-vista) :is(.ic-pop, .ic-linea, .ic-onda, .ic-caida, .ic-sube) { opacity: 0; }
 
-  .recorrido.en-vista .ic-t {
+  .anim-seccion.en-vista .ic-t {
     stroke-dasharray: 1 1;
-    animation: ic-trazo 700ms var(--ease-out) both;
-    animation-delay: calc(var(--paso, 0) * 160ms + var(--i, 0) * 90ms);
+    animation: ic-trazo 450ms var(--ease-out) both;
+    animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms);
   }
-  .recorrido.en-vista .ic-pop {
-    animation: ic-pop 360ms var(--ease-out) both;
-    animation-delay: calc(var(--paso, 0) * 160ms + var(--i, 0) * 90ms + 200ms);
+  .anim-seccion.en-vista .ic-pop {
+    animation: ic-pop 280ms var(--ease-out) both;
+    animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms + 140ms);
   }
-  .recorrido.en-vista .ic-linea {
-    animation: ic-linea 420ms var(--ease-out) both;
-    animation-delay: calc(var(--paso, 0) * 160ms + var(--i, 0) * 90ms + 200ms);
+  .anim-seccion.en-vista .ic-linea {
+    animation: ic-linea 320ms var(--ease-out) both;
+    animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms + 140ms);
   }
-  .recorrido.en-vista .ic-caida { animation: ic-caida 520ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 160ms); }
-  .recorrido.en-vista .ic-tarjeta { animation: ic-endereza 600ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 160ms); }
-  .recorrido.en-vista .ic-onda:not(.ic-sombra) {
-    animation: ic-onda 900ms ease-out 2 both;
-    animation-delay: calc(var(--paso, 0) * 160ms + 700ms + var(--o, 0) * 160ms);
+  .anim-seccion.en-vista .ic-caida { animation: ic-caida 400ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 110ms); }
+  .anim-seccion.en-vista .ic-tarjeta { animation: ic-endereza 450ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 110ms); }
+  .anim-seccion.en-vista .ic-onda:not(.ic-sombra) {
+    animation: ic-onda 700ms ease-out 2 both;
+    animation-delay: calc(var(--paso, 0) * 110ms + 450ms + var(--o, 0) * 110ms);
   }
-  .recorrido.en-vista .ic-sombra {
-    animation: ic-sombra 900ms ease-out 2 both; transform-origin: center;
-    animation-delay: calc(var(--paso, 0) * 160ms + 450ms);
+  .anim-seccion.en-vista .ic-sube {
+    animation: ic-sube 700ms ease-out 2 both;
+    animation-delay: calc(var(--paso, 0) * 110ms + 450ms);
+  }
+  .anim-seccion.en-vista .ic-sombra {
+    animation: ic-sombra 700ms ease-out 2 both; transform-origin: center;
+    animation-delay: calc(var(--paso, 0) * 110ms + 300ms);
   }
 }
 @keyframes ic-trazo { 0% { stroke-dashoffset: 1; opacity: 0; } 8% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
@@ -654,4 +669,19 @@ p, li { text-wrap: pretty; }
 @keyframes ic-caida { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes ic-endereza { from { opacity: 0; transform: rotate(-8deg) translateX(-6px); } to { opacity: 1; transform: rotate(0) translateX(0); } }
 @keyframes ic-onda { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: .35; } }
+@keyframes ic-sube { 0% { opacity: 0; transform: translateY(8px); } 50% { opacity: 1; transform: translateY(0); } 100% { opacity: .4; transform: translateY(-3px); } }
 @keyframes ic-sombra { 0% { opacity: 0; transform: scale(.7); } 40% { opacity: 1; } 100% { opacity: .5; transform: scale(1.25); } }
+
+/* ---------- Con qué trabajamos ---------- */
+.tecnologia { background: var(--niebla); }
+.tecnologia-lista { list-style: none; margin: 2.2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+.tecnologia-lista > li { padding: 1.6rem; background: var(--papel); border: 1px solid var(--linea); border-radius: 8px; }
+.tecnologia-lista h3 { font-size: var(--t-xl); letter-spacing: -0.02em; margin-bottom: .1rem; }
+.tecnologia-rol { margin: 0 0 .7rem; font-weight: 600; color: var(--atlantico); }
+.tecnologia-lista p:last-child { margin: 0; color: var(--gris); }
+.tecnologia-lista .paso-icono { background: var(--niebla); }
+.lenguajes { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; gap: 1rem; }
+.lenguajes li { display: grid; justify-items: center; gap: .35rem; font-size: var(--t-s); font-weight: 600; color: var(--tinta); }
+.paso-icono-sm { width: 60px; height: 60px; margin: 0; border-radius: 14px; }
+.paso-icono-sm svg { width: 40px; height: 40px; }
+@media (max-width: 900px) { .tecnologia-lista { grid-template-columns: 1fr; } }
