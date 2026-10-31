@@ -510,3 +510,26 @@ describe('plantilla y skills de diseño', () => {
     assert.ok(existsSync(new URL('../docs/PLANTILLA.md', import.meta.url)));
   });
 });
+
+describe('conversión a WhatsApp', () => {
+  test('llamada final tras "Así trabajamos" con WhatsApp ya escrito', () => {
+    const cierre = between(index, 'id="empezar"', 'id="precios"');
+    assert.ok(index.indexOf('id="como"') < index.indexOf('id="empezar"') && index.indexOf('id="empezar"') < index.indexOf('id="precios"'));
+    assert.match(cierre, new RegExp(`<h2 id="cierre-titulo">${escapeRe(site.closing.title)}</h2>`));
+    assert.match(cierre, /wa\.me\/34623243294\?text=Hola%2C%20me%20gustar%C3%ADa%20pedir%20el%20diagn%C3%B3stico%20gratuito/);
+  });
+
+  test('botón fijo de WhatsApp para móvil, accesible y sin tapar el pie', () => {
+    assert.match(index, /<a class="wa-flotante" href="https:\/\/wa\.me\/34623243294\?text=[^"]+" rel="noopener" target="_blank"><svg[^>]*aria-hidden="true"[^>]*>[\s\S]*?<\/svg><span>Escribir por WhatsApp<\/span><\/a>/);
+    const css = read('assets/css/site.css');
+    assert.match(css, /\.wa-flotante \{ display: none; \}/, 'oculto en escritorio');
+    assert.match(css, /safe-area-inset-bottom/);
+    assert.match(css, /min-height: 48px/);
+    assert.equal(read('privacidad.html').includes('wa-flotante'), false, 'solo en la portada');
+  });
+
+  test('sin trabajos reales no se publica la sección de trabajos ni su enlace', () => {
+    assert.deepEqual(site.works.items, []);
+    assert.doesNotMatch(index, /id="trabajos"|href="#trabajos"/);
+  });
+});

@@ -308,6 +308,25 @@ export const site = {
     ],
   },
 
+  // TRABAJOS: galería de webs, cartas y tarjetas ya hechas. Sin elementos, la sección no se muestra.
+  // Guarda las fotos en public/img/trabajos/ y añade { img: 'img/trabajos/bar-luna.jpg', alt: '...', caption: '...' }.
+  // Solo con trabajos reales y con permiso del cliente.
+  works: {
+    title: 'Trabajos',
+    intro: 'Webs, cartas digitales y tarjetas de reseñas que ya funcionan en negocios de la isla.',
+    items: [],
+  },
+
+  // LLAMADA FINAL tras "Así trabajamos": para quien ya ha leído cómo se trabaja y está listo para escribir.
+  closing: {
+    title: '¿Empezamos con tu diagnóstico?',
+    text: 'Cuéntanos tu negocio por WhatsApp y te decimos qué necesitas. Sin compromiso y con respuesta en menos de 24 horas.',
+    cta: 'Pide tu diagnóstico gratuito',
+    whatsappText: 'Hola, me gustaría pedir el diagnóstico gratuito para mi negocio',
+  },
+  // Botón fijo de WhatsApp en móvil, siempre al alcance del pulgar.
+  floatingCta: 'Escribir por WhatsApp',
+
   // Rellena "name" (y opcionalmente "role" y "photo": guarda la foto en public/img/equipo/ y pon "img/equipo/ana.jpg").
   // Si ninguna persona tiene nombre, la sección "Quiénes somos" no se muestra.
   team: [
