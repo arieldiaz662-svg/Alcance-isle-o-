@@ -5,7 +5,8 @@
 // Para terminarla: pon active en false. Los precios de los packs vuelven a los normales y los
 // packs vuelven a incluir el primer año de mantenimiento. El cupo no se descuenta solo:
 // cuando se cubran las plazas, desactívala (o baja "spots") y vuelve a publicar.
-const launch = { active: true, percent: 50, spots: 5, months: 3 };
+// regularMonths: meses de mantenimiento que incluye el pack a precio normal (el precio tachado).
+const launch = { active: true, percent: 50, spots: 5, months: 3, regularMonths: 12 };
 const euros = (n) => `${n} €`;
 // Precio de un pack: con la oferta, la mitad; "regularPrice" (precio normal) solo existe mientras dura.
 const packPrice = (regular) => (launch.active ? euros(regular * (100 - launch.percent) / 100) : euros(regular));
@@ -20,6 +21,8 @@ export const site = {
   launch: {
     ...launch,
     badge: `Oferta de lanzamiento: -${launch.percent} %`,
+    // Aclara qué incluye el pack tachado: el precio normal lleva el primer año; el de lanzamiento, solo unos meses.
+    regularNote: `El precio tachado es el del pack normal, que incluye ${launch.regularMonths} meses de mantenimiento; el pack de lanzamiento incluye ${launch.months}.`,
     title: `-${launch.percent} % en los packs para los ${launch.spots} primeros clientes`,
     text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Cada pack incluye la tarjeta de reseñas QR + NFC y los ${launch.months} primeros meses de mantenimiento.`,
     terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni a los servicios extra ni externalizados (tarjeta de reseñas QR + NFC suelta, diseño de tarjetas de visita, etc.), que se contratan aparte a su precio normal.`,

@@ -35,7 +35,7 @@ const normalPrice = (pack) => pack.regularPrice || pack.price;
 const launch = site.launch.active ? site.launch : null;
 // Importe de un pack en la web: con la oferta, el precio normal tachado delante del de lanzamiento.
 const packPriceRe = (pack) => (pack.regularPrice
-  ? `<s class="antes"><span class="solo-lectores">Precio normal: </span>${escapeRe(pack.regularPrice)}</s> <span class="solo-lectores">Precio de lanzamiento: </span>${escapeRe(pack.price)}`
+  ? `<s class="antes"><span class="solo-lectores">Precio normal con ${site.launch.regularMonths} meses de mantenimiento: </span>${escapeRe(pack.regularPrice)}</s> <span class="solo-lectores">Precio de lanzamiento: </span>${escapeRe(pack.price)}`
   : escapeRe(pack.price));
 
 before(() => {
@@ -327,7 +327,7 @@ describe('precios', () => {
       for (const row of s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) assert.match(precios, priceRow(row.label, row.price));
     }
     for (const item of site.extras.items) assert.match(precios, priceRow(item.name, item.price));
-    const precioPack = launch ? '<s class="antes"><span class="solo-lectores">Precio normal: </span>520 €</s> <span class="solo-lectores">Precio de lanzamiento: </span><strong>260 €</strong>' : '<strong>520 €</strong>';
+    const precioPack = launch ? '<s class="antes"><span class="solo-lectores">Precio normal con 12 meses de mantenimiento: </span>520 €</s> <span class="solo-lectores">Precio de lanzamiento: </span><strong>260 €</strong>' : '<strong>520 €</strong>';
     assert.match(precios, new RegExp(`class="pack"[\\s\\S]*?<p class="pack-precio">${escapeRe(precioPack)}</p>`));
     assert.doesNotMatch(index, /ahorr|antes \d/i, 'sin ahorro calculado');
     assert.equal(index.includes('<s '), Boolean(launch), 'precio tachado solo mientras dura la oferta');
@@ -423,6 +423,12 @@ describe('oferta de lanzamiento', () => {
     assert.match(oferta, /los 5 primeros clientes/);
     assert.match(oferta, /3 primeros meses de mantenimiento/);
     assert.match(oferta, /Cada pack incluye la tarjeta de reseñas QR \+ NFC/);
+    assert.match(oferta, /El precio tachado es el del pack normal, que incluye 12 meses de mantenimiento; el pack de lanzamiento incluye 3\./);
+    assert.match(precios, /El precio tachado es el del pack normal, que incluye 12 meses de mantenimiento/);
+    for (const sector of site.sectors) {
+      const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido"');
+      assert.match(panel.slice(panel.indexOf('class="pack-total"')).split('</li>')[0], /class="pack-nota">El precio tachado es el del pack normal, que incluye 12 meses/, sector.id);
+    }
     for (const sector of site.sectors) {
       const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido"');
       assert.match(panel, /<h4>Tarjeta de reseñas QR \+ NFC<\/h4>[\s\S]*?class="local-precio incluido">Incluido</, `${sector.id}: la tarjeta va dentro del pack`);
