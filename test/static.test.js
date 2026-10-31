@@ -550,3 +550,39 @@ describe('conversión a WhatsApp', () => {
     }
   });
 });
+
+describe('recorrido animado', () => {
+  test('cada paso lleva su icono propio (Google, página web y tarjeta NFC), decorativo y sin logotipos', () => {
+    const recorrido = between(index, 'class="recorrido"', 'id="por-que"');
+    assert.deepEqual(site.journey.steps.map((s) => s.icon), ['google', 'web', 'nfc']);
+    const iconos = recorrido.match(/<div class="paso-icono">[\s\S]*?<\/svg><\/div>/g) || [];
+    assert.equal(iconos.length, 3);
+    for (const icono of iconos) {
+      assert.match(icono, /<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">/);
+      assert.doesNotMatch(icono, /<img|<text|logo/i, 'dibujos propios, sin logotipos ni texto');
+    }
+    assert.match(iconos[0], /ic-caida/);
+    assert.match(iconos[1], /ic-linea/);
+    assert.match(iconos[2], /ic-onda/);
+    assert.ok((iconos[0].match(/pathLength="1"/g) || []).length >= 1);
+  });
+
+  test('movimiento: solo con prefers-reduced-motion: no-preference, sin transition: all y con curva fuerte', () => {
+    const css = read('assets/css/site.css');
+    const bloque = css.slice(css.indexOf('/* ---------- Recorrido animado'));
+    assert.match(bloque, /@media \(prefers-reduced-motion: no-preference\)/);
+    assert.match(bloque, /\.anim-listo \.recorrido:not\(\.en-vista\)/, 'el estado oculto solo existe si el script lo activa');
+    assert.doesNotMatch(bloque, /transition: all|ease-in[^-]|scale\(0\)/);
+    assert.match(bloque, /var\(--ease-out\)/);
+    // Duraciones de los trazos: 700 ms como mucho en cada animación (explicativa, una sola vez).
+    for (const [, ms] of bloque.matchAll(/animation: ic-[a-z]+ (\d+)ms/g)) assert.ok(Number(ms) <= 900, `${ms} ms`);
+  });
+
+  test('script: IntersectionObserver una sola vez y sin animar con movimiento reducido', () => {
+    const js = read('assets/js/site.js');
+    assert.match(js, /new IntersectionObserver/);
+    assert.match(js, /prefers-reduced-motion: reduce/);
+    assert.match(js, /observer\.disconnect\(\)/);
+    assert.match(js, /classList\.add\('en-vista'\)/);
+  });
+});

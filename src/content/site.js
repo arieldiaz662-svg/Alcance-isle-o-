@@ -192,9 +192,10 @@ export const site = {
   journey: {
     title: 'Así llega un cliente a tu negocio',
     steps: [
-      { moment: 'Te busca en Google', service: 'gbp' },
-      { moment: 'Mira tu carta o tus servicios', service: 'landing' },
-      { moment: 'Te deja una reseña', service: 'nfc' },
+      // "icon": dibujo propio de cada paso (JOURNEY_ICONS en src/views/landing.js), animado al entrar en pantalla.
+      { moment: 'Te busca en Google', service: 'gbp', icon: 'google' },
+      { moment: 'Mira tu carta o tus servicios', service: 'landing', icon: 'web' },
+      { moment: 'Te deja una reseña', service: 'nfc', icon: 'nfc' },
     ],
     // {plan} se sustituye por los precios del plan de mantenimiento ("12 € al mes o 120 € al año").
     note: 'Y para que todo siga al día, nuestro plan de mantenimiento incluye hosting, dominio y hasta 2 cambios al mes (carta, servicios, precios, horarios o fotos) por {plan}. ' + (launch.active
@@ -322,14 +323,19 @@ export const site = {
         caption: 'Memphis Belle Coctelería · web con horario «Abierto ahora»',
       },
       {
+        img: 'img/trabajos/memphis-belle-carta', width: 800, height: 1000, compact: true, // compact: imagen más pequeña (alta o muy llamativa)
+        alt: 'Carta de Memphis Belle Coctelería en dos columnas, «Refrescantes» y «Ácidos y sour», con el nombre, los ingredientes y el precio de cada cóctel.',
+        caption: 'Memphis Belle Coctelería · carta de cócteles',
+      },
+      {
         img: 'img/trabajos/memphis-belle-bar', width: 1200, height: 413,
         alt: 'Sección «El bar» de la web de Memphis Belle: «Cócteles de autor, sin prisa», sobre una estantería de rones y whiskies.',
         caption: 'Memphis Belle Coctelería · sección «El bar»',
       },
       {
-        img: 'img/trabajos/memphis-belle-carta', width: 800, height: 1000,
-        alt: 'Carta de Memphis Belle Coctelería en dos columnas, «Refrescantes» y «Ácidos y sour», con el nombre, los ingredientes y el precio de cada cóctel.',
-        caption: 'Memphis Belle Coctelería · carta de cócteles',
+        img: 'img/trabajos/memphis-belle-tarjeta', width: 1000, height: 645,
+        alt: 'Tarjeta de visita de Memphis Belle Coctelería: dibujo de una coctelera, dos cucharas y una copa sobre el nombre en blanco y dorado, con fondo verde oliva.',
+        caption: 'Memphis Belle Coctelería · tarjeta de visita',
       },
     ],
   },
