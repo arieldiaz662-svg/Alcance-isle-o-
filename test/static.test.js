@@ -478,3 +478,17 @@ describe('instagram', () => {
   });
 });
 
+
+describe('plantilla y skills de diseño', () => {
+  test('el plugin de diseño está conectado por referencia al marketplace público de GitHub', () => {
+    const settings = JSON.parse(readFileSync(new URL('../.claude/settings.json', import.meta.url), 'utf8'));
+    assert.equal(settings.extraKnownMarketplaces['knowledge-work-plugins'].source.repo, 'anthropics/knowledge-work-plugins');
+    assert.equal(settings.enabledPlugins['design@knowledge-work-plugins'], true);
+  });
+
+  test('la guía de plantilla existe y está enlazada desde el README', () => {
+    const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+    assert.match(readme, /docs\/PLANTILLA\.md/);
+    assert.ok(existsSync(new URL('../docs/PLANTILLA.md', import.meta.url)));
+  });
+});
