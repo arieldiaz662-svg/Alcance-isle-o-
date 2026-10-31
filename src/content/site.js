@@ -24,8 +24,8 @@ export const site = {
     // Aclara qué incluye el pack tachado: el precio normal lleva el primer año; el de lanzamiento, solo unos meses.
     regularNote: `El precio tachado es el del pack normal, que incluye ${launch.regularMonths} meses de mantenimiento; el pack de lanzamiento incluye ${launch.months}.`,
     title: `-${launch.percent} % en los packs para los ${launch.spots} primeros clientes`,
-    text: `Precio de lanzamiento solo para los ${launch.spots} primeros negocios que contraten un pack, hasta completar plazas. Cada pack incluye la tarjeta de reseñas QR + NFC y los ${launch.months} primeros meses de mantenimiento.`,
-    terms: `Precios sin IGIC. Después de los ${launch.months} meses puedes seguir con el plan de mantenimiento ({plan}). La oferta no es acumulable con otras promociones y se aplica a los packs, no a los servicios sueltos ni a los servicios extra ni externalizados (tarjeta de reseñas QR + NFC suelta, diseño de tarjetas de visita, etc.), que se contratan aparte a su precio normal.`,
+    text: `Para los ${launch.spots} primeros negocios que contraten un pack. Incluye la tarjeta de reseñas QR + NFC y ${launch.months} meses de mantenimiento.`,
+    terms: `Precios sin IGIC. Después, plan de mantenimiento a {plan}. No acumulable con otras promociones ni aplicable a servicios sueltos, extras o externalizados, que van a su precio normal.`,
     cta: 'Reserva tu plaza',
     whatsappText: `Hola, quiero aprovechar la oferta de lanzamiento del ${launch.percent} % en el pack`,
   },

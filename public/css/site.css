@@ -556,3 +556,11 @@ p, li { text-wrap: pretty; }
 .marca { min-height: 44px; } /* zona táctil del logotipo */
 
 @media (max-width: 640px) { section { padding: 3.75rem 0; } }
+
+/* Banner de la oferta más compacto en móvil */
+@media (max-width: 640px) {
+  .oferta { padding: 1.2rem 1.1rem; margin-bottom: 1.4rem; }
+  .oferta h3 { font-size: var(--t-l); }
+  .oferta p { font-size: .95rem; line-height: 1.45; margin-bottom: .8rem; }
+  .oferta .oferta-condiciones { font-size: .8rem; margin-top: .9rem; }
+}

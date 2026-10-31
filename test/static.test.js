@@ -422,9 +422,8 @@ describe('oferta de lanzamiento', () => {
     const oferta = between(index, 'class="oferta"', '</aside>');
     assert.match(oferta, /Oferta de lanzamiento: -50 %/);
     assert.match(oferta, /los 5 primeros clientes/);
-    assert.match(oferta, /3 primeros meses de mantenimiento/);
-    assert.match(oferta, /Cada pack incluye la tarjeta de reseñas QR \+ NFC/);
-    assert.match(oferta, /El precio tachado es el del pack normal, que incluye 12 meses de mantenimiento; el pack de lanzamiento incluye 3\./);
+    assert.match(oferta, /Incluye la tarjeta de reseñas QR \+ NFC y 3 meses de mantenimiento/);
+    assert.ok(oferta.replace(/<[^>]+>/g, '').length < 560, 'banner breve');
     assert.match(precios, /El precio tachado es el del pack normal, que incluye 12 meses de mantenimiento/);
     for (const sector of site.sectors) {
       const panel = between(index, `id="${sector.id}"`, sector.id === 'hosteleria' ? 'id="cita-previa"' : 'class="recorrido"');
@@ -457,7 +456,7 @@ describe('oferta de lanzamiento', () => {
     assert.match(precios, /Pegatinas QR para mesas<\/span><span class="guia" aria-hidden="true"><\/span><span class="importe">Pide presupuesto</);
     assert.match(index, /wa\.me\/34623243294\?text=Hola%2C%20quiero%20pedir%20presupuesto%20para%20pegatinas%20QR/);
     assert.doesNotMatch(index, /Material para tu local/);
-    assert.match(between(index, 'class="oferta"', '</aside>'), /ni a los servicios extra ni externalizados \(tarjeta de reseñas QR \+ NFC suelta, diseño de tarjetas de visita, etc\.\)/);
+    assert.match(between(index, 'class="oferta"', '</aside>'), /ni aplicable a servicios sueltos, extras o externalizados, que van a su precio normal/);
   });
 
   test('la oferta no toca los servicios sueltos ni el material', () => {

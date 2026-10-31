@@ -91,7 +91,6 @@ export function renderLanding({ site, config }) {
       <p class="oferta-etiqueta">${esc(launch.badge)}</p>
       <h3 id="oferta-titulo">${esc(launch.title)}</h3>
       <p>${esc(launch.text)}</p>
-      <p>${esc(launch.regularNote)}</p>
       <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, launch.whatsappText))}" rel="noopener" target="_blank">${esc(launch.cta)}</a>
       <p class="oferta-condiciones">${esc(launch.terms.replace('{plan}', planText))}</p>
     </aside>` : '';
