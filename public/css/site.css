@@ -486,11 +486,8 @@ footer a { text-decoration: none; }
   .mostrador figcaption { position: static; margin-top: 1rem; }
 }
 
-/* Opción con varios productos y miniatura (material para mesas en hostelería) */
-.pack-opcion-lista { grid-template-columns: 110px 1fr; column-gap: 1.2rem; align-items: start; }
-.opcion-foto { margin: 0; }
-.opcion-foto img { width: 100%; height: auto; border-radius: 4px; }
-.opcion-foto figcaption { font-size: .75rem; color: var(--gris); margin-top: .3rem; }
+/* Opción con varios productos (material para mesas en hostelería) */
+.pack-opcion-lista { grid-template-columns: 1fr; align-items: start; }
 .pack-opcion-lista > div > p { margin-bottom: .6rem; }
 .pack-opcion-lista ul li {
   display: grid; grid-template-columns: 1fr auto; column-gap: 1rem;
@@ -498,10 +495,6 @@ footer a { text-decoration: none; }
 }
 .pack-opcion-lista h5 { font-size: .95rem; margin: 0 0 .1rem; }
 .pack-opcion-lista li p { grid-column: 1; margin: 0; color: var(--gris); font-size: .9rem; line-height: 1.4; }
-@media (max-width: 480px) {
-  .pack-opcion-lista { grid-template-columns: 1fr; }
-  .opcion-foto { max-width: 140px; margin-bottom: .8rem; }
-}
 
 /* ---------- Oferta de lanzamiento ---------- */
 .solo-lectores { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -526,3 +519,8 @@ s.antes { color: var(--gris); font-weight: 400; font-size: .7em; margin-right: .
 .extras-titulo { font-size: var(--t-l); margin: 0 0 .2rem; }
 .extras-nota { color: var(--gris); font-size: var(--t-s); margin: 0 0 1rem; }
 .extras-aparte .pack-opcion { margin-top: 0; }
+
+.externalizados { list-style: none; margin: 0 0 1.6rem; padding: 0; }
+.externalizados h4 { font-size: var(--t-m); margin: 0 0 .2rem; }
+.externalizados p { color: var(--gris); font-size: .95rem; margin: 0 0 .8rem; }
+.extras-aparte + .extras-aparte { margin-top: 1.4rem; }

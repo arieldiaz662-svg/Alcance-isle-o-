@@ -38,7 +38,7 @@ const CHANNEL_ICONS = {
 // Lista de precios por grupos (sin el pack principal, que se muestra destacado). La usan la sección de
 // precios y los datos estructurados para Google, así que siempre coinciden.
 export function priceList(site) {
-  const { extras, sectors } = site;
+  const { extras, sectors, outsourced } = site;
   return [
     { title: 'Servicios digitales', rows: site.services.flatMap((s) => s.prices || [{ label: s.priceLabel || s.name, price: s.price }]) },
     ...(extras ? [{ title: site.extrasTitle, rows: extras.items.map((i) => ({ label: i.name, price: i.price })) }] : []),
@@ -47,9 +47,9 @@ export function priceList(site) {
       title: sector.title,
       rows: [
         { label: `${sector.pack.name} (${sector.pack.label.charAt(0).toLowerCase()}${sector.pack.label.slice(1)})`, price: sector.pack.price, regularPrice: sector.pack.regularPrice },
-        ...(sector.option ? [{ label: `${sector.option.name} (opcional)`, price: sector.option.price }] : []),
       ],
     })),
+    ...(outsourced ? [{ title: outsourced.title, rows: outsourced.items.map((i) => ({ label: i.name, price: outsourced.quoteLabel })) }] : []),
   ];
 }
 
@@ -162,8 +162,6 @@ export function renderLanding({ site, config }) {
   </div>
 </section>`;
 
-  // Imagen del material para mesas (se muestra en la opción de la pestaña de hostelería).
-  const img = extras && extras.image;
   const extraById = Object.fromEntries((extras ? extras.items : []).map((item) => [item.id, item]));
 
   // ---------- Packs por tipo de negocio (pestañas) ----------
@@ -212,32 +210,31 @@ export function renderLanding({ site, config }) {
         </ul>${sector.option ? `
         <div class="extras-aparte">
           <h3 class="extras-titulo">${esc(site.extrasTitle)}</h3>
-          <p class="extras-nota">${esc(launch ? site.extrasNoteLaunch : site.extrasNote)}</p>${sector.option.items ? `
-        <div class="pack-opcion pack-opcion-lista">
-          ${img ? `<figure class="opcion-foto">
-            <picture>
-              <source type="image/webp" srcset="${esc(to.asset(`${img.small}.webp`))}">
-              <img src="${esc(to.asset(`${img.small}.jpg`))}" alt="${esc(img.alt)}" width="480" height="480" loading="lazy" decoding="async">
-            </picture>
-            ${img.caption ? `<figcaption>${esc(img.caption)}</figcaption>` : ''}
-          </figure>` : ''}
-          <div>
-            <h4>Opcional: ${esc(sector.option.name)}</h4>
-            <p>${esc(sector.option.text)}</p>
-            <ul>${sector.option.items.map((id) => extraById[id]).filter(Boolean).map((item) => `
-              <li>
-                <h5>${esc(item.name)}</h5>
-                <p>${esc(item.text)}</p>
-                <span class="local-precio">${esc(item.price)}</span>
-              </li>`).join('')}
-            </ul>
+          <p class="extras-nota">${esc(launch ? site.extrasNoteLaunch : site.extrasNote)}</p>
+          <div class="pack-opcion pack-opcion-lista">
+            <div>
+              <h4>Opcional: ${esc(sector.option.name)}</h4>
+              <p>${esc(sector.option.text)}</p>
+              <ul>${sector.option.items.map((id) => extraById[id]).filter(Boolean).map((item) => `
+                <li>
+                  <h5>${esc(item.name)}</h5>
+                  <p>${esc(item.text)}</p>
+                  <span class="local-precio">${esc(item.price)}</span>
+                </li>`).join('')}
+              </ul>
+            </div>
           </div>
-        </div>` : sector.option ? `
-        <div class="pack-opcion">
-          <h4>Opcional: ${esc(sector.option.name)}</h4>
-          <p>${esc(sector.option.text)}</p>
-          <span class="local-precio">${esc(sector.option.price)}</span>
-        </div>` : ''}
+        </div>` : ''}${site.outsourced ? `
+        <div class="extras-aparte">
+          <h3 class="extras-titulo">${esc(site.outsourced.title)}</h3>
+          <p class="extras-nota">${esc(site.outsourced.note)}</p>
+          <ul class="externalizados">${site.outsourced.items.map((item) => `
+            <li>
+              <h4>${esc(item.name)}</h4>
+              <p>${esc(item.text)}</p>
+              <a class="btn btn-linea" href="${esc(whatsappUrl(whatsapp, item.whatsappText))}" rel="noopener" target="_blank">${esc(site.outsourced.quoteCta)}</a>
+            </li>`).join('')}
+          </ul>
         </div>` : ''}
         <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, sector.whatsappText))}" rel="noopener" target="_blank">${esc(sector.cta)}</a>
       </div>

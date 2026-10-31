@@ -36,7 +36,6 @@ Alternativas: arrastrar la carpeta `dist/` a [Netlify Drop](https://app.netlify.
 | WhatsApp, teléfono y email | `src/content/site.js` |
 | Horario, zona y enlace a la ficha de Google Business (datos estructurados para Google) | `src/content/site.js` → `business` y `region` (deben coincidir con la ficha) |
 | Colores y tipografía | `public/css/site.css` → `:root` |
-| Foto del expositor | `public/img/productos/expositor-mesa-480.{jpg,webp}` y quitar `caption` en `site.js` |
 
 ## Estructura
 

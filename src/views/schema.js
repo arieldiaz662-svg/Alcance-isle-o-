@@ -26,10 +26,11 @@ const offer = (name, price) => ({
 export function structuredDataObject({ site, config, priceGroups }) {
   const base = config.publicBaseUrl;
   const business = site.business || {};
+  // Los servicios "a presupuesto" (sin importe) no se publican como oferta con precio.
   const groups = [
     ...(site.pack ? [{ title: 'Pack destacado', rows: [{ label: site.pack.name, price: site.pack.price }] }] : []),
     ...priceGroups,
-  ];
+  ].map((group) => ({ ...group, rows: group.rows.filter((row) => /\d/.test(row.price)) })).filter((group) => group.rows.length);
   const amounts = groups.flatMap((g) => g.rows).map((row) => {
     const spec = parsePrice(row.price);
     return spec.price ?? spec.minPrice;
