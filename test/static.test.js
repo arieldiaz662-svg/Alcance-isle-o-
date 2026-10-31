@@ -528,8 +528,25 @@ describe('conversión a WhatsApp', () => {
     assert.equal(read('privacidad.html').includes('wa-flotante'), false, 'solo en la portada');
   });
 
-  test('sin trabajos reales no se publica la sección de trabajos ni su enlace', () => {
-    assert.deepEqual(site.works.items, []);
-    assert.doesNotMatch(index, /id="trabajos"|href="#trabajos"/);
+  test('galería de trabajos con imágenes reales: webp con alternativa jpg, textos alternativos y tamaño reales', () => {
+    const galeria = between(index, 'id="trabajos"', 'id="como"');
+    assert.match(index, /href="#trabajos"/);
+    assert.ok(site.works.items.length >= 1);
+    for (const item of site.works.items) {
+      assert.ok(item.alt.length > 30, `texto alternativo descriptivo: ${item.img}`);
+      assert.match(galeria, new RegExp(`<source type="image/webp" srcset="[^"]*${escapeRe(item.img)}\\.webp">`));
+      assert.match(galeria, new RegExp(`<img src="[^"]*${escapeRe(item.img)}\\.jpg" alt="[^"]+" loading="lazy" decoding="async" width="${item.width}" height="${item.height}">`));
+      for (const ext of ['webp', 'jpg']) {
+        const file = join(outDir, 'assets', `${item.img}.${ext}`);
+        assert.ok(existsSync(file), file);
+      }
+      const jpg = readFileSync(join(outDir, 'assets', `${item.img}.jpg`));
+      let o = 2; // SOF0/SOF2: alto y ancho reales del JPEG
+      while (o < jpg.length) {
+        const marker = jpg[o + 1];
+        if (marker >= 0xC0 && marker <= 0xC3) { assert.deepEqual([jpg.readUInt16BE(o + 7), jpg.readUInt16BE(o + 5)], [item.width, item.height], item.img); break; }
+        o += 2 + jpg.readUInt16BE(o + 2);
+      }
+    }
   });
 });

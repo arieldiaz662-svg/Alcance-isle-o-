@@ -322,7 +322,10 @@ export function renderLanding({ site, config }) {
     <ul class="trabajos-lista">${works.items.map((item) => `
       <li>
         <figure>
-          <img src="${esc(to.asset(item.img))}" alt="${esc(item.alt)}" loading="lazy" decoding="async" width="800" height="600">
+          <picture>
+            <source type="image/webp" srcset="${esc(to.asset(`${item.img}.webp`))}">
+            <img src="${esc(to.asset(`${item.img}.jpg`))}" alt="${esc(item.alt)}" loading="lazy" decoding="async" width="${esc(item.width)}" height="${esc(item.height)}">
+          </picture>
           ${item.caption ? `<figcaption>${esc(item.caption)}</figcaption>` : ''}
         </figure>
       </li>`).join('')}
