@@ -574,8 +574,8 @@ describe('recorrido animado', () => {
     assert.match(bloque, /\.anim-listo \.recorrido:not\(\.en-vista\)/, 'el estado oculto solo existe si el script lo activa');
     assert.doesNotMatch(bloque, /transition: all|ease-in[^-]|scale\(0\)/);
     assert.match(bloque, /var\(--ease-out\)/);
-    // Duraciones de los trazos: 700 ms como mucho en cada animación (explicativa, una sola vez).
-    for (const [, ms] of bloque.matchAll(/animation: ic-[a-z]+ (\d+)ms/g)) assert.ok(Number(ms) <= 900, `${ms} ms`);
+    // Duraciones: 450 ms los trazos, 700 ms las ondas; ninguna pasa de 700 ms en cada animación (explicativa, una sola vez).
+    for (const [, ms] of bloque.matchAll(/animation: ic-[a-z]+ (\d+)ms/g)) assert.ok(Number(ms) <= 700, `${ms} ms`);
   });
 
   test('script: IntersectionObserver una sola vez y sin animar con movimiento reducido', () => {

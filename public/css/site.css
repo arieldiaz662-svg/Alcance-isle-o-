@@ -600,7 +600,7 @@ p, li { text-wrap: pretty; }
 
 /* ---------- Recorrido animado: iconos propios que se dibujan al entrar en pantalla ---------- */
 /* Propósito: explicar cómo funciona cada servicio (una sola vez por visita). Solo trazo, transform y opacity;
-   curva fuerte de salida (--ease-out); trazos de 700 ms con escalones de 90 ms; ondas y sombra, 2 repeticiones y quietos.
+   curva fuerte de salida (--ease-out); trazos de 450 ms con escalones de 60 ms entre elementos y 110 ms entre pasos (el dibujado termina en ~1 s); ondas y sombra, 2 repeticiones de 700 ms y quietos.
    Sin JavaScript o con movimiento reducido los iconos quedan estáticos y completos. */
 .paso-icono {
   display: grid; place-items: center; width: 76px; height: 76px; margin-bottom: 1rem;
@@ -626,26 +626,26 @@ p, li { text-wrap: pretty; }
 
   .recorrido.en-vista .ic-t {
     stroke-dasharray: 1 1;
-    animation: ic-trazo 700ms var(--ease-out) both;
-    animation-delay: calc(var(--paso, 0) * 160ms + var(--i, 0) * 90ms);
+    animation: ic-trazo 450ms var(--ease-out) both;
+    animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms);
   }
   .recorrido.en-vista .ic-pop {
-    animation: ic-pop 360ms var(--ease-out) both;
-    animation-delay: calc(var(--paso, 0) * 160ms + var(--i, 0) * 90ms + 200ms);
+    animation: ic-pop 280ms var(--ease-out) both;
+    animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms + 140ms);
   }
   .recorrido.en-vista .ic-linea {
-    animation: ic-linea 420ms var(--ease-out) both;
-    animation-delay: calc(var(--paso, 0) * 160ms + var(--i, 0) * 90ms + 200ms);
+    animation: ic-linea 320ms var(--ease-out) both;
+    animation-delay: calc(var(--paso, 0) * 110ms + var(--i, 0) * 60ms + 140ms);
   }
-  .recorrido.en-vista .ic-caida { animation: ic-caida 520ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 160ms); }
-  .recorrido.en-vista .ic-tarjeta { animation: ic-endereza 600ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 160ms); }
+  .recorrido.en-vista .ic-caida { animation: ic-caida 400ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 110ms); }
+  .recorrido.en-vista .ic-tarjeta { animation: ic-endereza 450ms var(--ease-out) both; animation-delay: calc(var(--paso, 0) * 110ms); }
   .recorrido.en-vista .ic-onda:not(.ic-sombra) {
-    animation: ic-onda 900ms ease-out 2 both;
-    animation-delay: calc(var(--paso, 0) * 160ms + 700ms + var(--o, 0) * 160ms);
+    animation: ic-onda 700ms ease-out 2 both;
+    animation-delay: calc(var(--paso, 0) * 110ms + 450ms + var(--o, 0) * 110ms);
   }
   .recorrido.en-vista .ic-sombra {
-    animation: ic-sombra 900ms ease-out 2 both; transform-origin: center;
-    animation-delay: calc(var(--paso, 0) * 160ms + 450ms);
+    animation: ic-sombra 700ms ease-out 2 both; transform-origin: center;
+    animation-delay: calc(var(--paso, 0) * 110ms + 300ms);
   }
 }
 @keyframes ic-trazo { 0% { stroke-dashoffset: 1; opacity: 0; } 8% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
