@@ -60,10 +60,12 @@ export function renderLanding({ site, config }) {
   const team = site.team.filter((person) => person.name && person.name.trim());
   const { extras, pack, demoMenu, journey, hero, sectors } = site;
 
+  const works = site.works && site.works.items && site.works.items.length ? site.works : null; // sin trabajos reales, sin sección
   const nav = [ // mismo orden que las secciones de la página
     ...(sectors ? [{ id: 'packs', label: 'Packs' }] : []),
     { id: 'servicios', label: 'Servicios' },
     { id: 'por-que', label: 'Por qué elegirnos' },
+    ...(works ? [{ id: 'trabajos', label: 'Trabajos' }] : []),
     { id: 'precios', label: 'Precios' },
     ...(team.length ? [{ id: 'equipo', label: 'Equipo' }] : []),
   ];
@@ -298,6 +300,40 @@ export function renderLanding({ site, config }) {
   </div>
 </section>`;
 
+  // ---------- Llamada final ----------
+  const closing = site.closing;
+  const closingSection = closing ? `
+<section class="cierre" id="empezar" aria-labelledby="cierre-titulo">
+  <div class="wrap cierre-caja">
+    <div>
+      <h2 id="cierre-titulo">${esc(closing.title)}</h2>
+      <p>${esc(closing.text)}</p>
+    </div>
+    <a class="btn btn-sol" href="${esc(whatsappUrl(whatsapp, closing.whatsappText))}" rel="noopener" target="_blank">${esc(closing.cta)}</a>
+  </div>
+</section>` : '';
+
+  // ---------- Trabajos (solo si hay fotos reales) ----------
+  const worksSection = works ? `
+<section class="trabajos" id="trabajos">
+  <div class="wrap">
+    <h2>${esc(works.title)}</h2>
+    ${works.intro ? `<p class="suave">${esc(works.intro)}</p>` : ''}
+    <ul class="trabajos-lista">${works.items.map((item) => `
+      <li>
+        <figure>
+          <img src="${esc(to.asset(item.img))}" alt="${esc(item.alt)}" loading="lazy" decoding="async" width="800" height="600">
+          ${item.caption ? `<figcaption>${esc(item.caption)}</figcaption>` : ''}
+        </figure>
+      </li>`).join('')}
+    </ul>
+  </div>
+</section>` : '';
+
+  // ---------- Botón fijo de WhatsApp (solo móvil) ----------
+  const floatingCta = site.floatingCta ? `
+<a class="wa-flotante" href="${esc(wa)}" rel="noopener" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CHANNEL_ICONS.chat}</svg><span>${esc(site.floatingCta)}</span></a>` : '';
+
   // ---------- Precios: como la carta de una cafetería ----------
   const priceRow = (label, price, regularPrice) => `
           <li><span>${esc(label)}</span><span class="guia" aria-hidden="true"></span><span class="importe">${priceHtml(price, regularPrice)}</span></li>`;
@@ -348,7 +384,9 @@ ${channelsSection}
 ${sectorsSection}
 ${journeySection}
 ${whySection}
+${worksSection}
 ${stepsSection}
+${closingSection}
 ${pricesSection}
 ${teamSection}
 <section class="contacto" id="contacto">
@@ -370,7 +408,7 @@ ${teamSection}
   </div>
 </section>
 
-</main>`;
+</main>${floatingCta}`;
 
   return layout({
     site, config, title: site.title, description: site.description, path: '/', nav, body,

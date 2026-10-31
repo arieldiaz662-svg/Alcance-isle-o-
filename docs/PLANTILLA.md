@@ -28,6 +28,13 @@ Para montar la web de otro negocio (o una nueva versión de esta) no hace falta 
 6. **Comprobar:** `npm install && npm test && npm run preview`.
 7. **Publicar:** conecta el repositorio a Cloudflare Workers (ver el README).
 
+## Conversión a WhatsApp
+
+- **Llamada final** tras «Así trabajamos» (`closing` en `site.js`) y **botón fijo de WhatsApp en móvil** (`floatingCta`; vacío para quitarlo).
+- **Trabajos** (`works` en `site.js`): galería de webs, cartas y tarjetas ya hechas. Sin elementos no se muestra ni aparece en el menú.
+  Guarda las fotos en `public/img/trabajos/` y añade `{ img: 'img/trabajos/bar-luna.jpg', alt: '…', caption: '…' }`.
+  Usa solo trabajos reales y con permiso del cliente; las fotos se muestran en proporción 4:3.
+
 ## Revisión antes de publicar
 
 - Las políticas de privacidad y cookies (`src/views/legal.js`) son plantillas orientativas: revísalas con un
