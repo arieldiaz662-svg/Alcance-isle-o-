@@ -6,7 +6,7 @@
 // packs vuelven a incluir el primer año de mantenimiento. El cupo no se descuenta solo:
 // cuando se cubran las plazas, desactívala (o baja "spots") y vuelve a publicar.
 // regularMonths: meses de mantenimiento que incluye el pack a precio normal (el precio tachado).
-const launch = { active: true, percent: 50, spots: 5, months: 3, regularMonths: 12 };
+const launch = { active: false, percent: 50, spots: 5, months: 3, regularMonths: 12 };
 const euros = (n) => `${n} €`;
 // Precio de un pack: con la oferta, la mitad; "regularPrice" (precio normal) solo existe mientras dura.
 const packPrice = (regular) => (launch.active ? euros(regular * (100 - launch.percent) / 100) : euros(regular));
