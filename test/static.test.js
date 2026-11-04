@@ -531,7 +531,19 @@ describe('conversión a WhatsApp', () => {
     assert.equal(read('privacidad.html').includes('wa-flotante'), false, 'solo en la portada');
   });
 
-  test('galería de trabajos: marcos uniformes, imagen real con alternativa jpg, texto alternativo y descripción detallada', () => {
+  test('galería de trabajos: oculta mientras el cliente no dé el visto bueno ni pague; si se muestra, marcos uniformes y descripciones detalladas', () => {
+    if (site.works.items.length === 0) {
+      // Memphis Belle Coctelería: pendiente de visto bueno y pago. Sin sección, sin enlace en el menú y sin imágenes publicadas.
+      assert.doesNotMatch(index, /id="trabajos"|href="#trabajos"|trabajo-marco|Memphis Belle/);
+      const carpeta = join(outDir, 'assets', 'img', 'trabajos');
+      assert.deepEqual(existsSync(carpeta) ? readdirSync(carpeta) : [], [], 'las imágenes no se publican');
+      for (const f of ['portada', 'bar', 'carta', 'tarjeta']) {
+        for (const ext of ['webp', 'jpg']) {
+          assert.ok(existsSync(new URL(`../docs/trabajos-pendientes/memphis-belle/memphis-belle-${f}.${ext}`, import.meta.url)), `${f}.${ext} guardada a la espera`);
+        }
+      }
+      return;
+    }
     const galeria = between(index, 'id="trabajos"', 'id="como"');
     assert.match(index, /href="#trabajos"/);
     assert.equal(site.works.items.length, 4);
@@ -597,9 +609,9 @@ describe('recorrido animado', () => {
 
 describe('con qué trabajamos', () => {
   test('plataformas (Cloudflare, GitHub) y lenguajes (HTML, CSS, JavaScript) con sus logotipos oficiales, incrustados y con aviso de marcas', () => {
-    const tecnologia = between(index, 'id="tecnologia"', 'id="trabajos"');
+    const tecnologia = between(index, 'id="tecnologia"', index.includes('id="trabajos"') ? 'id="trabajos"' : 'id="como"');
     assert.match(tecnologia, /<h2>Con qué trabajamos<\/h2>/);
-    assert.ok(index.indexOf('id="por-que"') < index.indexOf('id="tecnologia"') && index.indexOf('id="tecnologia"') < index.indexOf('id="trabajos"'));
+    assert.ok(index.indexOf('id="por-que"') < index.indexOf('id="tecnologia"') && index.indexOf('id="tecnologia"') < index.indexOf('id="como"'));
     assert.match(tecnologia, /<h3>Cloudflare<\/h3>\s*<p class="tecnologia-rol">Hosting y dominio<\/p>/);
     assert.match(tecnologia, /<h3>GitHub<\/h3>\s*<p class="tecnologia-rol">Código y publicación<\/p>/);
     for (const lang of ['HTML', 'CSS', 'JavaScript']) assert.match(tecnologia, new RegExp(`<span>${lang}</span>`));
@@ -623,5 +635,14 @@ describe('con qué trabajamos', () => {
     assert.match(css, /\[data-i="7"\] \{ --i: 7; \}/);
     assert.match(css, /\[data-o="2"\] \{ --o: 2; \}/);
     assert.match(index, /data-i="3"/);
+  });
+});
+
+describe('condiciones de pago', () => {
+  test('80 % antes de la publicación y 20 % al publicar con el dominio y el traspaso (ya no 50 % / 50 %)', () => {
+    const como = between(index, 'id="como"', 'id="empezar"');
+    assert.match(como, /Pagas el 80 % antes de la publicación de la web y el 20 % restante al publicarla, con tu dominio y el traspaso\./);
+    assert.doesNotMatch(index, /50 % al empezar|50 % restante|a la entrega/);
+    assert.equal(80 + 20, 100);
   });
 });

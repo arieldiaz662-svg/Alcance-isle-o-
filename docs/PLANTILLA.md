@@ -36,7 +36,8 @@ Para montar la web de otro negocio (o una nueva versión de esta) no hace falta 
   `{ img: 'img/trabajos/NOMBRE', width, height, fit, alt, title, description }` (sin extensión; `width` y `height` son los píxeles reales).
   Todas se muestran en un marco 3:2 del mismo tamaño, así que nada desentona: `fit: 'contain'` enseña la imagen entera (con bandas del color
   del marco) y `fit: 'cover'` rellena el marco. `title` y `description` salen bajo la imagen; `alt` es para lectores de pantalla.
-  Usa solo trabajos reales y con permiso del cliente.
+  Usa solo trabajos reales y con permiso del cliente. Si aún no hay visto bueno o pago, deja `items` vacío y guarda las imágenes en
+  `docs/trabajos-pendientes/` (ver su README): no se publican.
 - **Recorrido del cliente animado** (`journey.steps[].icon`: `google`, `web`, `nfc`): iconos propios que se dibujan una vez al entrar en pantalla.
   Sin JavaScript o con «reducir movimiento» activado quedan estáticos y completos.
 
