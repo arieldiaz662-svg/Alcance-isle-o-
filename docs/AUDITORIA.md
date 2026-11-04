@@ -122,7 +122,7 @@ Sin cuellos de botella técnicos. **El cuello de botella es humano:**
 | 2 | **¿Qué tipo de negocio tienes?** (pestañas) | **Bares, restaurantes y cafeterías:** pack completo, pegatinas QR a presupuesto · **Negocios con cita previa:** pack · **Ambas:** diseño de tarjetas de visita a presupuesto (servicio externalizado) | *Pide información para tu local / negocio* → WhatsApp con mensaje propio |
 | 3 | **Así llega un cliente a tu negocio** | Te busca en Google → Mira tu carta o tus servicios → Te deja una reseña, con el servicio y precio de cada paso | — |
 | 4 | **Por qué elegirnos** | 5 motivos: equipo local, puesta en marcha ágil, todo conectado, formación, diagnóstico gratuito | — |
-| 5 | **Así trabajamos** | Diagnóstico → Lo preparamos → Entrega y formación · pago 80 % antes de publicar / 20 % al publicar con dominio y traspaso | — |
+| 5 | **Así trabajamos** | Diagnóstico → Lo preparamos (primero el diseño) → Traspaso y publicación (migración a su sitio definitivo y dominio si el cliente lo quiere) · pago 80 % antes de publicar / 20 % al publicar | — |
 | 6 | **Precios** | Carta de precios con puntos guía (tabla 4.2) | — |
 | 7 | **¿Hablamos?** | Teléfono, WhatsApp y formulario (abre WhatsApp, no guarda datos) | *Enviar por WhatsApp* |
 

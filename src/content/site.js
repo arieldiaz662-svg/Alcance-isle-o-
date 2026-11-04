@@ -252,11 +252,12 @@ export const site = {
   // CÓMO TRABAJAMOS
   steps: [
     { title: 'Diagnóstico gratuito', text: 'Vemos cómo aparece hoy tu negocio en internet y qué necesitas, sin compromiso.' },
-    { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta o tus servicios, tarjeta de reseñas QR + NFC y hosting, a partir del material que nos envíes.' },
-    { title: 'Entrega y formación', text: 'Revisamos el diseño contigo (2 rondas de cambios), lo publicamos y te enseñamos a usarlo.' },
+    { title: 'Lo preparamos', text: 'Ficha de Google, tarjeta de reseñas QR + NFC y el diseño de tu web con tu carta o tus servicios, a partir del material que nos envíes. Primero montamos el diseño, para que lo veas antes de publicar nada.' },
+    // Traspaso: tras tu visto bueno, la web se migra del diseño de pruebas a su sitio definitivo y, si el cliente lo quiere, se compra el dominio.
+    { title: 'Traspaso y publicación', text: 'Revisamos el diseño contigo (2 rondas de cambios) y, con tu visto bueno, hacemos el traspaso: migramos la web a su sitio definitivo y, si lo quieres, compramos tu dominio. La publicamos y te enseñamos a usarla.' },
   ],
-  // Condiciones de pago: 80 % antes de publicar la web y 20 % al publicarla con el dominio y el traspaso.
-  stepsNote: 'Pagas el 80 % antes de la publicación de la web y el 20 % restante al publicarla, con tu dominio y el traspaso.',
+  // Condiciones de pago: 80 % antes de publicar la web y 20 % al publicarla, hecho el traspaso (y con el dominio, si el cliente lo quiere).
+  stepsNote: 'Pagas el 80 % antes de publicar la web y el 20 % restante al publicarla, una vez hecho el traspaso (y con tu dominio, si lo quieres).',
 
 
   // SERVICIOS PRINCIPALES: lo que hacemos nosotros (software).

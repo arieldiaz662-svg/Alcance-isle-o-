@@ -638,11 +638,20 @@ describe('con qué trabajamos', () => {
   });
 });
 
-describe('condiciones de pago', () => {
-  test('80 % antes de la publicación y 20 % al publicar con el dominio y el traspaso (ya no 50 % / 50 %)', () => {
+describe('condiciones de pago y traspaso', () => {
+  test('80 % antes de publicar y 20 % al publicar, hecho el traspaso y con el dominio si el cliente lo quiere (ya no 50 % / 50 %)', () => {
     const como = between(index, 'id="como"', 'id="empezar"');
-    assert.match(como, /Pagas el 80 % antes de la publicación de la web y el 20 % restante al publicarla, con tu dominio y el traspaso\./);
+    assert.match(como, /Pagas el 80 % antes de publicar la web y el 20 % restante al publicarla, una vez hecho el traspaso \(y con tu dominio, si lo quieres\)\./);
     assert.doesNotMatch(index, /50 % al empezar|50 % restante|a la entrega/);
-    assert.equal(80 + 20, 100);
+  });
+
+  test('«Así trabajamos» explica el traspaso: primero el diseño, luego la migración y, si el cliente lo quiere, el dominio', () => {
+    const como = between(index, 'id="como"', 'id="empezar"');
+    assert.match(como, /<h3>Lo preparamos<\/h3><p>[^<]*Primero montamos el diseño, para que lo veas antes de publicar nada\./);
+    assert.match(como, /<h3>Traspaso y publicación<\/h3><p>[^<]*hacemos el traspaso: migramos la web a su sitio definitivo y, si lo quieres, compramos tu dominio\./);
+    // El orden de los pasos es el del trabajo: diagnóstico, diseño, traspaso y publicación.
+    const orden = ['Diagnóstico gratuito', 'Lo preparamos', 'Traspaso y publicación'].map((n) => como.indexOf(`<h3>${n}</h3>`));
+    assert.deepEqual(orden, [...orden].sort((x, y) => x - y));
+    assert.ok(orden.every((i) => i > 0));
   });
 });
