@@ -255,7 +255,8 @@ export const site = {
     { title: 'Lo preparamos', text: 'Ficha de Google, web con tu carta o tus servicios, tarjeta de reseñas QR + NFC y hosting, a partir del material que nos envíes.' },
     { title: 'Entrega y formación', text: 'Revisamos el diseño contigo (2 rondas de cambios), lo publicamos y te enseñamos a usarlo.' },
   ],
-  stepsNote: 'Pagas el 50 % al empezar y el 50 % restante a la entrega.',
+  // Condiciones de pago: 80 % antes de publicar la web y 20 % al publicarla con el dominio y el traspaso.
+  stepsNote: 'Pagas el 80 % antes de la publicación de la web y el 20 % restante al publicarla, con tu dominio y el traspaso.',
 
 
   // SERVICIOS PRINCIPALES: lo que hacemos nosotros (software).

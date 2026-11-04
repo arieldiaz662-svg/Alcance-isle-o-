@@ -637,3 +637,12 @@ describe('con qué trabajamos', () => {
     assert.match(index, /data-i="3"/);
   });
 });
+
+describe('condiciones de pago', () => {
+  test('80 % antes de la publicación y 20 % al publicar con el dominio y el traspaso (ya no 50 % / 50 %)', () => {
+    const como = between(index, 'id="como"', 'id="empezar"');
+    assert.match(como, /Pagas el 80 % antes de la publicación de la web y el 20 % restante al publicarla, con tu dominio y el traspaso\./);
+    assert.doesNotMatch(index, /50 % al empezar|50 % restante|a la entrega/);
+    assert.equal(80 + 20, 100);
+  });
+});
